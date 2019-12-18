@@ -1,0 +1,187 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "启动页",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},{
+			"path": "pages/index/guide",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "会员登录",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": "创建账号",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/login/forgetPassword",
+			"style": {
+				"navigationBarTitleText": "重置密码",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/shop",
+			"style": {
+				"navigationBarTitleText": "商城首页",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/detail",
+			"style": {
+				"navigationBarTitleText": "套餐详情",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/car/car",
+			"style": {
+				"navigationBarTitleText": "购物车",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/meal/meal",
+			"style": {
+				"navigationBarTitleText": "我的套餐",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/find/find",
+			"style": {
+				"navigationBarTitleText": "发现",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/person",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/online_area",
+			"style": {
+				"navigationBarTitleText": "线上发货专区",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/offline_area",
+			"style": {
+				"navigationBarTitleText": "线下提货专区",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/find/detail",
+			"style": {
+				"navigationBarTitleText": "发现详情页",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/find/comments",
+			"style": {
+				"navigationBarTitleText": "评论",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#bfbfbf",
+		"selectedColor": "#ff0036",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/index/shop",
+				"iconPath": "static/tabbar/tabbar1.png",
+				"selectedIconPath": "static/tabbar/tabbar1_on.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/meal/meal",
+				"iconPath": "static/tabbar/tabbar2.png",
+				"selectedIconPath": "static/tabbar/tabbar2_on.png",
+				"text": "套餐"
+			}, {
+				"pagePath": "pages/find/find",
+				"iconPath": "static/tabbar/tabbar3.png",
+				"selectedIconPath": "static/tabbar/tabbar3_on.png",
+				"text": "发现"
+			}, {
+				"pagePath": "pages/car/car",
+				"iconPath": "static/tabbar/tabbar4.png",
+				"selectedIconPath": "static/tabbar/tabbar4_on.png",
+				"text": "购物车"
+			}, {
+				"pagePath": "pages/person/person",
+				"iconPath": "static/tabbar/tabbar5.png",
+				"selectedIconPath": "static/tabbar/tabbar5_on.png",
+				"text": "我的"
+			}
+		]
+	}
+}
