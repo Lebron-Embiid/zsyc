@@ -1,0 +1,9 @@
+<view class="detail data-v-68ec4962"><uni-nav-bar vue-id="1" left-icon="back" title="发现详情页" class="data-v-68ec4962" bind:__l="__l"></uni-nav-bar><view class="find_detail_box data-v-68ec4962"><view class="detail_title data-v-68ec4962">贴身内衣裤挑选指南，专业知识在这里！</view>贴身内衣裤挑选指南，专业知识在这里！
+		
+		每日贴身穿着的内衣裤，决定了私密处的健康与舒适。针对男、女士和孕妇，也有着不同的挑选法则。平台盘点整条产品线，告诉你内衣裤到底怎么挑。
+		
+		臀围和腰围各指什么？臀围指臀部最宽处水平绕一周的长度，标准比例是“女性身高值乘以0.542”。腰围指经肚脐上0.5至1厘米处水平绕一周的长度，标准比例是“女性身高值乘以0.34 ”。
+		
+		如何根据“臀型”和“腰型”选择适合自己的内裤？女士内裤与男士内裤还是有很大的区别的，其中关键性便是对“倩影”和“臀部”的修饰作用。谈裤型，先要谈腰型，因为它牵涉到身材的“立体轮廓”问题。经典的裤装是有内在的气质，自信、现代。女性的内裤虽有多种类型，但有一点是共同的，那就是：外装是给别人看的，内裤和内衣是为自己穿的。不舒服的裤子肯定不好看，好看的裤子首先是穿起来舒服。
+		
+		圆润的臀部：低腰裤。裤腰位于腰线以下，又叫无腰裤。穿着时裤腰在肚脐眼以下松松垮垮挂在胯部，裸露出腰部与臀部的结合部那一段优美的弧线，非常适合腰围与臀围尺寸相差较大的人。低腰短裆，臀腹部贴身。低腰款让你的臀部短了一大截，显得臀围好像小了一圈，臀部看起来更小巧。</view><view class="mb100 data-v-68ec4962"></view><view class="fixed_bottom data-v-68ec4962"><form data-event-opts="{{[['submit',[['submitForm',['$event']]]]]}}" bindsubmit="__e" class="data-v-68ec4962"><input type="text" placeholder="说点什么吧" class="data-v-68ec4962"/></form><image src="/static/icon/message.png" mode="widthFix" data-event-opts="{{[['tap',[['toComments',['$event']]]]]}}" bindtap="__e" class="data-v-68ec4962"></image><block wx:if="{{is_collect==0}}"><image src="/static/icon/collect.png" mode="widthFix" data-event-opts="{{[['tap',[['collect',['$event']]]]]}}" bindtap="__e" class="data-v-68ec4962"></image></block><block wx:if="{{is_collect==1}}"><image src="/static/icon/collect1.png" mode="widthFix" data-event-opts="{{[['tap',[['collectCancel',['$event']]]]]}}" bindtap="__e" class="data-v-68ec4962"></image></block><image src="/static/icon/share1.png" mode="widthFix" class="data-v-68ec4962"></image></view></view>

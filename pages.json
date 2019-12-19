@@ -8,7 +8,8 @@
 					"titleNView": false
 				}
 			}
-		},{
+		},
+		{
 			"path": "pages/index/guide",
 			"style": {
 				"navigationBarTitleText": "",
@@ -16,7 +17,8 @@
 					"titleNView": false
 				}
 			}
-		},{
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "会员登录",
@@ -137,6 +139,87 @@
 			"path": "pages/find/comments",
 			"style": {
 				"navigationBarTitleText": "评论",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/car/write_order",
+			"style": {
+				"navigationBarTitleText": "填写订单",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/car/pay",
+			"style": {
+				"navigationBarTitleText": "选择付款方式",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/qualify",
+			"style": {
+				"navigationBarTitleText": "资格购买",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/logistics",
+			"style": {
+				"navigationBarTitleText": "物流信息",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/evaluation",
+			"style": {
+				"navigationBarTitleText": "用户评价",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/cancel",
+			"style": {
+				"navigationBarTitleText": "申请取消订单",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/process",
+			"style": {
+				"navigationBarTitleText": "进度",
 				"app-plus": {
 					"titleNView": false
 				}

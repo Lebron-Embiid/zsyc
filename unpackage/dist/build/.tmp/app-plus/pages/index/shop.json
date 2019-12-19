@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "商城首页",
+  "titleNView": false,
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-status-bar": "/components/uni-status-bar/uni-status-bar",
+    "uni-countdown": "/components/uni-count-down/uni-countdown",
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "fixed-list": "/components/fixedList"
+  }
+}

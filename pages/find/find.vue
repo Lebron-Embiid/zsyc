@@ -8,7 +8,7 @@
 		<view class="find_search_box">
 			<view class="search_box">
 				<image class="icon" src="/static/icon/search.png" mode="widthFix"></image>
-				<input type="text" :value="keywords" v-model="keywords" placeholder="请输入关键词进行搜索" />
+				<input type="text" v-model="keywords" placeholder="请输入关键词进行搜索" />
 				<image @tap="clearInput" v-if="keywords != ''" class="clear" src="/static/icon/clear.svg" mode="widthFix"></image>
 			</view>
 		</view>

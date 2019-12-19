@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "创建账号",
+  "titleNView": false,
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "switchc": "/components/zz-switchc/zz-switchc",
+    "valid-code": "/components/validCode"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "套餐详情",
+  "titleNView": false,
+  "usingComponents": {
+    "u-parse": "/components/u-parse/u-parse"
+  }
+}

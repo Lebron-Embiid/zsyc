@@ -100,7 +100,8 @@
 			margin-bottom: 10rpx;
 			border: 2px solid transparent;
 			&.last{
-				height: 66rpx;
+				height: auto;
+				padding: 0;
 			}
 			&.yellow{
 				background: #fab348;

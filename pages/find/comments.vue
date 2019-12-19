@@ -26,7 +26,10 @@
 		<view class="mb100"></view>
 		<view class="fixed_bottom">
 			<form @submit="submitForm">
-				<input type="text" placeholder="说点什么吧">
+				<view class="form_input_item">
+					<input type="text" placeholder="说点什么吧">
+					<button type="primary" size="mini">发送</button>
+				</view>
 			</form>
 		</view>
 	</view>
@@ -118,14 +121,31 @@
 		form{
 			display: block;
 			width: 100%;
-			background: #eee;
-			padding: 10rpx;
-			box-sizing: border-box;
-			border-radius: 30rpx;
-			input{
-				font-size: 28rpx;
-				padding-left: 10rpx;
+			.form_input_item{
+				background: #eee;
 				box-sizing: border-box;
+				border-radius: 30rpx;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				input{
+					display: block;
+					width: 80%;
+					font-size: 28rpx;
+					padding-left: 20rpx;
+					box-sizing: border-box;
+				}
+				button{
+					padding: 0 30rpx;
+					margin: 0;
+					border-radius: 0 30rpx 30rpx 0;
+					background: #f90;
+					color: #fff;
+					font-size: 28rpx;
+					&:after{
+						border: 0;
+					}
+				}
 			}
 		}
 	}

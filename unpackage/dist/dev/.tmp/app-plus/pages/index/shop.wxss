@@ -1,0 +1,299 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.status_bar.data-v-9aa7a430 {
+  background: #ff6600;
+}
+.index_scroll.data-v-9aa7a430 {
+  height: calc(100vh - 95px);
+}
+.fixed_search_top.data-v-9aa7a430 {
+  width: 100%;
+  height: 45px;
+  padding: 10rpx 30rpx;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background: #ff6600;
+  z-index: 30;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.fixed_search_top .scan_icon.data-v-9aa7a430 {
+    display: block;
+    width: 40rpx;
+    height: 40rpx;
+}
+.fixed_search_top .mess_icon.data-v-9aa7a430 {
+    display: block;
+    width: 48rpx;
+    height: 48rpx;
+}
+.fixed_search_top view.data-v-9aa7a430 {
+    width: 80%;
+    color: #999;
+    font-size: 26rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    background: rgba(255, 255, 255, 0.7);
+    height: 30px;
+    padding: 0 20rpx;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    border-radius: 10rpx;
+}
+.fixed_search_top view image.data-v-9aa7a430 {
+      display: block;
+      width: 44rpx;
+      height: 44rpx;
+      margin-right: 20rpx;
+}
+.swiper-box.data-v-9aa7a430 {
+  padding: 10rpx 30rpx;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  position: relative;
+}
+.swiper-box.data-v-9aa7a430:after {
+    content: "";
+    width: 100%;
+    height: 230rpx;
+    background: rgba(255, 102, 0, 0.8);
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-bottom-left-radius: 150rpx;
+    z-index: 1;
+}
+.swiper-box .swiper.data-v-9aa7a430 {
+    position: relative;
+    z-index: 5;
+}
+.swiper-box .swiper image.data-v-9aa7a430 {
+      display: block;
+      width: 100%;
+      height: 100% !important;
+      border-radius: 10rpx;
+}
+.index_nav_box.data-v-9aa7a430 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 20rpx 0 40rpx;
+}
+.index_nav_box view.data-v-9aa7a430 {
+    width: 32%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    height: 214rpx;
+    color: #fff;
+    font-size: 28rpx;
+    background: #f90;
+    padding: 15rpx 0;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+.index_nav_box view.yellow.data-v-9aa7a430 {
+      background: #fc0;
+}
+.index_nav_box view image.data-v-9aa7a430 {
+      display: block;
+      width: 100rpx;
+      height: 100rpx;
+}
+.index_nav_box view text.data-v-9aa7a430 {
+      display: block;
+      width: 100%;
+      text-align: center;
+}
+.time_title .countdown.data-v-9aa7a430 {
+  margin-left: 20rpx;
+}
+.time_goods_box.data-v-9aa7a430 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-bottom: 20rpx;
+}
+.time_goods_box .time_item.data-v-9aa7a430 {
+    display: block;
+    width: 32%;
+    text-align: center;
+}
+.time_goods_box .time_item image.data-v-9aa7a430 {
+      display: block;
+      width: 100%;
+}
+.time_goods_box .time_item view.data-v-9aa7a430 {
+      color: #f52f3e;
+      font-size: 32rpx;
+      margin: 10rpx 0 5rpx;
+}
+.time_goods_box .time_item text.data-v-9aa7a430 {
+      display: block;
+      color: #999;
+      font-size: 28rpx;
+}
+.shop_recommd_box.data-v-9aa7a430 {
+  padding: 20rpx 30rpx;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.shop_recommd_box .rec_banner.data-v-9aa7a430 {
+    display: block;
+    width: 100%;
+    margin: 0 0 15rpx;
+}
+.shop_recommd_box .rec_goods_box.data-v-9aa7a430 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    padding-bottom: 10rpx;
+}
+.shop_recommd_box .rec_goods_box .rec_item.data-v-9aa7a430 {
+      width: 32%;
+      color: #333;
+      font-size: 28rpx;
+      text-align: center;
+}
+.shop_recommd_box .rec_goods_box .rec_item image.data-v-9aa7a430 {
+        display: block;
+        width: 100%;
+        height: 260rpx !important;
+}
+.shop_recommd_box .rec_goods_box .rec_item .rec_title.data-v-9aa7a430 {
+        margin: 10rpx 0;
+}
+.shop_recommd_box .rec_goods_box .rec_item .rec_address.data-v-9aa7a430 {
+        color: #666;
+        font-size: 24rpx;
+}
+.shop_recommd_box .rec_goods_box .rec_item .rec_address text.data-v-9aa7a430 {
+          margin-left: 10rpx;
+}
+.shop_recommd_box .rec_goods_box .rec_item .rec_price.data-v-9aa7a430 {
+        color: #ff2a3a;
+        font-size: 32rpx;
+}
+.shop_recommd_box .rec_goods_box.pop .rec_item.data-v-9aa7a430 {
+      text-align: left;
+}
+.shop_recommd_box .rec_goods_box.pop .rec_item image.data-v-9aa7a430 {
+        display: block;
+        width: 100%;
+        height: 214rpx !important;
+}
+.recommd_goods_box.data-v-9aa7a430 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.recommd_goods_box .recommd_item.data-v-9aa7a430 {
+    width: 48%;
+    margin-bottom: 30rpx;
+}
+.recommd_goods_box .recommd_item image.data-v-9aa7a430 {
+      display: block;
+      width: 100%;
+}
+.recommd_goods_box .recommd_item .ri_title.data-v-9aa7a430 {
+      color: #333;
+      font-size: 28rpx;
+      font-weight: bold;
+      margin: 15rpx 0 5rpx;
+      overflow: hidden;
+      -o-text-overflow: ellipsis;
+         text-overflow: ellipsis;
+      white-space: nowrap;
+}
+.recommd_goods_box .recommd_item .ri_price.data-v-9aa7a430 {
+      color: #ff2a3a;
+      font-size: 32rpx;
+}
+

@@ -1,0 +1,1 @@
+<view data-event-opts="{{[['tap',[['refreshCode',['$event']]]]]}}" class="ValidCode disabled-select data-v-90b0420c" bindtap="__e"><block wx:for="{{codeList}}" wx:for-item="item" wx:for-index="index" wx:key="index"><text class="data-v-90b0420c">{{item.code}}</text></block></view>

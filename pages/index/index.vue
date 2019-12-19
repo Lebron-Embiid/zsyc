@@ -24,14 +24,14 @@
 				try {
 				    const value = uni.getStorageSync('launchFlag');
 					console.log('launchFlag:'+value);
-					let token = uni.getStorageSync('token');
-					console.log('token:'+token);
-					if(token != ''){
-						uni.switchTab({
-							url: '/pages/index/shop'
-						})
-						return;
-					}
+					// let token = uni.getStorageSync('token');
+					// console.log('token:'+token);
+					// if(token != ''){
+					// 	uni.switchTab({
+					// 		url: '/pages/index/shop'
+					// 	})
+					// 	return;
+					// }
 				    if (value) {
 				        if (value == true) {
 				            uni.redirectTo({

@@ -63,6 +63,26 @@
 		}
 	}
 	
+	.fixed_bottom_btn{
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		z-index: 10;
+		width: 100%;
+		height: 100rpx;
+		line-height: 100rpx;
+		border-radius: 0;
+		color: #fff !important;
+		background: rgba(250,29,76,.8) !important;
+		transition: background .3s ease;
+		&:active{
+			background: rgba(250,29,76,1) !important;
+		}
+		&:after{
+			border: 0;
+		}
+	}
+	
 	.list_nav{
 		background: #fff;
 		color: #666;
@@ -102,6 +122,67 @@
 		margin: 0 !important;
 		padding: 0 !important;
 		opacity: 1 !important;
+	}
+	
+	.textarea_box{
+		background: #fafafa;
+		padding: 10rpx 20rpx;
+		box-sizing: border-box;
+		border-top: 1px solid #ccc;
+		position: relative;
+		textarea{
+			background: #fff;
+			display: block;
+			width: 100%;
+			height: 150rpx;
+			padding: 10rpx;
+			box-sizing: border-box;
+			font-size: 28rpx;
+		}
+		text{
+			color: #999;
+			font-size: 28rpx;
+			position: absolute;
+			right: 50rpx;
+			bottom: 20rpx;
+		}
+	}
+	
+	.fixed_pay_bottom{
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-left: 30rpx;
+		box-sizing: border-box;
+		color: #ff0036;
+		font-size: 28rpx;
+		background: #fff;
+		z-index: 10;
+		text{
+			font-size: 36rpx;
+			margin-left: 5rpx;
+		}
+		button{
+			margin: 0;
+			padding: 0;
+			width: 220rpx;
+			text-align: center;
+			height: 100rpx;
+			line-height: 100rpx;
+			border-radius: 0;
+			color: #fff;
+			background: rgba(250,29,76,1);
+			&:active{
+				background: rgba(250,29,76,.8);
+			}
+			&:after{
+				border: 0;
+			}
+		}
 	}
 	
 	.submit_btn{
@@ -202,6 +283,122 @@
 		}
 		.switch_btn{
 			margin-left: 20rpx;
+		}
+	}
+	
+	.goods_pop_item{
+		padding: 20rpx 30rpx;
+		box-sizing: border-box;
+		border-bottom: 1px solid #eee;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		color: #333;
+		font-size: 32rpx;
+		image{
+			display: block;
+			width: 144rpx;
+			height: 144rpx;
+		}
+		.gp_center{
+			width: 50%;
+			.gp_info{
+				color: #999;
+				font-size: 28rpx;
+				margin: 15rpx 0 10rpx;
+			}
+			.gp_price{
+				color: #ff2a3a;
+				font-size: 32rpx;
+			}
+		}
+	}
+	
+	// 套餐样式
+	.meal_list{
+		padding: 30rpx;
+		box-sizing: border-box;
+		background: #eee;
+		.meal_item{
+			margin-bottom: 30rpx;
+			color: #fff;
+			font-size: 24rpx;
+			.meal_top{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 60rpx 40rpx 50rpx 20rpx;
+				box-sizing: border-box;
+				border-radius: 10rpx 10rpx 0 0;
+				background: #f08781 url('~@/static/icon/bg1.png') left bottom repeat-x;
+				.meal_left{
+					width: 32%;
+					font-size: 40rpx;
+					text{
+						font-size: 56rpx;
+						font-weight: bold;
+						margin-right: 5rpx;
+					}
+				}
+				.meal_center{
+					width: 40%;
+					.mc_title{
+						font-size: 36rpx;
+						font-weight: bold;
+						margin-bottom: 10rpx;
+					}
+				}
+				.meal_right{
+					width: 138rpx;
+					button{
+						width: 138rpx;
+						font-size: 24rpx;
+						padding: 0;
+						margin: 0;
+						color: #f08781;
+						background: #f4dedd;
+						&:after{
+							border: 0;
+						}
+					}
+				}
+			}
+			.meal_bottom{
+				background: #d8676b;
+				border-radius: 0 0 10rpx 10rpx;
+				padding: 15rpx 30rpx 20rpx;
+				box-sizing: border-box;
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				.mb_left{
+					width: 92%;
+				}
+				image{
+					display: block;
+					width: 16rpx !important;
+					height: 28rpx !important;
+					transform: rotate(-90deg);
+				}
+				&.active{
+					.mb_left{
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+					image{
+						transform: rotate(90deg);
+					}
+				}
+			}
+			&.gray{
+				.meal_top{
+					background: #dbdbdb url('~@/static/icon/bg.png') left bottom repeat-x;
+				}
+				.meal_bottom{
+					background: #d3d3d3;
+				}
+			}
 		}
 	}
 </style>

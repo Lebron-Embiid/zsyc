@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar title="购物车" rightText="编辑"></uni-nav-bar>
+		<uni-nav-bar title="购物车" rightText="编辑" @clickRight="clickRightBtn"></uni-nav-bar>
 		<!-- 商品列表 -->
 		<view class="goods-list">
 			<view class="tis" v-if="goodsList.length==0">购物车是空的哦~</view>
@@ -137,6 +137,9 @@
 			})
 		},
 		methods: {
+			clickRightBtn(){
+				
+			},
 			//加入商品 参数 goods:商品数据
 			joinGoods(goods){
 				/*

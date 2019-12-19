@@ -27,7 +27,7 @@
 		</view>
 		<view class="gray-place"></view>
 		<view class="my_order_box">
-			<view class="my_title">我的订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
+			<view class="my_title" @tap="toOrder">我的订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
 			<view class="order_box">
 				<view class="order_item" v-for="(item,index) in orderNavs" :key="index" @tap="clickNav(index)">
 					<view><image :src="item.icon" mode="widthFix"></image></view>
@@ -74,28 +74,36 @@
 				useList: [
 					{
 						icon: '/static/icon/use_icon1.png',
-						title: '套餐选购'
+						title: '套餐选购',
+						url: ''
 					},{
 						icon: '/static/icon/use_icon2.png',
-						title: '资格购买'
+						title: '资格购买',
+						url: '/pages/person/qualify'
 					},{
 						icon: '/static/icon/use_icon3.png',
-						title: '我的收益'
+						title: '我的收益',
+						url: ''
 					},{
 						icon: '/static/icon/use_icon4.png',
-						title: '账户安全'
+						title: '账户安全',
+						url: ''
 					},{
 						icon: '/static/icon/use_icon5.png',
-						title: '在线客服'
+						title: '在线客服',
+						url: ''
 					},{
 						icon: '/static/icon/use_icon6.png',
-						title: '帮助中心'
+						title: '帮助中心',
+						url: ''
 					},{
 						icon: '/static/icon/use_icon7.png',
-						title: '意见反馈'
+						title: '意见反馈',
+						url: ''
 					},{
 						icon: '/static/icon/use_icon8.png',
-						title: '我的收藏'
+						title: '我的收藏',
+						url: ''
 					}
 				]
 			}
@@ -121,11 +129,18 @@
 					}
 				})
 			},
+			toOrder(){
+				uni.navigateTo({
+					url: '/pages/person/order'
+				})
+			},
 			clickNav(idx){
 				
 			},
 			clickUse(idx){
-				
+				uni.navigateTo({
+					url: this.useList[idx].url
+				})
 			}
 		}
 	}
@@ -136,7 +151,7 @@
 		background: #ff7d0b;
 	}
 	.person_top{
-		background: url(../../static/img/person_bg.jpg) center center no-repeat;
+		background: url('~@/static/img/person_bg.jpg') center center no-repeat;
 		background-size: 100% 100%;
 		padding: 20rpx 30rpx;
 		box-sizing: border-box;

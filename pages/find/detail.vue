@@ -16,7 +16,10 @@
 		<view class="mb100"></view>
 		<view class="fixed_bottom">
 			<form @submit="submitForm">
-				<input type="text" placeholder="说点什么吧">
+				<view class="form_input_item">
+					<input type="text" placeholder="说点什么吧">
+					<button type="primary" size="mini">发送</button>
+				</view>
 			</form>
 			<image src="/static/icon/message.png" @tap="toComments" mode="widthFix"></image>
 			<image src="/static/icon/collect.png" v-if="is_collect == 0" @tap="collect" mode="widthFix"></image>
@@ -85,14 +88,29 @@
 		form{
 			display: block;
 			width: 60%;
-			background: #eee;
-			padding: 10rpx;
-			box-sizing: border-box;
-			border-radius: 30rpx;
-			input{
-				font-size: 28rpx;
-				padding-left: 10rpx;
+			.form_input_item{
+				background: #eee;
 				box-sizing: border-box;
+				border-radius: 30rpx;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				input{
+					font-size: 28rpx;
+					padding-left: 15rpx;
+					box-sizing: border-box;
+				}
+				button{
+					padding: 0 10rpx;
+					margin: 0;
+					border-radius: 0 30rpx 30rpx 0;
+					background: #f90;
+					color: #fff;
+					font-size: 28rpx;
+					&:after{
+						border: 0;
+					}
+				}
 			}
 		}
 		image{
