@@ -26,10 +26,11 @@
 					<view class="uni-navbar__content_view" v-if="rightIcon.length">
 						<!-- <uni-icons :color="color" :type="rightIcon" size="24" /> -->
 						<!-- <view :class="[rightDot == true?'dot':'']"><image :src="rightIcon" mode="widthFix"></image></view> -->
+						<view><image :src="rightIcon" mode="widthFix"></image></view>
 					</view>
 					<!-- 优先显示图标 -->
 					<view class="uni-navbar-btn-text uni-navbar__content_view" v-if="rightText.length && !rightIcon.length">
-						<text class="uni-nav-bar-right-text">{{ rightText }}</text>
+						<text class="uni-nav-bar-right-text" :class="[isBtn==true?'btn':'']">{{ rightText }}</text>
 					</view>
 					<slot name="right"></slot>
 				</view>
@@ -79,6 +80,10 @@
 				default: ""
 			},
 			rightDot: {
+				type: Boolean,
+				default: false
+			},
+			isBtn:{
 				type: Boolean,
 				default: false
 			},
@@ -142,6 +147,14 @@
 	}
 	.uni-nav-bar-right-text {
 		font-size: $uni-font-size-base;
+		&.btn{
+			background: #f60;
+			height: 50rpx;
+			line-height: 50rpx;
+			padding: 0 15rpx;
+			border-radius: 10rpx;
+			box-sizing: border-box;
+		}
 	}
 
 	.uni-navbar {

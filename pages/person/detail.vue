@@ -26,15 +26,23 @@
 			<block v-if="is_type == 3"><view class="txt">等待收货</view></block>
 			<block v-if="is_type == 4"><view class="txt">交易完成</view></block>
 			<block v-if="is_type == 5"><view class="txt">已取消</view></block>
+			<block v-if="is_type == 6 || is_type == 7">
+				<view class="txt">提货码</view>
+				<view class="count_box copy">PG1358964578fHGD</view>
+			</block>
+			<block v-if="is_type == 8 || is_type == 9">
+				<view class="txt">换货码</view>
+				<view class="count_box copy">CG1358964578fHGD</view>
+			</block>
 		</view>
 		<view class="logistics_info" v-if="is_type == 3 || is_type == 4" @tap="toLogistics">
 			<view>物流信息 <text>{{log}}</text></view>
 			<image src="/static/icon/arrow.png" mode="widthFix"></image>
 		</view>
-		<view class="logistics_info">
+		<!-- <view class="logistics_info">
 			<view>物流信息 <text>已签收</text></view>
 			<image src="/static/icon/arrow.png" mode="widthFix"></image>
-		</view>
+		</view> -->
 		<view class="person_info">
 			<view class="pi_title">亮亮专营店 <text>1866981688</text></view>
 			<view class="pi_info">地址：广东省深圳市南山区西丽镇沙河西路12号</view>
@@ -74,8 +82,9 @@
 			<button v-if="is_type == 2 || is_type == 3 || is_type == 4" type="default" size="mini">再次购买</button>
 			<button v-if="is_type == 4" type="default" size="mini">退换货</button>
 			<button v-if="is_type == 3" type="primary" size="mini" class="red">确认收货</button>
-			<button v-if="is_type == 4" type="primary" size="mini" class="red">评价有礼</button>
+			<button @tap="toEvaluation" v-if="is_type == 4" type="primary" size="mini" class="red">评价有礼</button>
 			<button v-if="is_type == 1" type="primary" size="mini" class="red">付款</button>
+			<button v-if="is_type == 6 || is_type == 7" type="primary" size="mini" class="red">生成提货码</button>
 		</view>
 	</view>
 </template>
@@ -130,6 +139,11 @@
 				uni.navigateTo({
 					url: '/pages/person/logistics'
 				})
+			},
+			toEvaluation(){
+				uni.navigateTo({
+					url: '/pages/person/evaluation'
+				})
 			}
 		}
 	}
@@ -159,6 +173,9 @@
 			display: flex;
 			justify-content: flex-start;
 			align-items: center;
+			&.copy{
+				
+			}
 		}
 	}
 	.logistics_info{

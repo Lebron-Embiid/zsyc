@@ -19,7 +19,7 @@
 		</view>
 		<!-- 底部菜单 -->
 		<view class="footer">
-			<!-- <view class="icons">
+			<view class="icons">
 				<view class="box" @tap="share">
 					<view class="icon fenxiang"></view>
 					<view class="text">分享</view>
@@ -28,7 +28,7 @@
 					<view class="icon" :class="[isKeep?'shoucangsel':'shoucang']"></view>
 					<view class="text">{{isKeep?'已':''}}收藏</view>
 				</view>
-			</view> -->
+			</view>
 			<view class="btn">
 				<view class="joinCart" @tap="joinCart">加入购物车</view>
 				<view class="buy" @tap="buy">立即购买</view>
@@ -91,10 +91,10 @@
 			<view class="mask"></view>
 			<view class="layer" @tap.stop="discard">
 				<view class="content">
-					<!-- <view class="title">选择规格</view>
+					<view class="title">选择规格</view>
 					<view class="sp">
 						<view v-for="(item,index) in goodsData.spec" :class="[index==selectSpec?'on':'']" @tap="setSelectSpec(index)" :key="index">{{item}}</view>
-					</view> -->
+					</view>
 					<!-- v-if="selectSpec!=null" -->
 					<view class="length" >
 						<view class="text">数量</view>
@@ -119,7 +119,7 @@
 		<view class="swiper-box">
 			<swiper circular="true" autoplay="true" @change="swiperChange">
 				<swiper-item v-for="swiper in swiperList" :key="swiper.id">
-					<image :src="url+swiper" mode="widthFix"></image>
+					<image :src="swiper.img" mode="widthFix"></image>
 				</swiper-item>
 			</swiper>
 			<view class="indicator">{{currentSwiper+1}}/{{swiperList.length}}</view>
@@ -133,7 +133,7 @@
 			</view>
 		</view>
 		<!-- 服务-规则选择 -->
-		<!-- <view class="info-box spec">
+		<view class="info-box spec">
 			<view class="row" @tap="showService">
 				<view class="text">服务</view>
 				<view class="content"><view class="serviceitem" v-for="(item,index) in goodsData.service" :key="index">{{item.name}}</view></view>
@@ -150,9 +150,9 @@
 				</view>
 				<view class="arrow"><view class="icon xiangyou"></view></view>
 			</view>
-		</view> -->
+		</view>
 		<!-- 评价 -->
-		<!-- <view class="info-box comments" id="comments">
+		<view class="info-box comments" id="comments">
 			<view class="row">
 				<view class="text">商品评价({{goodsData.comment.number}})</view>
 				<view class="arrow" @tap="toRatings">
@@ -171,13 +171,13 @@
 					{{goodsData.comment.content}}
 				</view>
 			</view>
-		</view> -->
+		</view>
 		<!-- 详情 -->
 		<view class="description">
 			<view class="title">———— 商品详情 ————</view>
 			<view class="content">
-				<block v-if="content!=''">
-					<u-parse :content="content"></u-parse>
+				<block v-if="descriptionStr!=''">
+					<u-parse :content="descriptionStr"></u-parse>
 				</block>
 			</view>
 		</view>
@@ -199,7 +199,12 @@ export default {
 			showBack:true,
 			// #endif
 			//轮播主图数据
-			swiperList: [],
+			swiperList: [
+				{ id: 1, img: 'https://ae01.alicdn.com/kf/HTB1Mj7iTmzqK1RjSZFjq6zlCFXaP.jpg' },
+				{ id: 2, img: 'https://ae01.alicdn.com/kf/HTB1fbseTmzqK1RjSZFLq6An2XXaL.jpg' },
+				{ id: 3, img: 'https://ae01.alicdn.com/kf/HTB1dPUMThnaK1RjSZFtq6zC2VXa0.jpg' },
+				{ id: 4, img: 'https://ae01.alicdn.com/kf/HTB1OHZrTXzqK1RjSZFvq6AB7VXaw.jpg' }
+			],
 			//轮播图下标
 			currentSwiper: 0,
 			anchorlist:[],//导航条锚点
@@ -209,29 +214,29 @@ export default {
 			shareClass:'',//分享弹窗css类，控制开关动画
 			// 商品信息
 			goodsData:{
-				id:'',
-				name:"",
-				price:"",
-				stock:'',
-				number: 1,
-				// service:[
-				// 	{name:"正品保证",description:"此商品官方保证为正品"},
-				// 	{name:"极速退款",description:"此商品享受退货极速退款服务"},
-				// 	{name:"7天退换",description:"此商品享受7天无理由退换服务"}
-				// ],
-				// spec:["XS","S","M","L","XL","XXL"],
-				// comment:{
-				// 	number:1,
-				// 	userface:'../../static/img/face.jpg',
-				// 	username:'大黑哥',
-				// 	content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-				// }
+				id:1,
+				name:"商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题",
+				price:"127.00",
+				number:1,
+				service:[
+					{name:"正品保证",description:"此商品官方保证为正品"},
+					{name:"极速退款",description:"此商品享受退货极速退款服务"},
+					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
+				],
+				spec:["XS","S","M","L","XL","XXL"],
+				comment:{
+					number:102,
+					userface:'../../static/img/face.jpg',
+					username:'大黑哥',
+					content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
+				}
 			},
 			goods_id: '',
 			selectSpec:null,//选中规格
 			isKeep:false,//收藏
 			//商品描述html
 			content: '',
+			descriptionStr:'<div style="text-align:center;"><img width="100%" src="https://ae01.alicdn.com/kf/HTB1t0fUl_Zmx1VjSZFGq6yx2XXa5.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB1LzkjThTpK1RjSZFKq6y2wXXaT.jpg"/><img width="100%" src="https://ae01.alicdn.com/kf/HTB18dkiTbvpK1RjSZPiq6zmwXXa8.jpg"/></div>',
 			url: '',
 			btn: 0	,//0:加入购物车  1:立即购买
 		};
@@ -373,31 +378,31 @@ export default {
 		add(){
 			this.goodsData.number++;
 		},
-		//跳转锚点
-		// toAnchor(index){
-		// 	this.selectAnchor = index;
-		// 	uni.pageScrollTo({scrollTop: this.anchorlist[index].top,duration: 200});
-		// },
-		//计算锚点高度
-		// calcAnchor(){
-		// 	this.anchorlist=[
-		// 		{name:'主图',top:0},
-		// 		{name:'评价',top:0},
-		// 		{name:'详情',top:0}
-		// 	]
-		// 	let commentsView = uni.createSelectorQuery().select("#comments");
-		// 	commentsView.boundingClientRect((data) => {
-		// 		let statusbarHeight = 0;
-		// 		//APP内还要计算状态栏高度
-		// 		// #ifdef APP-PLUS
-		// 			statusbarHeight = plus.navigator.getStatusbarHeight()
-		// 		// #endif
-		// 		let headerHeight = uni.upx2px(100);
-		// 		this.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
-		// 		this.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
+		// 跳转锚点
+		toAnchor(index){
+			this.selectAnchor = index;
+			uni.pageScrollTo({scrollTop: this.anchorlist[index].top,duration: 200});
+		},
+		// 计算锚点高度
+		calcAnchor(){
+			this.anchorlist=[
+				{name:'主图',top:0},
+				{name:'评价',top:0},
+				{name:'详情',top:0}
+			]
+			let commentsView = uni.createSelectorQuery().select("#comments");
+			commentsView.boundingClientRect((data) => {
+				let statusbarHeight = 0;
+				//APP内还要计算状态栏高度
+				// #ifdef APP-PLUS
+					statusbarHeight = plus.navigator.getStatusbarHeight()
+				// #endif
+				let headerHeight = uni.upx2px(100);
+				this.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
+				this.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
 				
-		// 	}).exec();
-		// },
+			}).exec();
+		},
 		//返回上一页
 		back() {
 			uni.navigateBack();

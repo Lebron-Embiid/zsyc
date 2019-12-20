@@ -45,6 +45,14 @@
 		height: 100rpx;
 	}
 	
+	.not_have{
+		width: 100%;
+		text-align: center;
+		// margin: 300upx 0 0;
+		font-size: 28upx;
+		color: #999;
+	} 
+	
 	.time_title{
 		display: flex;
 		justify-content: space-between;

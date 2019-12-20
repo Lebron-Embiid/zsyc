@@ -56,26 +56,31 @@
 				orderNavs: [
 					{
 						icon: '/static/icon/order_icon1.png',
-						title: '待付款'
+						title: '待付款',
+						url: '/pages/person/order?id=1'
 					},{
 						icon: '/static/icon/order_icon2.png',
-						title: '待发货'
+						title: '待发货',
+						url: '/pages/person/order?id=2'
 					},{
 						icon: '/static/icon/order_icon3.png',
-						title: '待收货'
+						title: '待收货',
+						url: '/pages/person/order?id=3'
 					},{
 						icon: '/static/icon/order_icon4.png',
-						title: '待评价'
+						title: '待评价',
+						url: '/pages/person/order?id=4'
 					},{
 						icon: '/static/icon/order_icon5.png',
-						title: '提货码'
+						title: '提货码',
+						url: '/pages/person/offline_order?id=2'
 					}
 				],
 				useList: [
 					{
 						icon: '/static/icon/use_icon1.png',
 						title: '套餐选购',
-						url: ''
+						url: '/pages/meal/meal'
 					},{
 						icon: '/static/icon/use_icon2.png',
 						title: '资格购买',
@@ -135,12 +140,20 @@
 				})
 			},
 			clickNav(idx){
-				
+				uni.navigateTo({
+					url: this.orderNavs[idx].url
+				})
 			},
 			clickUse(idx){
-				uni.navigateTo({
-					url: this.useList[idx].url
-				})
+				if(idx == 0){
+					uni.switchTab({
+						url: this.useList[idx].url
+					})
+				}else{
+					uni.navigateTo({
+						url: this.useList[idx].url
+					})
+				}
 			}
 		}
 	}
@@ -173,8 +186,14 @@
 			}
 		}
 		.pt_center{
-			width: 80%;
+			width: 60%;
 			font-size: 28rpx;
+			view{
+				margin-bottom: 5rpx;
+				&:last-child{
+					margin-bottom: 0;
+				}
+			}
 		}
 		.pt_right{
 			text-align: right;

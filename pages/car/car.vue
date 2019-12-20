@@ -24,9 +24,9 @@
 						</view>
 						<view class="info">
 							<view class="title">{{row.name}}</view>
-							<!-- <view class="spec">{{row.spec}}</view> -->
+							<view class="spec">{{row.spec}}</view>
 							<view class="price-number">
-								<view class="price">￥{{row.price}}</view>
+								<view class="price">￥{{row.price}}<text>v {{row.lines}}</text></view>
 								<view class="number">
 									<view class="sub" @tap.stop="sub(index)">
 										<view class="icon jian"></view>
@@ -75,7 +75,13 @@
 				numList: [],
 				isAllselected:false,
 				goods: [],
-				goodsList:[],
+				goodsList:[
+					{id:1,img:'/static/img/goods/p1.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					{id:2,img:'/static/img/goods/p2.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					{id:3,img:'/static/img/goods/p3.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					{id:4,img:'/static/img/goods/p4.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					{id:5,img:'/static/img/goods/p5.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false}
+				],
 				//控制滑动效果
 				theIndex:null,
 				oldIndex:null,
@@ -462,23 +468,23 @@
 		display: flex;
 		align-items: center;
 		.checkbox{
-			width: 35upx;
-			height: 35upx;
+			width: 35rpx;
+			height: 35rpx;
 			border-radius: 100%;
-			border: solid 2upx #1abc9c;
+			border: solid 2rpx #fe747f;
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			.on{
-				width: 25upx;
-				height: 25upx;
+				width: 25rpx;
+				height: 25rpx;
 				border-radius: 100%;
-				background-color: #1abc9c;
+				background-color: #fe747f;
 			}
 		}
 		.text{
-			font-size: 28upx;
-			margin-left: 10upx;
+			font-size: 28rpx;
+			margin-left: 10rpx;
 		}
 	}
 .status {
@@ -496,7 +502,7 @@
 	.header{
 		width: 92%;
 		padding: 0 4%;
-		height: 100upx;
+		height: 100rpx;
 		display: flex;
 		align-items: center;
 		position: fixed;
@@ -507,36 +513,36 @@
 		top: var(--status-bar-height);
 		/*  #endif  */
 		.title{
-			font-size: 36upx;
+			font-size: 36rpx;
 		}
 		
 	}
 	.place{
 		
 		background-color: #ffffff;
-		height: 100upx;
+		height: 100rpx;
 		/*  #ifdef  APP-PLUS  */
 		margin-top: var(--status-bar-height);
 		/*  #endif  */
 	}
 	.goods-list{
 		width: 100%;
-		padding: 20upx 0 120upx 0;
+		padding: 20rpx 0 120rpx 0;
 		.tis{
 			width: 100%;
-			height: 60upx;
+			height: 60rpx;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			font-size: 32upx;
+			font-size: 32rpx;
 		}
 		.row{
 			width: calc(92%);
-			height: calc(22vw + 40upx); 
-			margin: 20upx auto;
+			height: calc(22vw + 40rpx); 
+			margin: 20rpx auto;
 			
-			border-radius: 15upx;
-			box-shadow: 0upx 5upx 20upx rgba(0,0,0,0.1);
+			// border-radius: 15rpx;
+			box-shadow: 0rpx 5rpx 20rpx rgba(0,0,0,0.1);
 			display: flex;
 			align-items: center;
 			position: relative;
@@ -546,7 +552,7 @@
 			.menu{
 				.icon{
 					color: #fff;
-					// font-size: 25upx;
+					// font-size: 25rpx;
 				}
 				position: absolute;
 				width: 30%;
@@ -555,7 +561,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				background-color: red;
+				background: #f00;
 				color: #fff;
 				z-index: 2;
 			}
@@ -574,10 +580,10 @@
 				}
 				background-color: #fff;
 				.checkbox-box{
-					padding-left: 20upx;
+					padding-left: 20rpx;
 					flex-shrink: 0;
 					height: 22vw;
-					margin-right: 20upx;
+					margin-right: 20rpx;
 				}
 				position: absolute;
 				width: 100%;
@@ -590,14 +596,14 @@
 				.goods-info{
 					width: 100%;
 					display: flex;
-					padding-right: 20upx;
+					padding-right: 20rpx;
 					.img{
 						width: 22vw;
 						height: 22vw;
-						border-radius: 10upx;
+						border-radius: 10rpx;
 						overflow: hidden;
 						flex-shrink: 0;
-						margin-right: 10upx;
+						margin-right: 10rpx;
 						image{
 							width: 22vw;
 							height: 22vw;
@@ -610,66 +616,64 @@
 						position: relative;
 						.title{
 							width: 100%;
-							font-size: 28upx;
-							overflow : hidden;
+							overflow: hidden;
 							text-overflow: ellipsis;
 							display: -webkit-box;
-							-webkit-line-clamp: 2;
+							-webkit-line-clamp: 1;
 							-webkit-box-orient: vertical;
 							word-wrap: break-word;
 							word-break: break-all;
+							margin-bottom: 20rpx;
+							color: #333;
+							font-size: 32rpx;
 						}
 						.spec{
-							// font-size: 20upx;
-							// background-color: #f3f3f3;
-							// color: #a7a7a7;
-							// height: 30upx;
-							// display: flex;
-							// align-items: center;
-							// padding: 0 10upx;
-							// border-radius: 15upx;
-							// margin-bottom: 20vw;
+							font-size: 28rpx;
+							color: #999;
 						}
 						.price-number{
 							position: absolute;
 							width: 100%;
-							bottom: 0upx;
+							bottom: 0rpx;
 							display: flex;
 							justify-content: space-between;
 							align-items: flex-end;
-							font-size: 28upx;
-							height: 60upx;
+							font-size: 28rpx;
+							height: 60rpx;
 							.price{
 								color: #f00;
+								text{
+									margin-left: 30rpx;
+								}
 							}
 							.number{
 								display: flex;
 								justify-content: center;
 								align-items: flex-end;
 								.input{
-									width: 60upx;
-									height: 60upx;
-									margin: 0 10upx;
+									width: 60rpx;
+									height: 60rpx;
+									margin: 0 10rpx;
 									background-color: #f3f3f3;
 									input{
-										width: 60upx;
-										height: 60upx;
+										width: 60rpx;
+										height: 60rpx;
 										display: flex;
 										justify-content: center;
 										align-items: center;
 										text-align: center;
-										font-size: 26upx;
+										font-size: 28rpx;
 									}
 								}
 								.sub ,.add{
-									width: 45upx;
-									height: 45upx;
+									width: 45rpx;
+									height: 45rpx;
 									background-color: #f3f3f3;
-									border-radius: 5upx;
+									border-radius: 5rpx;
 									.icon{
-										font-size: 22upx;
-										width: 45upx;
-										height: 45upx;
+										font-size: 22rpx;
+										width: 45rpx;
+										height: 45rpx;
 										display: flex;
 										justify-content: center;
 										align-items: center;
@@ -687,20 +691,21 @@
 		width: 92%;
 		padding: 0 4%;
 		background-color: #fbfbfb;
-		height: 100upx;
+		height: 100rpx;
+		border-top: 1px solid #eee;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		font-size: 28upx;
+		font-size: 28rpx;
 		position: fixed;
-		bottom: 0upx;
+		bottom: 0rpx;
 		z-index: 5;
 		.delBtn{
-			border: solid 1upx #f06c7a;
-			color: #f06c7a;
-			padding: 0 30upx;
-			height: 50upx;
-			border-radius: 30upx;
+			border: solid 1rpx #fd4b71;
+			color: #fd4b71;
+			padding: 0 30rpx;
+			height: 50rpx;
+			border-radius: 30rpx;
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -712,24 +717,24 @@
 			align-items: center;
 			.sum{
 				width: 60%;
-				font-size: 28upx;
-				margin-right: 10upx;
+				font-size: 28rpx;
+				margin-right: 10rpx;
 				display: flex;
 				justify-content: flex-end;
 				.money{
-					font-weight: 600;
+					color: #fd4b71;
 				}
 			}
 			.btn{
-				padding: 0 30upx;
-				height: 50upx;
-				background-color: #f06c7a;
+				padding: 0 30rpx;
+				height: 50rpx;
+				background-color: #fd4b71;
 				color: #fff;
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				
-				border-radius: 30upx;
+				border-radius: 30rpx;
 			}
 		}
 	}

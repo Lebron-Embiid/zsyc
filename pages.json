@@ -127,6 +127,15 @@
 			}
 		},
 		{
+			"path": "pages/index/category",
+			"style": {
+				"navigationBarTitleText": "分类",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/find/detail",
 			"style": {
 				"navigationBarTitleText": "发现详情页",
@@ -175,6 +184,15 @@
 			"path": "pages/person/order",
 			"style": {
 				"navigationBarTitleText": "我的订单",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/offline_order",
+			"style": {
+				"navigationBarTitleText": "线下订单",
 				"app-plus": {
 					"titleNView": false
 				}

@@ -1,7 +1,7 @@
 <template>
 	<view class="process">
 		<view class="page_bg"></view>
-		<uni-nav-bar leftIcon="back" title="进度"></uni-nav-bar>
+		<uni-nav-bar leftIcon="back" title="进度" :rightIcon="customer" @clickRight="contactCustomer"></uni-nav-bar>
 		<view class="logist_content">
 			<view class="logist_box">
 				<view class="logist_item" v-for="(item,index) in logists" :key="index">
@@ -23,6 +23,7 @@
 	export default{
 		data(){
 			return{
+				customer: '/static/icon/kefu.png',
 				logists:[
 					{
 						log_title: '【订单】已提交申请，正在受理',
@@ -41,7 +42,9 @@
 			uniNavBar
 		},
 		methods:{
-			
+			contactCustomer(){
+				
+			}
 		},
 		onLoad(opt) {
 			
@@ -50,6 +53,9 @@
 </script>
 
 <style scoped lang="scss">
+	.not_have{
+		margin: 50rpx auto 0;
+	}
 	.process{
 		background: #eee;
 	}

@@ -7,7 +7,7 @@
 		<!-- #endif -->
 		<view class="fixed_search_top">
 			<image @tap="scanCode" src="/static/icon/scan.png" class="scan_icon" mode="widthFix"></image>
-			<view @tap="toSearch"><image src="/static/icon/search.png" mode="widthFix"></image>搜索商品</view>
+			<view @tap="toSearch"><image src="/static/icon/search.png" class="search_icon" mode="widthFix"></image>搜索商品</view>
 			<image src="/static/icon/mess.png" class="mess_icon" mode="widthFix"></image>
 		</view>
 		<scroll-view scroll-y="true" class="index_scroll">
@@ -72,7 +72,7 @@
 			<view class="shop_recommd_box">
 				<view class="time_title bold">
 					<view>人气推荐</view>
-					<navigator url="">更多&gt;</navigator>
+					<navigator url="/pages/index/category">更多&gt;</navigator>
 				</view>
 				<image src="/static/img/pop_banner.jpg" class="rec_banner" mode="widthFix"></image>
 				<view class="rec_goods_box pop">
@@ -296,10 +296,10 @@
 			padding: 0 20rpx;
 			box-sizing: border-box;
 			border-radius: 10rpx;
-			image{
+			.search_icon{
 				display: block;
-				width: 44rpx;
-				height: 44rpx;
+				width: 32rpx;
+				height: 32rpx;
 				margin-right: 20rpx;
 			}
 		}
@@ -322,6 +322,7 @@
 		}
 		.swiper{
 			position: relative;
+			height: 300rpx;
 			z-index: 5;
 			image{
 				display: block;

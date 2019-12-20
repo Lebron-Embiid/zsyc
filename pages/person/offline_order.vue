@@ -1,6 +1,6 @@
 <template>
-	<view class="order">
-		<uni-nav-bar leftIcon="back" title="我的订单" rightText="线下订单" :isBtn="true" @clickRight="clickRightBtn"></uni-nav-bar>
+	<view class="offline_order">
+		<uni-nav-bar leftIcon="back" title="线下订单" rightText="线上订单" :isBtn="true" @clickRight="clickRightBtn"></uni-nav-bar>
 		<view class="list_nav">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
 		</view>
@@ -14,18 +14,18 @@
 					<image :src="order.src" mode="widthFix"></image>
 					<view class="moi_box">
 						<view class="moi_title">{{order.title}}</view>
-						<view class="moi_info">{{order.info}}</view>
+						<view class="moi_info">提货店铺：{{order.shop}}</view>
+						<view class="moi_info">提货地址：{{order.address}}</view>
+						<view class="moi_info">联系电话：{{order.phone}}</view>
 					</view>
 				</view>
 				<view class="moi_all">共{{item.num}}件商品 合计：￥{{item.price}}</view>
 				<view class="moi_bottom">
-					<button @tap="toLogistics(item.id)" v-if="item.is_type == 3" type="default" size="mini" class="pad">查看物流</button>
-					<button @tap="cancelOrder(item.id)" v-if="item.is_type == 1 || item.is_type == 2" type="default" size="mini" class="pad">取消订单</button>
-					<button v-if="item.is_type == 2 || item.is_type == 3 || item.is_type == 4" type="default" size="mini" class="pad">再次购买</button>
-					<button v-if="item.is_type == 4" type="default" size="mini">退换货</button>
-					<button v-if="item.is_type == 3" type="primary" size="mini" class="red pad">确认收货</button>
-					<button @tap="toEvaluation(item.id)" v-if="item.is_type == 4" type="primary" size="mini" class="red pad">评价有礼</button>
-					<button v-if="item.is_type == 1" type="primary" size="mini" class="red">付款</button>
+					<button v-if="item.is_type == 6" type="default" size="mini" class="orange pad">生成提货码</button>
+					<button v-if="item.is_type == 7" type="default" size="mini" class="green">未提货</button>
+					<button v-if="item.is_type == 8 || item.is_type == 9" type="default" size="mini">已提货</button>
+					<button @tap="toEvaluation(item.id)" v-if="item.is_type == 9 && item.is_eval == 0" type="primary" size="mini" class="orange">评价</button>
+					<button v-if="item.is_type == 9 && item.is_eval == 1" type="primary" size="mini">已评价</button>
 				</view>
 			</view>
 			<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
@@ -39,69 +39,100 @@
 	export default{
 		data(){
 			return{
-				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"}],
+				navbar:[{name:"全部"},{name:"待确认"},{name:"待提货"},{name:"已提货"},{name:"待评价"}],
 				currentTab:0,
 				orderList: [
 					{
 						id: 1,
 						order_sn: '021255684',
-						status: '待付款',
+						status: '套餐',
 						list: [
 							{
 								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
+								title: '女士套餐',
+								shop: '广州越秀蓉蓉美衣',
+								address: '广州市越秀区中山路119号',
+								phone: '13855668899'
 							}
 						],
 						num: 1,
 						price: 24,
-						is_type: 1
+						is_type: 6,
+						is_eval: 0
 					},{
 						id: 2,
 						order_sn: '021255684',
-						status: '待发货',
+						status: '套餐',
 						list: [
 							{
 								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
+								title: '女士套餐',
+								shop: '广州越秀蓉蓉美衣',
+								address: '广州市越秀区中山路119号',
+								phone: '13855668899'
 							},{
 								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
+								title: '女士套餐',
+								shop: '广州越秀蓉蓉美衣',
+								address: '广州市越秀区中山路119号',
+								phone: '13855668899'
 							}
 						],
 						num: 1,
 						price: 24,
-						is_type: 2
+						is_type: 7,
+						is_eval: 0
 					},{
 						id: 3,
 						order_sn: '021255684',
-						status: '待收货',
+						status: '套餐',
 						list: [
 							{
 								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
+								title: '女士套餐',
+								shop: '广州越秀蓉蓉美衣',
+								address: '广州市越秀区中山路119号',
+								phone: '13855668899'
 							}
 						],
 						num: 1,
 						price: 24,
-						is_type: 3
+						is_type: 8,
+						is_eval: 0
 					},{
 						id: 4,
 						order_sn: '021255684',
-						status: '待评价',
+						status: '套餐',
 						list: [
 							{
 								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
+								title: '女士套餐',
+								shop: '广州越秀蓉蓉美衣',
+								address: '广州市越秀区中山路119号',
+								phone: '13855668899'
 							}
 						],
 						num: 1,
 						price: 24,
-						is_type: 4
+						is_type: 9,
+						is_eval: 0
+					},{
+						id: 4,
+						order_sn: '021255684',
+						status: '套餐',
+						list: [
+							{
+								src: '/static/img/online_img1.png',
+								title: '女士套餐',
+								shop: '广州越秀蓉蓉美衣',
+								address: '广州市越秀区中山路119号',
+								phone: '13855668899'
+							}
+						],
+						num: 1,
+						price: 24,
+						is_type: 9,
+						is_eval: 1
 					}
 				],
 				loadingType: 'more'
@@ -119,7 +150,7 @@
 		methods:{
 			clickRightBtn(){
 				uni.redirectTo({
-					url: '/pages/person/offline_order'
+					url: '/pages/person/order'
 				})
 			},
 			navbarTap(e){
@@ -140,18 +171,13 @@
 				uni.navigateTo({
 					url: '/pages/person/evaluation?id='+id
 				})
-			},
-			toLogistics(id){
-				uni.navigateTo({
-					url: '/pages/person/logistics?id='+id
-				})
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	.order{
+	.offline_order{
 		background: #eee;
 	}
 	.my_order_box{
@@ -184,7 +210,7 @@
 				font-weight: bold;
 				display: flex;
 				justify-content: flex-start;
-				align-items: center;
+				align-items: flex-start;
 				&:active{
 					background: #fafafa;
 				}
@@ -196,7 +222,9 @@
 				}
 				.moi_box{
 					.moi_title{
-						margin-bottom: 30rpx;
+						font-size: 30rpx;
+						color: #333;
+						margin-bottom: 20rpx;
 						overflow : hidden;
 						text-overflow: ellipsis;
 						display: -webkit-box;
@@ -208,6 +236,10 @@
 					.moi_info{
 						font-size: 28rpx;
 						color: #999;
+						margin-bottom: 10rpx;
+						&:last-child{
+							margin-bottom: 0;
+						}
 					}
 				}
 			}
@@ -229,27 +261,32 @@
 				flex-wrap: wrap;
 				button{
 					margin: 0 0 0 20rpx;
-					background: #fff;
-					width: 180rpx;
+					background: #ccc;
+					width: 150rpx;
 					height: 60rpx;
 					line-height: 60rpx;
 					text-align: center;
-					box-sizing: border-box;
 					font-size: 28rpx;
 					border: 1px solid #ccc;
-					color: #333;
+					box-sizing: border-box;
+					padding: 0;
+					color: #fff;
 					&.pad{
 						width: auto;
-						padding: 0 30rpx;
+						padding: 0 20rpx;
 					}
-					&:active{
-						background: #eee;
-					}
-					&.red{
+					&.green{
 						color: #fff;
-						font-weight: bold;
-						background: #fd4b71;
-						border-color: #fd4b71;
+						background: #390;
+						border-color: #390;
+						&:active{
+							opacity: .9;
+						}
+					}
+					&.orange{
+						color: #fff;
+						background: #f60;
+						border-color: #f60;
 						&:active{
 							opacity: .9;
 						}

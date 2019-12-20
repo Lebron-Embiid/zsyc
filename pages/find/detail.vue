@@ -2,16 +2,17 @@
 	<view class="detail">
 		<uni-nav-bar left-icon="back" title="发现详情页"></uni-nav-bar>
 		<view class="find_detail_box">
-			<view class="detail_title">贴身内衣裤挑选指南，专业知识在这里！</view>
-			贴身内衣裤挑选指南，专业知识在这里！
-			
-			每日贴身穿着的内衣裤，决定了私密处的健康与舒适。针对男、女士和孕妇，也有着不同的挑选法则。平台盘点整条产品线，告诉你内衣裤到底怎么挑。
-			
-			臀围和腰围各指什么？臀围指臀部最宽处水平绕一周的长度，标准比例是“女性身高值乘以0.542”。腰围指经肚脐上0.5至1厘米处水平绕一周的长度，标准比例是“女性身高值乘以0.34 ”。
-			
-			如何根据“臀型”和“腰型”选择适合自己的内裤？女士内裤与男士内裤还是有很大的区别的，其中关键性便是对“倩影”和“臀部”的修饰作用。谈裤型，先要谈腰型，因为它牵涉到身材的“立体轮廓”问题。经典的裤装是有内在的气质，自信、现代。女性的内裤虽有多种类型，但有一点是共同的，那就是：外装是给别人看的，内裤和内衣是为自己穿的。不舒服的裤子肯定不好看，好看的裤子首先是穿起来舒服。
-			
-			圆润的臀部：低腰裤。裤腰位于腰线以下，又叫无腰裤。穿着时裤腰在肚脐眼以下松松垮垮挂在胯部，裸露出腰部与臀部的结合部那一段优美的弧线，非常适合腰围与臀围尺寸相差较大的人。低腰短裆，臀腹部贴身。低腰款让你的臀部短了一大截，显得臀围好像小了一圈，臀部看起来更小巧。
+			<skeleton
+			  :loading="loading"
+			  :showAvatar="false"
+			>
+				<view class="detail_title">{{title}}</view>
+				<view class="detail_content">
+					<block v-if="content!=''">
+						<u-parse :content="content"></u-parse>
+					</block>
+				</view>
+			</skeleton>
 		</view>
 		<view class="mb100"></view>
 		<view class="fixed_bottom">
@@ -31,14 +32,21 @@
 
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import uParse from '@/components/u-parse/u-parse.vue'
+	import Skeleton from '@/components/skeleton/index.vue'
 	export default{
 		data(){
 			return{
-				is_collect: 0
+				is_collect: 0,
+				title: '贴身内衣裤挑选指南，专业知识在这里！',
+				content: "贴身内衣裤挑选指南，专业知识在这里！每日贴身穿着的内衣裤，决定了私密处的健康与舒适。针对男、女士和孕妇，也有着不同的挑选法则。平台盘点整条产品线，告诉你内衣裤到底怎么挑。臀围和腰围各指什么？臀围指臀部最宽处水平绕一周的长度，标准比例是女性身高值乘以0.542。腰围指经肚脐上0.5至1厘米处水平绕一周的长度，标准比例是女性身高值乘以0.34。如何根据臀型和腰型选择适合自己的内裤？女士内裤与男士内裤还是有很大的区别的，其中关键性便是对倩影和臀部的修饰作用。谈裤型，先要谈腰型，因为它牵涉到身材的立体轮廓问题。经典的裤装是有内在的气质，自信、现代。女性的内裤虽有多种类型，但有一点是共同的，那就是：外装是给别人看的，内裤和内衣是为自己穿的。不舒服的裤子肯定不好看，好看的裤子首先是穿起来舒服。圆润的臀部：低腰裤。裤腰位于腰线以下，又叫无腰裤。穿着时裤腰在肚脐眼以下松松垮垮挂在胯部，裸露出腰部与臀部的结合部那一段优美的弧线，非常适合腰围与臀围尺寸相差较大的人。低腰短裆，臀腹部贴身。低腰款让你的臀部短了一大截，显得臀围好像小了一圈，臀部看起来更小巧。",
+				loading: false
 			}
 		},
 		components:{
-			uniNavBar
+			uniNavBar,
+			uParse,
+			Skeleton
 		},
 		methods:{
 			submitForm(){
