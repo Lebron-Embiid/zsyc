@@ -46,7 +46,7 @@
 					<navigator url="">更多&gt;</navigator>
 				</view>
 				<view class="time_goods_box">
-					<view class="time_item" v-for="(item,index) in timeList" :key="index">
+					<view class="time_item" @tap="toGoodsDetail(item.id)" v-for="(item,index) in timeList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view>￥{{item.price}}</view>
 						<text>仅剩{{item.num}}件</text>
@@ -76,7 +76,7 @@
 				</view>
 				<image src="/static/img/pop_banner.jpg" class="rec_banner" mode="widthFix"></image>
 				<view class="rec_goods_box pop">
-					<view class="rec_item" v-for="(item,index) in popList" :key="index">
+					<view class="rec_item" @tap="toGoodsDetail(item.id)" v-for="(item,index) in popList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view class="rec_title">{{item.title}}</view>
 						<view class="rec_price">{{item.price}}</view>
@@ -89,7 +89,7 @@
 					<view>为你推荐</view>
 				</view>
 				<view class="recommd_goods_box">
-					<view class="recommd_item" v-for="(item,index) in recommdList" :key="index">
+					<view class="recommd_item" @tap="toGoodsDetail(item.id)" v-for="(item,index) in recommdList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view class="ri_title">{{item.title}}</view>
 						<view class="ri_price">￥{{item.price}}</view>
@@ -115,7 +115,7 @@
 				navs: [
 					{
 						icon: '/static/icon/nav_icon1.png',
-						title: '掌上衣橱'
+						title: '折扣区'
 					},{
 						icon: '/static/icon/nav_icon2.png',
 						title: '线上发货专区'
@@ -231,7 +231,9 @@
 			},
 			clickNav(idx){
 				if(idx == 0){
-					
+					uni.navigateTo({
+						url: '/pages/index/discount'
+					})
 				}else if(idx == 1){
 					uni.navigateTo({
 						url: '/pages/index/online_area'
@@ -245,6 +247,11 @@
 			toSearch(){
 				uni.navigateTo({
 					url: '/pages/index/search'
+				})
+			},
+			toGoodsDetail(id){
+				uni.navigateTo({
+					url: '/pages/index/detail?id='+id
 				})
 			}
 		},

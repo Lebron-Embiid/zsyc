@@ -55,6 +55,15 @@
 			}
 		},
 		{
+			"path": "pages/index/discount",
+			"style": {
+				"navigationBarTitleText": "折扣区",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/index/search",
 			"style": {
 				"navigationBarTitleText": "搜索",
