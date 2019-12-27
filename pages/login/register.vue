@@ -20,14 +20,14 @@
 						</view>
 					</view>
 				</view>
-				<view class="form_item">
+				<!-- <view class="form_item">
 					<view class="icon no"><image src="/static/icon/email.png" mode="widthFix"></image></view>
 					<view class="right_box">
 						<view class="ipt_box">
 							<input type="text" placeholder="注册邮箱地址" v-model="email" />
 						</view>
 					</view>
-				</view>
+				</view> -->
 				<view class="form_item">
 					<view class="icon"><image src="/static/icon/vcode.svg" mode="widthFix"></image></view>
 					<view class="right_box all">
@@ -35,6 +35,17 @@
 							<input type="text" placeholder="输入验证码" v-model="code" />
 						</view>
 						<view class="yzm" :class="{ yzms: second>0 }" @tap="getcode">{{yanzhengma}}</view>
+					</view>
+				</view>
+				<view class="form_item">
+					<view class="icon"><image src="/static/icon/pwd.svg" mode="widthFix"></image></view>
+					<view class="right_box">
+						<view class="ipt_box">
+							<input type="password" placeholder="设置登录密码" v-if="input_type1 == 0" v-model="password" />
+							<input type="text" placeholder="设置登录密码" v-else v-model="password" />
+							<!-- <image :class="[password!=''?'active':'']" @tap="clearPwd" src="/static/clear.svg" mode="widthFix"></image> -->
+						</view>
+						<switchc text="可见|***" class="switch_btn" :sid="0" @change="switchchange"></switchc>
 					</view>
 				</view>
 				<!-- <view class="form_item">
@@ -58,17 +69,6 @@
 						<!-- #endif -->
 					</view>
 				</view>
-				<view class="form_item">
-					<view class="icon"><image src="/static/icon/pwd.svg" mode="widthFix"></image></view>
-					<view class="right_box">
-						<view class="ipt_box">
-							<input type="password" placeholder="设置登录密码" v-if="input_type1 == 0" v-model="password" />
-							<input type="text" placeholder="设置登录密码" v-else v-model="password" />
-							<!-- <image :class="[password!=''?'active':'']" @tap="clearPwd" src="/static/clear.svg" mode="widthFix"></image> -->
-						</view>
-						<switchc text="可见|***" class="switch_btn" :sid="0" @change="switchchange"></switchc>
-					</view>
-				</view>
 				<!-- <view class="form_item">
 					<view class="icon no"><image src="/static/email.png" mode="widthFix"></image></view>
 					<view class="right_box">
@@ -77,14 +77,14 @@
 						</view>
 					</view>
 				</view> -->
-				<!-- <view class="form_item nopad">
+				<view class="form_item nopad">
 					<view class="right_box">
 						<view class="ipt_box">
 							<input type="text" placeholder="请输入验证码" v-model="v_code" />
 						</view>
 						<valid-code :value.sync="validCode" @update:value="getCode"></valid-code>
 					</view>
-				</view> -->
+				</view>
 				<view class="agree_txt">
 					<view v-if="is_agree == false" @tap="changeAgree"><image src="/static/icon/radio.svg" mode="widthFix"></image></view>
 					<view v-else @tap="changeAgree"><image src="/static/icon/radio_on.svg" mode="widthFix"></image></view>
@@ -173,12 +173,16 @@
 						if(that.second>0){
 							return;
 						}
-						that.$http.sendEmailCode({
+						if(that.phone == ''){
+							that.$api.msg('请输入手机号码');
+							return;
+						}
+						that.$http.sendValidateCode({
 							mobile: that.phone,
-							email: that.email
+							scene: 1
 						}).then((data)=>{
 							console.log(data);
-							that.$api.msg(data.data.message);
+							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								that.second = 60;
 								timer = setInterval(function(){
@@ -249,29 +253,18 @@
 							this.$api.msg('请输入验证码');
 							return;
 						}
-						if(this.v_code != this.validCode){
+						if(this.v_code.toLowerCase() != this.validCode){
 							this.$api.msg('请输入正确的验证码');
 							return;
 						}
-						let all_phone = this.internation_number+this.phone;
-						// console.log(all_phone);
-						for(let i in util.phoneList){
-							let reg = new RegExp(util.phoneList[i][1]);
-							// console.log(reg);
-							if((reg.test(all_phone))){
-								console.log(util.phoneList[i][0]);
-							}
-						}
 						
-						this.$http.formRegister({
-							account: this.phone,
-							login_pwd: this.password,
-							safety_pwd: this.trade_pwd,
-							pid: this.invite_code,
-							email: this.email,
-							area_code: this.internation_number
+						this.$http.userRegister({
+							username: this.phone,
+							password: this.password,
+							code: this.code,
+							reg_code: this.invite_code
 						}).then((data)=>{
-							this.$api.msg(data.data.message);
+							this.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								setTimeout(function(){
 									uni.redirectTo({

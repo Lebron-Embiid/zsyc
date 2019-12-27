@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<uni-nav-bar title="购物车" rightText="编辑" @clickRight="clickRightBtn"></uni-nav-bar>
+		<!-- rightText="编辑" -->
+		<uni-nav-bar title="购物车" @clickRight="clickRightBtn"></uni-nav-bar>
 		<!-- 商品列表 -->
 		<view class="goods-list">
 			<view class="tis" v-if="goodsList.length==0">购物车是空的哦~</view>
@@ -111,38 +112,51 @@
 				this.footerbottom = document.getElementsByTagName('uni-tabbar')[0].offsetHeight+'px';
 			// #endif
 			// #ifdef APP-PLUS
-			this.showHeader = false;
-			this.statusHeight = plus.navigator.getStatusbarHeight();
+				this.showHeader = false;
+				this.statusHeight = plus.navigator.getStatusbarHeight();
 			// #endif
 		},
 		onShow() {
-			this.$http.getCar().then((data)=>{
-				// console.log(data.data);
-				let goodsList = [];
-				let res = data.data.list;
-				let arr = [];
-				for(let i in res){
-					arr.push(res[i])
-				}
-				this.goods = arr;
-				for(var i=0;i<arr.length;i++){
-					goodsList.push({
-						gid: arr[i].gid,
-						name: arr[i].name,
-						num: arr[i].num,
-						pic: arr[i].pic,
-						price: arr[i].price,
-						selected: false
-					})
-				}
-				this.selectedList = [];
-				this.isAllselected = false;
-				this.goodsList = goodsList;
-				this.sum();
-				console.log(this.goodsList);
-			})
+			this.getCarInit();
+			
+			// this.selectedList = [];
+			// this.isAllselected = false;
 		},
 		methods: {
+			getCarInit(){
+				let params = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						unique_id: uni.getStorageSync('unique_id')
+					}
+				}else{
+					params = {
+						token: uni.getStorageSync('token')
+					}
+				}
+				this.$http.carList(params).then((data)=>{
+					// console.log(data.data);
+					let goodsList = [];
+					let res = data.data.result.cartList;
+					let arr = [];
+					for(let i in res){
+						arr.push(res[i])
+					}
+					this.goods = arr;
+					for(var i=0;i<arr.length;i++){
+						goodsList.push({
+							gid: arr[i].goods_id,
+							name: arr[i].goods_name,
+							num: arr[i].goods_num,
+							pic: arr[i].pic,
+							price: arr[i].goods_price,
+							selected: false
+						})
+					}
+					this.goodsList = goodsList;
+					this.sum();
+				})
+			},
 			clickRightBtn(){
 				
 			},
@@ -250,7 +264,7 @@
 					time: 1500,
 					success:()=>{
 						uni.navigateTo({
-							url: '/pages/index/confirmation?id='+JSON.stringify(this.selectedList)+'&type=1'
+							url: '/pages/car/write_order?id='+JSON.stringify(this.selectedList)+'&type=1'
 						})
 					}
 				})
@@ -259,32 +273,22 @@
 			deleteGoods(id){
 				let ids = [];
 				ids.push(id);
+				let del_parm = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					del_parm = {
+						ids: JSON.stringify(ids),
+						unique_id: uni.getStorageSync('unique_id')
+					}
+				}else{
+					del_parm = {
+						ids: JSON.stringify(ids),
+						token: uni.getStorageSync('token')
+					}
+				}
 				console.log(JSON.stringify(ids));
-				this.$http.delCar({
-					g_id: JSON.stringify(ids)
-				}).then((data)=>{
-					this.$api.msg(data.data.message);
-					this.$http.getCar().then((data)=>{
-						let goodsList = [];
-						let res = data.data.list;
-						let arr = [];
-						for(let i in res){
-							arr.push(res[i])
-						}
-						console.log(arr);
-						for(var i=0;i<arr.length;i++){
-							goodsList.push({
-								gid: arr[i].gid,
-								name: arr[i].name,
-								num: arr[i].num,
-								pic: arr[i].pic,
-								price: arr[i].price,
-								selected: false
-							})
-						}
-						this.goodsList = goodsList;
-						this.sum();
-					})
+				this.$http.delCar(del_parm).then((data)=>{
+					this.$api.msg(data.data.msg);
+					this.getCarInit();
 				})
 				this.sum();
 				this.oldIndex = null;
@@ -305,7 +309,7 @@
 								that.$http.delCar({
 									is_all: is_all
 								}).then((data)=>{
-									that.$api.msg(data.data.message);
+									that.$api.msg(data.data.msg);
 									that.$http.getCar().then((data)=>{
 										let goodsList = [];
 										let res = data.data.list;

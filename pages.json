@@ -82,6 +82,33 @@
 			}
 		},
 		{
+			"path": "pages/index/ratings",
+			"style": {
+				"navigationBarTitleText": "用户评价",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/address",
+			"style": {
+				"navigationBarTitleText": "地址列表",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/edit",
+			"style": {
+				"navigationBarTitleText": "添加地址",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/car/car",
 			"style": {
 				"navigationBarTitleText": "购物车",
@@ -130,6 +157,15 @@
 			"path": "pages/index/offline_area",
 			"style": {
 				"navigationBarTitleText": "线下提货专区",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/recommend",
+			"style": {
+				"navigationBarTitleText": "精选推荐",
 				"app-plus": {
 					"titleNView": false
 				}

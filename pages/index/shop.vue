@@ -20,7 +20,7 @@
 					:autoplay="true"
 				>
 					<swiper-item v-for="(item,index) in swiperList" :key="index">
-						<image :src="item" mode="widthFix"></image>
+						<image :src="item.ad_code" mode="widthFix"></image>
 					</swiper-item>
 				</swiper>
 				<view class="index_nav_box">
@@ -31,22 +31,22 @@
 				</view>
 				<view class="time_title">
 					<view>
-						限时抢购
+						{{time_name}}
 						<uni-countdown
 							class="countdown"
 							color="#FFFFFF" 
 							background-color="#ff0036" 
 							border-color="#ff0036" 
 							:show-day="false"
-							:hour="2" 
-							:minute="30" 
-							:second="0" :reset="false">
+							:hour="hour" 
+							:minute="minute" 
+							:second="second" :reset="false">
 						</uni-countdown>
 					</view>
 					<navigator url="">更多&gt;</navigator>
 				</view>
 				<view class="time_goods_box">
-					<view class="time_item" @tap="toGoodsDetail(item.id)" v-for="(item,index) in timeList" :key="index">
+					<view class="time_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in timeList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view>￥{{item.price}}</view>
 						<text>仅剩{{item.num}}件</text>
@@ -56,7 +56,7 @@
 			<view class="gray-place"></view>
 			<view class="shop_recommd_box">
 				<view class="time_title bold">
-					<view>店铺推荐</view>
+					<view>{{rec_name}}</view>
 					<navigator url="">更多&gt;</navigator>
 				</view>
 				<image src="/static/img/rec_banner.png" class="rec_banner" mode="widthFix"></image>
@@ -71,12 +71,12 @@
 			<view class="gray-place"></view>
 			<view class="shop_recommd_box">
 				<view class="time_title bold">
-					<view>人气推荐</view>
+					<view>{{pop_name}}</view>
 					<navigator url="/pages/index/category">更多&gt;</navigator>
 				</view>
 				<image src="/static/img/pop_banner.jpg" class="rec_banner" mode="widthFix"></image>
 				<view class="rec_goods_box pop">
-					<view class="rec_item" @tap="toGoodsDetail(item.id)" v-for="(item,index) in popList" :key="index">
+					<view class="rec_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in popList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view class="rec_title">{{item.title}}</view>
 						<view class="rec_price">{{item.price}}</view>
@@ -86,10 +86,10 @@
 			<view class="gray-place"></view>
 			<view class="shop_recommd_box">
 				<view class="time_title bold">
-					<view>为你推荐</view>
+					<view>{{recommd_name}}</view>
 				</view>
 				<view class="recommd_goods_box">
-					<view class="recommd_item" @tap="toGoodsDetail(item.id)" v-for="(item,index) in recommdList" :key="index">
+					<view class="recommd_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in recommdList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view class="ri_title">{{item.title}}</view>
 						<view class="ri_price">￥{{item.price}}</view>
@@ -111,7 +111,7 @@
 	export default{
 		data(){
 			return{
-				swiperList: ['/static/img/banner1.png','/static/img/banner2.png','/static/img/banner3.png'],
+				swiperList: [],
 				navs: [
 					{
 						icon: '/static/icon/nav_icon1.png',
@@ -124,6 +124,7 @@
 						title: '线下提货专区'
 					}
 				],
+				time_name: '限时抢购',
 				timeList: [
 					{
 						src: '/static/img/time_img1.png',
@@ -139,6 +140,7 @@
 						num: 80
 					}
 				],
+				rec_name: '店铺推荐',
 				recList: [
 					{
 						src: '/static/img/rec_img1.png',
@@ -157,6 +159,7 @@
 						area: '番禺区'
 					}
 				],
+				pop_name: '人气推荐',
 				popList: [
 					{
 						src: '/static/img/pop_img1.jpg',
@@ -172,6 +175,7 @@
 						price: '329'
 					}
 				],
+				recommd_name: '为你推荐',
 				recommdList:[
 					{
 						src: '/static/img/recommd_img1.png',
@@ -207,6 +211,9 @@
 						price: '1199'
 					}
 				],
+				hour: 2,
+				minute: 29,
+				second: 60,
 				loadingType: 'more'
 			}
 		},
@@ -216,6 +223,21 @@
 			uniCountdown,
 			uniLoadMore,
 			fixedList
+		},
+		onLoad() {
+			console.log(uni.getStorageSync('token'));
+			this.$http.getIndexList().then((data)=>{
+				let res = data.data.result;
+				this.swiperList = res.ad;
+				this.time_name = res.goods[0].name;
+				this.timeList = res.goods[0].goods_list;
+				this.rec_name = res.goods[1].name;
+				this.recList = res.goods[1].goods_list;
+				this.pop_name = res.goods[2].name;
+				this.popList = res.goods[2].goods_list;
+				this.recommd_name = res.goods[3].name;
+				this.recommdList = res.goods[3].goods_list;
+			})
 		},
 		methods:{
 			scanCode(){
@@ -418,6 +440,9 @@
 				color: #333;
 				font-size: 28rpx;
 				text-align: center;
+				&:nth-child(n+4){
+					display: none;
+				}
 				image{
 					display: block;
 					width: 100%;

@@ -16,14 +16,14 @@
 						</view>
 					</view>
 				</view>
-				<view class="form_item">
+				<!-- <view class="form_item">
 					<view class="icon no"><image src="/static/icon/email.png" mode="widthFix"></image></view>
 					<view class="right_box">
 						<view class="ipt_box">
 							<input type="text" placeholder="注册邮箱地址" v-model="email" />
 						</view>
 					</view>
-				</view>
+				</view> -->
 				<view class="form_item">
 					<view class="icon"><image src="/static/icon/vcode.svg" mode="widthFix"></image></view>
 					<view class="right_box all">
@@ -100,12 +100,16 @@
 						if(that.second>0){
 							return;
 						}
-						that.$http.sendEmailCode({
+						if(that.phone == ''){
+							that.$api.msg('请输入手机号码');
+							return;
+						}
+						that.$http.sendValidateCode({
 							mobile: that.phone,
-							email: that.email
+							scene: 2
 						}).then((data)=>{
 							console.log(data);
-							that.$api.msg(data.data.message);
+							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								that.second = 60;
 								timer = setInterval(function(){
@@ -120,17 +124,20 @@
 				})
 			},
 			loginSubmit(){
+				if(this.phone == ''){
+					this.$api.msg('请输入手机号码');	
+					return;
+				}
 				this.$Debounce.canDoFunction({
 					key: "forget",
 					time: 1500,
 					success:()=>{
 						this.$http.forgetPassword({
 							mobile: this.phone,
-							email: this.email,
 							password: this.password,
-							code: this.code
+							check_code: this.code
 						}).then((data)=>{
-							this.$api.msg(data.data.message);
+							this.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								setTimeout(function(){
 									uni.navigateBack({

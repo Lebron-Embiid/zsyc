@@ -8,16 +8,16 @@
 			<view class="my_order_item" v-for="(item,index) in orderList" :key="index">
 				<view class="moi_top">
 					订单号：{{item.order_sn}}
-					<text>{{item.status}}</text>
+					<text>{{item.order_status_desc}}</text>
 				</view>
-				<view class="moi_center" @tap="toOrderDetail(item.id,item.is_type)" v-for="(order,idx) in item.list" :key="idx">
-					<image :src="order.src" mode="widthFix"></image>
+				<view class="moi_center" @tap="toOrderDetail(item.id,item.is_type)" v-for="(order,idx) in item.goods_list" :key="idx">
+					<image :src="order.original_img" mode="widthFix"></image>
 					<view class="moi_box">
-						<view class="moi_title">{{order.title}}</view>
-						<view class="moi_info">{{order.info}}</view>
+						<view class="moi_title">{{order.goods_name}}</view>
+						<view class="moi_info">{{order.spec_key_name}}</view>
 					</view>
 				</view>
-				<view class="moi_all">共{{item.num}}件商品 合计：￥{{item.price}}</view>
+				<view class="moi_all">共{{item.goods_list.length}}件商品 合计：￥{{item.total_amount}}</view>
 				<view class="moi_bottom">
 					<button @tap="toLogistics(item.id)" v-if="item.is_type == 3" type="default" size="mini" class="pad">查看物流</button>
 					<button @tap="cancelOrder(item.id)" v-if="item.is_type == 1 || item.is_type == 2" type="default" size="mini" class="pad">取消订单</button>
@@ -115,6 +115,11 @@
 			if(opt.id != undefined){
 				this.currentTab = opt.id;
 			}
+			this.$http.getOrderList({
+				token: uni.getStorageSync('token')
+			}).then((data)=>{
+				this.orderList = data.data.result;
+			})
 		},
 		methods:{
 			clickRightBtn(){

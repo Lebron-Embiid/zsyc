@@ -35,6 +35,11 @@
 				if(this.index == null){
 					this.$api.msg('请选择取消原因');
 				}
+				this.$http.cancelOrder({
+					token: uni.getStorageSync('token')
+				}).then((data)=>{
+					
+				})
 			},
 			bindPickerChange(e) {
 				console.log('picker发送选择改变，携带值为', e.target.value)

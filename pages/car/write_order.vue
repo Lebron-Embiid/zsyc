@@ -2,12 +2,12 @@
 	<view class="write_order">
 		<view class="page_bg"></view>
 		<uni-nav-bar left-icon="back" title="填写订单"></uni-nav-bar>
-		<view class="order_address">
-			<view class="oa_left" v-if="has_address">
+		<view class="order_address" @tap="selectAddress">
+			<view class="oa_left" v-if="has_address==false">
 				<view class="oa_title">请选择地址</view></view>
 			<view class="oa_left" v-else>
-				<view class="oa_title">亮亮 <text>186****1688</text></view>
-				<view class="oa_address">地址：广东省深圳市南山区西丽镇沙河西路12号丽新花园6栋1502号</view>
+				<view class="oa_title">{{recinfo.consignee}} <text>{{phone}}</text></view>
+				<view class="oa_address">地址：{{recinfo.province_name}}{{recinfo.city_name}}{{recinfo.district_name}}{{recinfo.address}}</view>
 			</view>
 			<image src="/static/icon/arrow.png" mode="widthFix"></image>
 		</view>
@@ -46,7 +46,7 @@
 			</view>
 		</view>
 		<view class="fixed_pay_bottom">
-			<view>应付：￥<text>300.00</text></view>
+			<view>应付：￥<text>{{pay_price}}</text></view>
 			<button type="primary" @tap="toPay">去付款</button>
 		</view>
 		<uni-popup ref="goods" type="bottom">
@@ -105,6 +105,10 @@
 	export default{
 		data(){
 			return{
+				phone: '',
+				recinfo: {
+					
+				},
 				goodsList: [
 					{
 						src: '/static/img/order_img2.png',
@@ -173,14 +177,73 @@
 				],
 				message: '',
 				num: 0,
-				has_address: false
+				has_address: false,
+				shipping_code: {},
+				pay_price: ''
 			}
 		},
 		components:{
 			uniNavBar,
 			uniPopup
 		},
+		onLoad(opt) {
+			if(opt.shipCode != undefined){
+				this.shipping_code = JSON.parse(JSON.stringify(opt.shipCode));
+				console.log(this.shipping_code);
+			}
+			
+			this.$http.carConfirm({
+				token: uni.getStorageSync('token')
+			}).then((data)=>{
+				this.recinfo = data.data.result.addressList;
+				console.log(data.data);
+				this.pay_price = data.data.result.totalPrice.total_fee;
+				if(this.recinfo == null){
+					this.has_address = false;
+				}else{
+					this.has_address = true;
+					
+					let tel = ""+this.recinfo.mobile;
+					let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+					this.phone = tel1;
+					
+					this.$http.submitConfirm({
+						token: uni.getStorageSync('token'),
+						address_id: this.recinfo.address_id,
+						shipping_code: this.shipping_code,
+						user_money: 0,
+						pay_points: 0
+					}).then((data)=>{
+						
+					})
+				}
+			})
+		},
+		onShow() {
+			if(uni.getStorageSync('selectAddress') != ''){
+				uni.getStorage({
+					key:'selectAddress',
+					success: (e) => {
+						console.log(e);
+						this.recinfo = e.data;
+						
+						let tel = ""+this.recinfo.mobile;
+						let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+						this.phone = tel1;
+						
+						this.has_address = true;
+					}
+				})
+			}else{
+				this.has_address = false;
+			}
+		},
 		methods:{
+			selectAddress(){
+				uni.navigateTo({
+					url: '/pages/index/address?type=select'
+				})
+			},
 			showGoodsPopup(){
 				this.$refs.goods.open();
 			},
@@ -206,8 +269,29 @@
 				this.num = e.detail.value.length;
 			},
 			toPay(){
-				uni.navigateTo({
-					url: '/pages/car/pay'
+				this.$Debounce.canDoFunction({
+					key: "submitConfirm",
+					time: 1500,
+					success:()=>{
+						this.$http.submitConfirm({
+							token: uni.getStorageSync('token'),
+							address_id: this.recinfo.address_id,
+							shipping_code: this.shipping_code,
+							user_money: 0,
+							pay_points: 0,
+							user_note: JSON.stringify({"7":"留言"}),
+							act: 'submit_order'
+						}).then((data)=>{
+							this.$api.msg(data.data.msg);
+							if(data.data.status == 1){
+								setTimeout(()=>{
+									uni.navigateTo({
+										url: '/pages/car/pay'
+									})
+								},1500)
+							}
+						})
+					}
 				})
 			}
 		}

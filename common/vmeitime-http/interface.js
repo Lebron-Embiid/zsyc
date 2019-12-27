@@ -32,13 +32,13 @@ http.delete('user/1').then((res)=>{
 export default {
 	config: {
 		// 线上地址
-		baseUrl: "http://api.malai.longbasz.com/",
+		// baseUrl: "http://api.malai.longbasz.com/",
 		// 本地地址
-		// baseUrl: "http://192.168.1.126/www.qkl.com/",
+		baseUrl: "http://192.168.1.126/free_app/index.php/",
 		header: {
 			// 'Content-Type': 'application/json;charset=UTF-8',
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'AUTHORIZATION': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token')
 		},  
 		data: {},
 		method: "GET",

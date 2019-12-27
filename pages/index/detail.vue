@@ -92,8 +92,8 @@
 					<image src="/static/icon/close1.png" @tap="hideService" class="close_img" mode="widthFix"></image>
 				</view>
 				<view class="courier_box">
-					<view class="courier_item" @tap="selectCourier(index)" v-for="(item,index) in goodsData.couriers" :key="index">
-						<text class="cour_label">{{item.label}}</text>
+					<view class="courier_item" @tap="selectCourier(index)" v-for="(item,index) in couriers" :key="index">
+						<text class="cour_label">{{item.name}}</text>
 						<view class="cour_right">
 							<view class="cr_title">{{item.from}}至 <text>{{item.to}}</text></view>
 							<view class="cr_price">快递：{{item.price}}</view>
@@ -115,19 +115,19 @@
 			<view class="mask"></view>
 			<view class="layer" style="overflow-y: scroll;" @tap.stop="discard">
 				<view class="layer_goods_box">
-					<image src="/static/img/order_img3.png" mode="widthFix"></image>
+					<image :src="goodsData.original_img" mode="widthFix"></image>
 					<view class="layer_goods_info">
-						<view class="lgi_title">价格：<text>￥28</text></view>
+						<view class="lgi_title">价格：<text>￥{{goodsData.shop_price}}</text></view>
 						<view class="lgi_title">额度：<text>￥723</text></view>
-						<view>库存：<text>8778</text></view>
+						<view>库存：<text>{{goodsData.store_count}}</text></view>
 					</view>
 					<image src="/static/icon/close1.png" @tap="hideSpec" class="close_img" mode="widthFix"></image>
 				</view>
 				<view class="content layer_goods_content">
-					<view class="spec_item" v-for="(item,index) in goodsData.spec" :key="index">
-						<view class="title">{{item.title}}</view>
+					<view class="spec_item" v-for="(item,index) in goods_spec_list" :key="index">
+						<view class="title">{{item.attr_name}}</view>
 						<view class="sp">
-							<view v-for="(list,idx) in item.list" :class="[list.isShow?'on':'',subIndex[index] == idx?'on':'']" @tap="setSelectSpec(list.name,index,$event,idx)" :key="idx">{{list.name}}</view>
+							<view v-for="(list,idx) in item.attr_list" :class="[list.isShow?'on':'',subIndex[index] == idx?'on':'']" @tap="setSelectSpec(list,index,$event,idx)" :key="idx">{{list}}</view>
 						</view>
 					</view>
 					<!-- v-if="selectSpec!=null" -->
@@ -138,7 +138,7 @@
 								<view class="icon jian"></view>
 							</view>
 							<view class="input" @tap.stop="discard">
-								<input type="number" v-model="goodsData.number" />
+								<input type="number" v-model="number" />
 							</view>
 							<view class="add"  @tap.stop="add">
 								<view class="icon jia"></view>
@@ -153,8 +153,8 @@
 		
 		<view class="swiper-box">
 			<swiper circular="true" autoplay="true" @change="swiperChange">
-				<swiper-item v-for="swiper in swiperList" :key="swiper.id">
-					<image :src="swiper.img" mode="widthFix"></image>
+				<swiper-item v-for="(swiper,idx) in swiperList" :key="idx">
+					<image :src="swiper.image_url" mode="widthFix"></image>
 				</swiper-item>
 			</swiper>
 			<view class="indicator">
@@ -165,22 +165,28 @@
 					:key="idx"
 				></view>
 			</view>
-			<view class="layer_words_box">
+			<view class="layer_words_box" v-if="is_time == 0">
 				<text class="lwb_title">女士套餐</text>
 				<text>衬衫</text>
-				<button type="primary" size="mini">前往折扣区单购</button>
+				<button type="primary" size="mini" @tap="changeTime">前往折扣区单购</button>
 				<text>未选</text>
+			</view>
+			<view class="layer_words_box" v-else>
+				<text class="lwb_title">限时购</text>
+				<text class="price_txt">￥<text>82</text></text>
+				<text class="del_txt">￥103</text>
+				<view>额度积分<text>300</text></view>
 			</view>
 			<!-- <view class="indicator">{{currentSwiper+1}}/{{swiperList.length}}</view> -->
 		</view>
 		<!-- 标题 价格 -->
 		<view class="info-box goods-info">
 			<view class="title">
-				{{goodsData.name}}
+				{{goodsData.goods_name}}
 			</view>
-			<view class="spec_info">{{goodsData.info}}</view>
-			<!-- <view class="price">￥{{goodsData.price}} <text v-if="goodsData.old_price != null">￥{{goodsData.old_price}}</text></view> -->
-			<view class="stock">库存：{{goodsData.stock}}</view>
+			<view class="spec_info">{{goodsData.goods_remark}}</view>
+			<!-- <view class="price">￥{{goodsData.shop_price}} <text v-if="goodsData.market_price != null">￥{{goodsData.market_price}}</text></view> -->
+			<view class="stock">库存：{{goodsData.store_count}}</view>
 		</view>
 		<!-- 服务-规则选择 -->
 		<view class="info-box spec">
@@ -191,23 +197,26 @@
 					<!-- <view class="sp">
 						<view v-for="(item,index) in goodsData.spec" :key="index" :class="[index==selectSpec?'on':'']">{{item}}</view>
 					</view>
-					 -->
+					-->
 				</view>
 				<view class="arrow"><view class="icon xiangyou"></view></view>
 			</view>
-			<view class="row" @tap="showService">
-				<!-- <view class="text">服务</view> -->
-				<view class="content">
-					<view>请选择快递方式</view>
-					<!-- <view class="serviceitem" v-for="(item,index) in goodsData.service" :key="index">{{item.name}}</view> -->
+			 <!-- @tap="showService" -->
+			<picker @change="bindCouriersChange" :value="couriersCurrent" range-key="name" :range="couriers">
+				<view class="row">
+					<!-- <view class="text">服务</view> -->
+					<view class="content">
+						<view>{{couriers[couriersCurrent].name}}</view>
+						<!-- <view class="serviceitem" v-for="(item,index) in goodsData.service" :key="index">{{item.name}}</view> -->
+					</view>
+					<view class="arrow"><view class="icon xiangyou"></view></view>
 				</view>
-				<view class="arrow"><view class="icon xiangyou"></view></view>
-			</view>
+			</picker>
 		</view>
 		<!-- 评价 -->
 		<view class="info-box comments" id="comments">
 			<view class="row">
-				<view class="text">用户评价({{goodsData.comment.number}})</view>
+				<view class="text">用户评价({{goodsData.comment_count}})</view>
 				<view class="arrow" @tap="toRatings">
 					<view class="show" @tap="showComments(goodsData.id)">
 						查看全部
@@ -215,23 +224,50 @@
 					</view>
 				</view>
 			</view>
-			<view class="comment" @tap="toRatings">
+			<view class="comment" v-for="(com,index) in comment" :key="index">
 				<view class="user-info">
-					<view class="face"><image :src="goodsData.comment.userface"></image></view>
-					<view class="username">{{goodsData.comment.username}}</view>
+					<view class="face"><image :src="com.img"></image></view>
+					<view class="user_right">
+						<view class="username"><view>{{com.username}}</view><text>{{com.add_time}}</text></view>
+						<view class="userstar"><image v-for="index in com.goods_rank" :key="index" src="/static/icon/star1.png" mode="widthFix"></image></view>
+					</view>
 				</view>
 				<view class="content">
-					{{goodsData.comment.content}}
+					{{com.content}}
 				</view>
 			</view>
 		</view>
 		<!-- 详情 -->
 		<view class="description">
-			<view class="title">———— 商品详情 ————</view>
-			<view class="content">
-				<block v-if="descriptionStr!=''">
-					<u-parse :content="descriptionStr"></u-parse>
+			<!-- <view class="title">———— 商品详情 ————</view> -->
+			<view class="list_nav">
+				<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
+			</view>
+			<view class="content" v-if="currentTab == 0">
+				<block v-if="goodsData.goods_content!=''">
+					<u-parse :content="goodsData.goods_content"></u-parse>
 				</block>
+			</view>
+			<view class="parameter" v-if="currentTab == 1">
+				<view class="param_item" v-for="(attr,index) in goodsData.goods_attr_list" :key="index">
+					<text>{{attr.attr_name}}</text>
+					<view class="box">{{attr.attr_value}}</view>
+				</view>
+				<!-- <view class="param_item">
+					<text>使用说明</text>
+					<view class="box">
+						<view>1）本产品含可用水清洗；清洗时可取出，易洗易干。</view>
+						<view>2）本产品为柔弹舒适型衬衣，2019新款秋冬纯色白衬衫女长袖工作服正装职业衬衣</view>
+					</view>
+				</view> -->
+			</view>
+			<view class="question" v-if="currentTab == 2">
+				<view class="question_item">
+					<view class="qsi_title">Q：购买运费如何获取？</view>
+					<view class="qsi_content">
+						A、单笔订单金额（不含运费）满88元免邮费；不满88元，每单收取10元运费。(港澳台地区需满500元免邮费；不满500元，每单收取30元运费)
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -266,40 +302,17 @@ export default {
 			specClass: '',//规格弹窗css类，控制开关动画
 			shareClass:'',//分享弹窗css类，控制开关动画
 			// 商品信息
+			number:1,
 			goodsData:{
-				id:1,
+				id: '',
 				name:"商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题",
 				info: "店长推荐 两件99元 暗扣防走光",
 				price:"127.00",
 				stock: 129,
-				number:1,
 				service:[
 					{name:"正品保证",description:"此商品官方保证为正品"},
 					{name:"极速退款",description:"此商品享受退货极速退款服务"},
 					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
-				],
-				couriers: [
-					{
-						label: '顺丰',
-						from: '上海',
-						to: '深圳/罗湖区',
-						price: '8.00'
-					},{
-						label: '申通',
-						from: '上海',
-						to: '深圳/罗湖区',
-						price: '8.00'
-					},{
-						label: '中通',
-						from: '上海',
-						to: '深圳/罗湖区',
-						price: '8.00'
-					},{
-						label: '顺丰',
-						from: '上海',
-						to: '深圳/罗湖区',
-						price: '8.00'
-					}
 				],
 				spec:[
 					{
@@ -332,14 +345,43 @@ export default {
 							"name": "48"
 						}]
 					}
-				],
-				comment:{
-					number:102,
-					userface:'../../static/img/face.jpg',
-					username:'大黑哥',
-					content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-				}
+				]
 			},
+			couriers: [
+				{
+					label: '顺丰',
+					from: '上海',
+					to: '深圳/罗湖区',
+					price: '8.00'
+				},{
+					label: '申通',
+					from: '上海',
+					to: '深圳/罗湖区',
+					price: '8.00'
+				},{
+					label: '中通',
+					from: '上海',
+					to: '深圳/罗湖区',
+					price: '8.00'
+				},{
+					label: '顺丰',
+					from: '上海',
+					to: '深圳/罗湖区',
+					price: '8.00'
+				}
+			],
+			couriersCurrent: 0,
+			couriersTxt: '请选择快递方式',
+			selectCourierVal: {},
+			goods_spec_list: [],
+			comment:[{
+				number:102,
+				userface:'/static/img/face.png',
+				username:'大黑哥',
+				time: '上午08:56',
+				star_num: 5,
+				content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
+			}],
 			goods_id: '',
 			selectSpec:[-1,-1],//选中规格
 			isKeep:false,//收藏
@@ -351,6 +393,9 @@ export default {
 			shopItemInfo: {}, //存放要和选中的值进行匹配的数据
 			subIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
 			btn: 0	,//0:加入购物车  1:立即购买
+			is_time: 0,
+			navbar:[{name:"商品介绍"},{name:"规则参数"},{name:"常见问题"}],
+			currentTab:0
 		};
 	},
 	components:{
@@ -360,29 +405,46 @@ export default {
 		this.url = this.$http.url;
 		console.log(option.cid);
 		if(option.name != undefined){
-			uni.setNavigationBarTitle({
-				title: option.name
-			});
-			this.goods_id = option.cid;
+			this.goodsData.id = option.cid;
 			// console.log(this.goods_id);
 		}
-		// uni.showLoading({
-		// 	title: '加载中'
-		// })
-		this.$http.getStoreDetails({
-			g_id: option.cid
+		
+		// 获取商品信息
+		this.$http.getGoodsInfo({
+			id: option.cid
 		}).then((data)=>{
 			// console.log(data.data);
-			let res = data.data;
-			this.goodsData.id = res.id;
-			this.goodsData.name = res.name;
-			this.goodsData.price = res.price;
-			this.goodsData.old_price = res.old_price;
-			this.goodsData.stock = res.stock;
-			this.swiperList = res.pic_list;
+			let res = data.data.result;
+			this.goodsData = res.goods;
+			// for(let i in res.goods.goods_attr_list){
+			// 	this.goods_attr_list.push({
+			// 		attr_name: res.goods.goods_attr_list[i].attr_name,
+			// 		attr_list: res.goods.goods_attr_list[i].attr_value.trim().split(/\s+/)
+			// 	})
+			// }
+			this.goods_spec_list = res.spec_goods_price;
+			this.couriers = res.shippingList;
+			let store_id = this.couriers[0].store_id;
+			let shipping_code = this.couriers[0].shipping_code;
+			this.selectCourierVal = {
+				[store_id]: shipping_code
+			}
+			console.log(this.selectCourierVal)
+			console.log(this.goods_spec_list);
+			// this.goodsData.price = res.price;
+			// this.goodsData.old_price = res.old_price;
+			// this.goodsData.stock = res.stock;
+			this.swiperList = res.gallery;
 			this.content = res.content==null?'':res.content;
 			// uni.hideLoading();
 		})
+		// 获取评论
+		this.$http.getGoodsComment({
+			goods_id: option.cid
+		}).then((data)=>{
+			this.comment = data.data.result;
+		})
+		
 		// #ifdef MP
 		//小程序隐藏返回按钮
 		this.showBack = false;
@@ -414,8 +476,32 @@ export default {
 	// 	uni.showToast({ title: '触发上拉加载' });
 	// },
 	methods: {
+		bindCouriersChange(e){
+			this.couriersCurrent = e.detail.value;
+			this.couriersTxt = this.couriers[this.couriersCurrent].name;
+			let store_id = this.couriers[this.couriersCurrent].store_id;
+			let shipping_code = this.couriers[this.couriersCurrent].shipping_code;
+			this.selectCourierVal = {
+				[store_id]: shipping_code
+			}
+			console.log(this.selectCourierVal)
+		},
+		toCostomer(){
+			
+		},
 		selectCourier(idx){
 			
+		},
+		navbarTap(e){
+			console.log(e)
+			this.currentTab = e;
+		},
+		changeTime(){
+			if(this.is_time == 0){
+				this.is_time = 1;
+			}else{
+				this.is_time = 0;
+			}
 		},
 		//轮播图指示器
 		swiperChange(event) {
@@ -469,7 +555,7 @@ export default {
 		//跳转确认订单页面
 		toConfirmation(){
 			let tmpList=[];
-			let goods = {id:this.goodsData.id,img:'../../static/img/p1.jpg',name:this.goodsData.name,spec:'规格:'+this.goodsData.spec[this.selectSpec],price:this.goodsData.price,number:this.goodsData.number};
+			let goods = {id:this.goodsData.id,img:'../../static/img/p1.jpg',name:this.goodsData.name,spec:'规格:'+this.goodsData.spec[this.selectSpec],price:this.goodsData.price,number:this.number};
 			tmpList.push(goods);
 			uni.setStorage({
 				key:'buylist',
@@ -496,39 +582,40 @@ export default {
 				this.$set(this.subIndex, index, -1); //去掉选中颜色
 			}
 			this.checkItem(index);
+			console.log(this.selectArr);
 		},
 		checkItem(clickIndex) {
-			var option = this.goodsData.spec;
+			var option = this.goodsData.goods_attr_list;
 			for (let i = 0, len = option.length; i < len; i++) {
 				if (i == clickIndex) {
 					continue;
 				}
-				let len2 = option[i].list.length;
+				let len2 = option[i].attr_list.length;
 				for (let j = 0; j < len2; j++) {
 					if (this.subIndex[i] != -1 && j == this.subIndex[i]) {
 						continue;
 					}
 					let choosed_copy = [...this.selectArr];
-					this.$set(choosed_copy, i, this.goodsData.spec[i].list[j].name);
+					this.$set(choosed_copy, i, this.goodsData.goods_attr_list[i].attr_list[j].name);
 					let choosed_copy2 = choosed_copy.filter(item => item !== '' && typeof item !== 'undefined');
 					if (this.shopItemInfo.hasOwnProperty(choosed_copy2)) {
-						this.$set(this.goodsData.spec[i].list[j], 'isShow', true);
+						this.$set(this.goodsData.goods_attr_list[i].attr_list[j], 'isShow', true);
 					} else {
-						this.$set(this.goodsData.spec[i].list[j], 'isShow', false);
+						this.$set(this.goodsData.goods_attr_list[i].attr_list[j], 'isShow', false);
 					}
 				}
 			}
 		},
 		//减少数量
 		sub(){
-			if(this.goodsData.number<=1){
+			if(this.number<=1){
 				return;
 			}
-			this.goodsData.number--;
+			this.number--;
 		},
 		//增加数量
 		add(){
-			this.goodsData.number++;
+			this.number++;
 		},
 		// 跳转锚点
 		toAnchor(index){
@@ -538,7 +625,7 @@ export default {
 		// 计算锚点高度
 		calcAnchor(){
 			this.anchorlist=[
-				{name:'主图',top:0},
+				{name:'商品',top:0},
 				{name:'评价',top:0},
 				{name:'详情',top:0}
 			]
@@ -581,22 +668,41 @@ export default {
 			return;
 		},
 		finishSpec(){
-			this.specClass = 'hide';
-			this.specClass = 'none';
 			if(this.btn == 0){
-				this.$http.addCar({
-					g_id: this.goodsData.id,
-					num: this.goodsData.number
-				}).then((data)=>{
+				// if(this.selectArr.length == 0){
+				// 	this.$api.msg('请选择规格');
+				// 	return;
+				// }
+				let params = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						goods_id: this.goodsData.goods_id,
+						goods_num: this.number,
+						unique_id: uni.getStorageSync('unique_id')
+					}
+				}else{
+					params = {
+						goods_id: this.goodsData.goods_id,
+						goods_num: this.number,
+						token: uni.getStorageSync('token')
+					}
+				}
+				this.$http.addCar(params).then((data)=>{
 					if(data.data.status == 1){
 						uni.showToast({title: "已加入购物车"});
+						
+						this.specClass = 'hide';
+						this.specClass = 'none';
 					}else{
-						this.$api.msg(data.data.message);
+						this.$api.msg(data.data.msg);
 					}
 				})
 			}else{
+				this.specClass = 'hide';
+				this.specClass = 'none';
+				
 				uni.navigateTo({
-					url:'/pages/index/confirmation?id='+this.goodsData.id+'&num='+this.goodsData.number
+					url:'/pages/car/write_order?id='+this.goodsData.id+'&num='+this.number+'&shipCode='+JSON.stringify(this.selectCourierVal)
 				})
 			}
 		},
@@ -649,7 +755,7 @@ export default {
 	height: 45px;
 	left: 0;
 	bottom: 0;
-	z-index: 30;
+	z-index: 8;
 	background: rgba(255,118,26,.8);
 	display: flex;
 	justify-content: space-between;
@@ -666,6 +772,19 @@ export default {
 		background: #f90;
 		&:after{
 			border: 0;
+		}
+	}
+	.price_txt{
+		text{
+			font-size: 44rpx;
+		}
+	}
+	.del_txt{
+		text-decoration: line-through;
+	}
+	view{
+		text{
+			margin-left: 20rpx;
 		}
 	}
 }
@@ -981,30 +1100,61 @@ page {
 			width: 100%;
 			// height: 80rpx;
 			display: flex;
+			justify-content: flex-start;
 			align-items: center;
 			.face {
 				width: 80rpx;
 				height: 80rpx;
-				margin-right: 10rpx;
+				margin-right: 20rpx;
 				image {
 					width: 80rpx;
 					height: 80rpx;
 					border-radius: 100%;
 				}
 			}
+			.user_right{
+				width: 85%;
+				.userstar{
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					margin-top: 10rpx;
+					image{
+						display: block;
+						width: 24rpx;
+						height: 24rpx;
+						margin-right: 10rpx;
+					}
+				}
+			}
 			.username {
 				font-size: 32rpx;
 				color: #000;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				view{
+					width: 60%;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+				text{
+					font-size: 24rpx;
+					color: #999;
+				}
 			}
 		}
 		.content {
-			margin-top: 10rpx;
+			margin-top: 20rpx;
 			color: #333;
 			font-size: 32rpx;
 		}
 	}
 }
 .description {
+	margin-bottom: 100rpx;
+	background: #fff;
 	.title {
 		width: 100%;
 		height: 80rpx;
@@ -1014,13 +1164,47 @@ page {
 		font-size: 26rpx;
 		color: #999;
 	}
+	.parameter{
+		padding: 30rpx;
+		box-sizing: border-box;
+		.param_item{
+			display: flex;
+			justify-content: flex-start;
+			align-items: stretch;
+			border-bottom: 1px solid #eee;
+			padding: 15rpx;
+			box-sizing: border-box;
+			color: #666;
+			font-size: 32rpx;
+			text{
+				display: block;
+				width: 30%;
+			}
+			.box{
+				width: 70%;
+			}
+		}
+	}
+	.question{
+		padding: 30rpx;
+		box-sizing: border-box;
+		.question_item{
+			margin-bottom: 30rpx;
+			color: #999;
+			font-size: 32rpx;
+			.qsi_title{
+				color: #333;
+				margin-bottom: 10rpx;
+			}
+		}
+	}
 }
 .footer {
 	position: fixed;
 	bottom: 0rpx;
 	width: 92%;
 	padding: 0 4%;
-	height: 99rpx;
+	height: 100rpx;
 	border-top: solid 1rpx #eee;
 	background-color: #fff;
 	z-index: 2;

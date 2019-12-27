@@ -38,109 +38,454 @@ export const test = (data) => {
 }
 
 // 登录
-// export const checkLogin = (data) => {
-// 	http.interceptor.request = (config) => {
-// 		config.header = {
-// 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-// 			'AUTHORIZATION': uni.getStorageSync('token')
-// 		}
-// 	}
-//     return http.request({
-//         url: 'Login/checkLogin',
-//         method: 'POST', 
-//         data
-// 		// handle:true
-//     })
-// }
-// // 注册
-// export const formRegister = (data) => {
-// 	http.interceptor.request = (config) => {
-// 		config.header = {
-// 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-// 			'AUTHORIZATION': uni.getStorageSync('token')
-// 		}
-// 	}
-//     return http.request({
-//         url: 'Login/register',
-//         method: 'POST', 
-//         data
-// 		// handle:true
-//     })
-// }
-// // 找回密码
-// export const forgetPassword = (data) => {
-// 	http.interceptor.request = (config) => {
-// 		config.header = {
-// 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-// 			'AUTHORIZATION': uni.getStorageSync('token')
-// 		}
-// 	}
-//     return http.request({
-//         url: 'Login/setpsw',
-//         method: 'POST', 
-//         data
-//     })
-// }
-// // 发送邮箱验证码
-// export const sendEmailCode = (data) => {
-// 	http.interceptor.request = (config) => {
-// 		config.header = {
-// 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-// 			'AUTHORIZATION': uni.getStorageSync('token')
-// 		}
-// 	}
-//     return http.request({
-//         url: 'Home/Login/sendEmailCode',
-//         method: 'POST', 
-//         data
-//     })
-// }
-// // 资讯列表
-// export const getNewsList = (data) => {
-// 	http.interceptor.request = (config) => {
-// 		config.header = {
-// 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-// 			'AUTHORIZATION': uni.getStorageSync('token')
-// 		}
-// 	}
-// 	http.interceptor.response = (response) => {
-// 		if(response.data.status === 40001){
-// 			uni.showToast({
-// 				title: '登录失效,请重新登录',
-// 				icon: 'none',
-// 				duration: 1500,
-// 				mask: true
-// 			});
-// 			uni.removeStorageSync('token');
-// 			setTimeout(function(){
-// 				uni.reLaunch({
-// 					url: '/pages/login/login'
-// 				})
-// 			},1500)
-// 			return;
-// 		}
-// 		if(response.data.status === 40002){
-// 			uni.showToast({
-// 				title: '账号已冻结',
-// 				icon: 'none',
-// 				duration: 1500,
-// 				mask: true
-// 			});
-// 			uni.removeStorageSync('token');
-// 			setTimeout(function(){
-// 				uni.reLaunch({
-// 					url: '/pages/login/login'
-// 				})
-// 			},1500)
-// 			return;
-// 		}
-// 	}
-//     return http.request({
-//         url: 'News/index',
-//         method: 'POST', 
-//         data
-//     })
-// }
+export const userLogin = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/login',
+        method: 'POST', 
+        data
+    })
+}
+// 注册
+export const userRegister = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/reg',
+        method: 'POST', 
+        data
+    })
+}
+// 找回密码
+export const forgetPassword = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/forgetPassword',
+        method: 'POST', 
+        data
+    })
+}
+// 发送验证码
+export const sendValidateCode = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Home/Api/send_validate_code',
+        method: 'POST', 
+        data
+    })
+}
+// 修改用户密码
+export const changePassword = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/password',
+        method: 'POST', 
+        data
+    })
+}
+
+
+// 首页
+export const getIndexList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status === 40001){
+			uni.showToast({
+				title: '登录失效,请重新登录',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+		if(response.data.status === 40002){
+			uni.showToast({
+				title: '账号已冻结',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/Index/home',
+        method: 'POST', 
+        data
+    })
+}
+
+// 获取商品一级分类
+export const getGoodsCategoryList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Goods/goodsCategoryList',
+        method: 'POST', 
+        data
+    })
+}
+// 获取商品子级分类
+export const getGoodsSecAndThirdCategoryList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Goods/goodsSecAndThirdCategoryList',
+        method: 'POST', 
+        data
+    })
+}
+// 商品列表
+export const getGoodsList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Goods/goodsList',
+        method: 'POST', 
+        data
+    })
+}
+// 商品详情
+export const getGoodsInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Goods/goodsInfo',
+        method: 'POST', 
+        data
+    })
+}
+// 商品评论
+export const getGoodsComment = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Goods/getGoodsComment',
+        method: 'POST', 
+        data
+    })
+}
+// 添加购物车
+export const addCar = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Cart/addCart',
+        method: 'POST', 
+        data
+    })
+}
+// 购物车列表
+export const carList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/Cart/cartList',
+        method: 'POST', 
+        data
+    })
+}
+// 删除购物车
+export const delCar = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Cart/delCart',
+        method: 'POST', 
+        data
+    })
+}
+// 购物车确认结算
+export const carConfirm = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Cart/cart2',
+        method: 'POST', 
+        data
+    })
+}
+
+// 确认提交订单
+export const submitConfirm = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/Cart/cart3',
+        method: 'POST', 
+        data
+    })
+}
+
+// 订单列表 
+export const getOrderList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/getOrderList',
+        method: 'POST', 
+        data
+    })
+}
+// 取消订单 
+export const cancelOrder = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/cancelOrder',
+        method: 'POST', 
+        data
+    })
+}
+
+
+// 获取省市区
+export const getAreaList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Home/Api/getAreaList',
+        method: 'POST', 
+        data
+    })
+}
+// 获取省市 
+export const getProvince = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Home/Api/getPro',
+        method: 'POST', 
+        data
+    })
+}
+// 获取省市 
+export const getCity = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Home/Api/getCity',
+        method: 'POST', 
+        data
+    })
+}
+// 获取地区 
+export const getArea = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Home/Api/getArea',
+        method: 'POST', 
+        data
+    })
+}
+
+// 添加收货地址 
+export const addAddress = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/addAddress',
+        method: 'POST', 
+        data
+    })
+}
+// 添加收货地址 
+export const getAddressList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/getAddressList',
+        method: 'POST', 
+        data
+    })
+}
+// 删除收货地址 
+export const delAddress = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/del_address',
+        method: 'POST', 
+        data
+    })
+}
+// 设置默认收货地址 
+export const setDefaultAddress = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/setDefaultAddress',
+        method: 'POST', 
+        data
+    })
+}
+// 订单详情 
+export const getOrderDetail = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/getOrderDetail',
+        method: 'POST', 
+        data
+    })
+}
+// 申请退货退款 
+export const returnGoods = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token')
+		}
+	}
+    return http.request({
+        url: 'Api/User/return_goods',
+        method: 'POST', 
+        data
+    })
+}
 
 // if(data.data.status == 40001){
 // 	this.$api.msg('请登录');
@@ -178,5 +523,33 @@ export const test = (data) => {
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 	url,
-	test
+	test,
+	userLogin,
+	forgetPassword,
+	userRegister,
+	sendValidateCode,
+	changePassword,
+	getIndexList,
+	getGoodsCategoryList,
+	getGoodsSecAndThirdCategoryList,
+	getGoodsList,
+	getGoodsInfo,
+	getGoodsComment,
+	addCar,
+	carList,
+	delCar,
+	carConfirm,
+	submitConfirm,
+	getOrderList,
+	cancelOrder,
+	getAreaList,
+	getProvince,
+	getCity,
+	getArea,
+	addAddress,
+	getAddressList,
+	delAddress,
+	setDefaultAddress,
+	getOrderDetail,
+	returnGoods
 }

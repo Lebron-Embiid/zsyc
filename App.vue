@@ -6,6 +6,16 @@
 		},
 		onLaunch: function() {
 			console.log('App Launch')
+			let random = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789';
+			let ranLen = random.length;
+			let uni_code = [];
+			for (let i = 0; i < 20; i++) {
+			  uni_code.push({
+			    code: random.charAt(Math.floor(Math.random() * ranLen))
+			  })
+			}
+			uni.setStorageSync('unique_id',uni_code.map(item => item.code).join(''));
+			console.log(uni.getStorageSync('unique_id'));
 		},
 		onShow: function() {
 			console.log('App Show')
