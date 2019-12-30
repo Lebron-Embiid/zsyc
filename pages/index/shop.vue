@@ -225,8 +225,11 @@
 			fixedList
 		},
 		onLoad() {
+			let params = {};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
 			console.log(uni.getStorageSync('token'));
-			this.$http.getIndexList().then((data)=>{
+			this.$http.getIndexList(params).then((data)=>{
 				let res = data.data.result;
 				this.swiperList = res.ad;
 				this.time_name = res.goods[0].name;

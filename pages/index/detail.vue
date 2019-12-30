@@ -206,7 +206,8 @@
 				<view class="row">
 					<!-- <view class="text">服务</view> -->
 					<view class="content">
-						<view>{{couriers[couriersCurrent].name}}</view>
+						<!-- <view>{{couriers[couriersCurrent].name}}</view> -->
+						<view>{{couriersTxt}}</view>
 						<!-- <view class="serviceitem" v-for="(item,index) in goodsData.service" :key="index">{{item.name}}</view> -->
 					</view>
 					<view class="arrow"><view class="icon xiangyou"></view></view>
@@ -218,7 +219,7 @@
 			<view class="row">
 				<view class="text">用户评价({{goodsData.comment_count}})</view>
 				<view class="arrow" @tap="toRatings">
-					<view class="show" @tap="showComments(goodsData.id)">
+					<view class="show" @tap="showComments(goodsData.goods_id)">
 						查看全部
 						<view class="icon xiangyou"></view>
 					</view>
@@ -403,16 +404,17 @@ export default {
 	},
 	onLoad(option) {
 		this.url = this.$http.url;
-		console.log(option.cid);
-		if(option.name != undefined){
+		if(option.cid != undefined){
 			this.goodsData.id = option.cid;
 			// console.log(this.goods_id);
 		}
+		console.log(option.cid+'---------------'+this.goodsData.id);
 		
+		let params = {id: option.cid};
+		let sign = this.$sign.getSign(params,this.AppSecret);
+		params.sign = sign;
 		// 获取商品信息
-		this.$http.getGoodsInfo({
-			id: option.cid
-		}).then((data)=>{
+		this.$http.getGoodsInfo(params).then((data)=>{
 			// console.log(data.data);
 			let res = data.data.result;
 			this.goodsData = res.goods;
@@ -426,6 +428,7 @@ export default {
 			this.couriers = res.shippingList;
 			let store_id = this.couriers[0].store_id;
 			let shipping_code = this.couriers[0].shipping_code;
+			this.couriersTxt = this.couriers[0].name;
 			this.selectCourierVal = {
 				[store_id]: shipping_code
 			}
@@ -439,9 +442,10 @@ export default {
 			// uni.hideLoading();
 		})
 		// 获取评论
-		this.$http.getGoodsComment({
-			goods_id: option.cid
-		}).then((data)=>{
+		let params1 = {goods_id: option.cid};
+		let sign1 = this.$sign.getSign(params1,this.AppSecret);
+		params1.sign = sign1;
+		this.$http.getGoodsComment(params1).then((data)=>{
 			this.comment = data.data.result;
 		})
 		
@@ -525,6 +529,23 @@ export default {
 		//收藏
 		keep(){
 			this.isKeep = this.isKeep?false:true;
+			let is_type = '';
+			if(this.isKeep == true){
+				is_type = 0;
+			}else{
+				is_type = 1;
+			}
+			console.log(is_type);
+			let params = {
+				token: uni.getStorageSync('token'),
+				goods_id: this.goodsData.goods_id,
+				type: is_type
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.collectGoods(params).then((data)=>{
+				
+			})
 		},
 		// 加入购物车
 		joinCart(){
@@ -555,7 +576,7 @@ export default {
 		//跳转确认订单页面
 		toConfirmation(){
 			let tmpList=[];
-			let goods = {id:this.goodsData.id,img:'../../static/img/p1.jpg',name:this.goodsData.name,spec:'规格:'+this.goodsData.spec[this.selectSpec],price:this.goodsData.price,number:this.number};
+			let goods = {id:this.goodsData.goods_id,img:'../../static/img/p1.jpg',name:this.goodsData.name,spec:'规格:'+this.goodsData.spec[this.selectSpec],price:this.goodsData.price,number:this.number};
 			tmpList.push(goods);
 			uni.setStorage({
 				key:'buylist',
@@ -687,6 +708,8 @@ export default {
 						token: uni.getStorageSync('token')
 					}
 				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
 				this.$http.addCar(params).then((data)=>{
 					if(data.data.status == 1){
 						uni.showToast({title: "已加入购物车"});
@@ -702,7 +725,7 @@ export default {
 				this.specClass = 'none';
 				
 				uni.navigateTo({
-					url:'/pages/car/write_order?id='+this.goodsData.id+'&num='+this.number+'&shipCode='+JSON.stringify(this.selectCourierVal)
+					url:'/pages/car/write_order?id='+this.goodsData.goods_id+'&num='+this.number+'&shipCode='+JSON.stringify(this.selectCourierVal)
 				})
 			}
 		},

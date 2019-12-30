@@ -22,6 +22,7 @@
 	export default{
 		data(){
 			return{
+				id: '',
 				array: ['不想买了', '发现同款更低价', '忘记使用优惠券', '地址填错了','其他'],
 				index: null,
 				cancel_txt: '请选择取消原因'
@@ -30,15 +31,25 @@
 		components:{
 			uniNavBar
 		},
+		onLoad(opt) {
+			if(opt.id != undefined){
+				this.id = opt.id;
+			}
+		},
 		methods:{
 			clickRightBtn(){
 				if(this.index == null){
 					this.$api.msg('请选择取消原因');
+					return;
 				}
-				this.$http.cancelOrder({
-					token: uni.getStorageSync('token')
-				}).then((data)=>{
-					
+				let params = {
+					token: uni.getStorageSync('token'),
+					order_id: this.id
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.cancelOrder(params).then((data)=>{
+					this.$api.msg(data.data.msg);
 				})
 			},
 			bindPickerChange(e) {

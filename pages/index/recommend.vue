@@ -85,11 +85,14 @@
 				console.log(e)
 				this.currentTab = e;
 				this.id = id;
-				this.$http.getGoodsList({
+				let params = {
 					id: this.id,
 					sort: 'goods_id',
 					sort_asc: 'desc'
-				}).then((data)=>{
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getGoodsList(params).then((data)=>{
 					this.recommendList = data.data.result.goods_list;
 				})
 			},
@@ -104,11 +107,14 @@
 				this.sort_type = null;
 				if(this.sort_one == 0){
 					this.sort_one = 1;
-					this.$http.getGoodsList({
+					let params = {
 						id: this.id,
 						sort: 'goods_id',
 						sort_asc: 'desc'
-					}).then((data)=>{
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getGoodsList(params).then((data)=>{
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else{
@@ -121,11 +127,14 @@
 				this.sort_type = null;
 				if(this.sort_two == 0){
 					this.sort_two = 1;
-					this.$http.getGoodsList({
+					let params = {
 						id: this.id,
 						sort: 'sales_sum',
 						sort_asc: 'desc'
-					}).then((data)=>{
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getGoodsList(params).then((data)=>{
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else{
@@ -138,11 +147,14 @@
 				this.sort_type = null;
 				if(this.sort_three == 0){
 					this.sort_three = 1;
-					this.$http.getGoodsList({
+					let params = {
 						id: this.id,
 						sort: 'is_new',
 						sort_asc: 'desc'
-					}).then((data)=>{
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getGoodsList(params).then((data)=>{
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else{
@@ -155,29 +167,38 @@
 				this.sort_three = 0;
 				if(this.sort_type == null){
 					this.sort_type = 0;
-					this.$http.getGoodsList({
+					let params = {
 						id: this.id,
 						sort: 'shop_price',
 						sort_asc: 'asc'
-					}).then((data)=>{
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getGoodsList(params).then((data)=>{
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else if(this.sort_type == 0){
 					this.sort_type = 1;
-					this.$http.getGoodsList({
+					let params = {
 						id: this.id,
 						sort: 'shop_price',
 						sort_asc: 'desc'
-					}).then((data)=>{
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getGoodsList(params).then((data)=>{
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else{
 					this.sort_type = 0;
-					this.$http.getGoodsList({
+					let params = {
 						id: this.id,
 						sort: 'shop_price',
 						sort_asc: 'asc'
-					}).then((data)=>{
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getGoodsList(params).then((data)=>{
 						this.recommendList = data.data.result.goods_list;
 					})
 				}
@@ -198,15 +219,21 @@
 				this.currentTab = opt.index;
 			}
 			
-			this.$http.getGoodsCategoryList().then((data)=>{
+			let params = {};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getGoodsCategoryList(params).then((data)=>{
 				this.navbar = data.data.result;
 			})
 			
-			this.$http.getGoodsList({
+			let params1 = {
 				id: this.id,
 				sort: 'is_hot',
 				sort_asc: 'desc'
-			}).then((data)=>{
+			};
+			let sign1 = this.$sign.getSign(params1,this.AppSecret);
+			params1.sign = sign1;
+			this.$http.getGoodsList(params1).then((data)=>{
 				this.recommendList = data.data.result.goods_list;
 			})
 		},

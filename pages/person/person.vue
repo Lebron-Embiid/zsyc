@@ -8,10 +8,11 @@
 		<view class="person_top">
 			<view class="pt_left">
 				<image src="/static/avatar/avatar.png" mode="widthFix"></image>
-				<view>小靓</view>
+				
 			</view>
 			<view class="pt_center">
-				<view>余额：￥5000</view>
+				<view>昵称：{{personInfo.nickname}}</view>
+				<view>余额：￥{{personInfo.user_money}}</view>
 				<view>额度：v 150000</view>
 				<view>套餐资格：1</view>
 				<view>套餐名额：2</view>
@@ -53,6 +54,7 @@
 	export default{
 		data(){
 			return{
+				personInfo:{},
 				orderNavs: [
 					{
 						icon: '/static/icon/order_icon1.png',
@@ -108,10 +110,20 @@
 					},{
 						icon: '/static/icon/use_icon8.png',
 						title: '我的收藏',
-						url: ''
+						url: '/pages/person/my_collect'
 					}
 				]
 			}
+		},
+		onLoad() {
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getUserInfo(params).then((data)=>{
+				this.personInfo = data.data.result;
+			})
 		},
 		methods:{
 			logout(){

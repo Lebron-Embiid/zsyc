@@ -42,7 +42,8 @@ export const userLogin = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -56,7 +57,8 @@ export const userRegister = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -70,7 +72,8 @@ export const forgetPassword = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -84,7 +87,8 @@ export const sendValidateCode = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -98,7 +102,8 @@ export const changePassword = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -114,7 +119,8 @@ export const getIndexList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
 	http.interceptor.response = (response) => {
@@ -161,7 +167,8 @@ export const getGoodsCategoryList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -175,7 +182,8 @@ export const getGoodsSecAndThirdCategoryList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -189,7 +197,8 @@ export const getGoodsList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -203,7 +212,8 @@ export const getGoodsInfo = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -217,7 +227,8 @@ export const getGoodsComment = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -231,7 +242,8 @@ export const addCar = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -245,7 +257,8 @@ export const carList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
 	http.interceptor.response = (response) => {
@@ -276,7 +289,8 @@ export const delCar = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -290,7 +304,8 @@ export const carConfirm = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -305,7 +320,8 @@ export const submitConfirm = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -320,7 +336,8 @@ export const getOrderList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -334,7 +351,8 @@ export const cancelOrder = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -350,7 +368,8 @@ export const getAreaList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -364,7 +383,8 @@ export const getProvince = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -378,7 +398,8 @@ export const getCity = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -392,7 +413,8 @@ export const getArea = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -407,7 +429,8 @@ export const addAddress = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -421,7 +444,8 @@ export const getAddressList = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -435,7 +459,8 @@ export const delAddress = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -449,7 +474,8 @@ export const setDefaultAddress = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -463,7 +489,8 @@ export const getOrderDetail = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
@@ -477,12 +504,194 @@ export const returnGoods = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			'token': uni.getStorageSync('token')
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
 		}
 	}
     return http.request({
         url: 'Api/User/return_goods',
         method: 'POST', 
+        data
+    })
+}
+// 获取退货服务类型 
+export const returnGoodReason = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Home/Api/returnGoodReason',
+        method: 'POST', 
+        data
+    })
+}
+// 售后详情 
+export const returnGoodsInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/return_goods_info',
+        method: 'POST', 
+        data
+    })
+}
+// 退换货列表 
+export const returnGoodsList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/return_goods_list',
+        method: 'POST', 
+        data
+    })
+}
+// 订单确认收货 
+export const orderConfirm = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/orderConfirm',
+        method: 'POST', 
+        data
+    })
+}
+// 添加订单评论 
+export const orderCommentAdd = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/order_comment_add',
+        method: 'POST', 
+        data
+    })
+}
+// 获取用户信息 
+export const getUserInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/userInfo',
+        method: 'POST', 
+        data
+    })
+}
+// 修改用户信息 
+export const updateUserInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/updateUserInfo',
+        method: 'POST',
+        data
+    })
+}
+// 收藏或取消收藏商品 
+export const collectGoods = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Goods/collectGoods',
+        method: 'POST',
+        data
+    })
+}
+// 收藏或取消收藏店铺 
+export const collectStoreOrNo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Store/collectStoreOrNo',
+        method: 'POST',
+        data
+    })
+}
+// 获取收藏店铺列表 
+export const getUserCollectStore = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/getUserCollectStore',
+        method: 'POST',
+        data
+    })
+}
+// 获取收藏商品列表 
+export const getUserCollectGoods = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/getUserCollectGoods',
+        method: 'POST',
+        data
+    })
+}
+
+// 获取收藏商品列表 
+export const articleClass = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/articleClass',
+        method: 'POST',
         data
     })
 }
@@ -496,6 +705,14 @@ export const returnGoods = (data) => {
 // 	},1500)
 // }
 
+// let params = {
+// 	token: uni.getStorageSync('token')
+// };
+// let sign = this.$sign.getSign(params,this.AppSecret);
+// params.sign = sign;
+// this.$http.getUserInfo(params).then((data)=>{
+	
+// })
 
 // this.$http.formRegister({
 					
@@ -551,5 +768,17 @@ export default {
 	delAddress,
 	setDefaultAddress,
 	getOrderDetail,
-	returnGoods
+	returnGoods,
+	returnGoodReason,
+	returnGoodsInfo,
+	returnGoodsList,
+	orderConfirm,
+	orderCommentAdd,
+	getUserInfo,
+	updateUserInfo,
+	collectGoods,
+	collectStoreOrNo,
+	getUserCollectStore,
+	getUserCollectGoods,
+	articleClass
 }

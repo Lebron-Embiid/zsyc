@@ -15,7 +15,7 @@
 					<!-- checkbox -->
 					<view class="checkbox-box" @tap="selected(index)">
 						<view class="checkbox">
-							<view :class="[row.selected==true?'on':'']"></view>
+							<view :class="[row.selected==1?'on':'']"></view>
 						</view>
 					</view>
 					<!-- 商品信息 -->
@@ -56,7 +56,7 @@
 			<view class="delBtn" @tap="deleteList" v-if="selectedList.length>0">删除</view>
 			<view class="settlement">
 				<view class="sum">合计:<view class="money">￥{{sumPrice}}</view></view>
-				<view class="btn" @tap="toConfirmation">结算({{selectedList.length}})</view>
+				<view class="btn" @tap="toConfirmation">结算<!-- ({{selectedList.length}}) --></view>
 			</view>
 		</view>
 	</view>
@@ -77,11 +77,11 @@
 				isAllselected:false,
 				goods: [],
 				goodsList:[
-					{id:1,img:'/static/img/goods/p1.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
-					{id:2,img:'/static/img/goods/p2.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
-					{id:3,img:'/static/img/goods/p3.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
-					{id:4,img:'/static/img/goods/p4.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
-					{id:5,img:'/static/img/goods/p5.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false}
+					// {id:1,img:'/static/img/goods/p1.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					// {id:2,img:'/static/img/goods/p2.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					// {id:3,img:'/static/img/goods/p3.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					// {id:4,img:'/static/img/goods/p4.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false},
+					// {id:5,img:'/static/img/goods/p5.jpg',name:'商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题',spec:'普罗旺斯 优雅精致',price:127.5,lines: 45,number:1,selected:false}
 				],
 				//控制滑动效果
 				theIndex:null,
@@ -134,6 +134,8 @@
 						token: uni.getStorageSync('token')
 					}
 				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
 				this.$http.carList(params).then((data)=>{
 					// console.log(data.data);
 					let goodsList = [];
@@ -150,8 +152,15 @@
 							num: arr[i].goods_num,
 							pic: arr[i].pic,
 							price: arr[i].goods_price,
-							selected: false
+							selected: arr[i].selected
 						})
+						if(arr[i].selected == 1){
+							this.selectedList.push(arr[i].selected)
+						}
+					}
+					// console.log(goodsList,this.selectedList);
+					if(this.selectedList.length == goodsList.length){
+						this.isAllselected = true;
 					}
 					this.goodsList = goodsList;
 					this.sum();
@@ -276,15 +285,19 @@
 				let del_parm = {};
 				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
 					del_parm = {
-						ids: JSON.stringify(ids),
+						// ids: JSON.stringify(ids),
+						ids: id,
 						unique_id: uni.getStorageSync('unique_id')
 					}
 				}else{
 					del_parm = {
-						ids: JSON.stringify(ids),
+						// ids: JSON.stringify(ids),
+						ids: id,
 						token: uni.getStorageSync('token')
 					}
 				}
+				let sign = this.$sign.getSign(del_parm,this.AppSecret);
+				del_parm.sign = sign;
 				console.log(JSON.stringify(ids));
 				this.$http.delCar(del_parm).then((data)=>{
 					this.$api.msg(data.data.msg);
@@ -304,13 +317,40 @@
 					content: '确定删除选中的商品？',
 					success: (res)=>{
 						if (res.confirm) {
+							let params = {};
+							if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+								params = {
+									unique_id: uni.getStorageSync('unique_id')
+								}
+							}else{
+								params = {
+									token: uni.getStorageSync('token')
+								}
+							}
+							let sign1 = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign1;
+							
+							let del_parm = {};
+							if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+								del_parm = {
+									// ids: JSON.stringify(ids),
+									is_all: 1,
+									unique_id: uni.getStorageSync('unique_id')
+								}
+							}else{
+								del_parm = {
+									// ids: JSON.stringify(ids),
+									is_all: 1,
+									token: uni.getStorageSync('token')
+								}
+							}
+							let sign = this.$sign.getSign(del_parm,this.AppSecret);
+							del_parm.sign = sign;
 							if(that.isAllselected == true){
 								is_all = 1;
-								that.$http.delCar({
-									is_all: is_all
-								}).then((data)=>{
+								that.$http.delCar(del_parm).then((data)=>{
 									that.$api.msg(data.data.msg);
-									that.$http.getCar().then((data)=>{
+									that.$http.carList(params).then((data)=>{
 										let goodsList = [];
 										let res = data.data.list;
 										let arr = [];
@@ -334,11 +374,9 @@
 								})
 							}else{
 								is_all = 0;
-								that.$http.delCar({
-									g_id: JSON.stringify(that.selectedList)
-								}).then((data)=>{
+								that.$http.delCar(del_parm).then((data)=>{
 									that.$api.msg(data.data.message);
-									that.$http.getCar().then((data)=>{
+									that.$http.carList(params).then((data)=>{
 										let goodsList = [];
 										let res = data.data.list;
 										let arr = [];
@@ -411,10 +449,24 @@
 					return;
 				}
 				this.goodsList[index].num--;
-				this.$http.editCar({
-					g_id: this.goodsList[index].gid,
-					num: this.goodsList[index].num
-				}).then((data)=>{
+				let params = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						unique_id: uni.getStorageSync('unique_id'),
+						cartID: this.goodsList[index].gid,
+						goodsNum: this.goodsList[index].num
+					}
+				}else{
+					params = {
+						token: uni.getStorageSync('token'),
+						cartID: this.goodsList[index].gid,
+						goodsNum: this.goodsList[index].num
+					}
+				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				console.log(index);
+				this.$http.carList(params).then((data)=>{
 					
 				})
 				this.sum();
@@ -422,20 +474,47 @@
 			// 增加数量
 			add(index){
 				this.goodsList[index].num++;
-				this.$http.editCar({
-					g_id: this.goodsList[index].gid,
-					num: this.goodsList[index].num
-				}).then((data)=>{
+				let params = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						unique_id: uni.getStorageSync('unique_id'),
+						cartID: this.goodsList[index].gid,
+						goodsNum: this.goodsList[index].num
+					}
+				}else{
+					params = {
+						token: uni.getStorageSync('token'),
+						cartID: this.goodsList[index].gid,
+						goodsNum: this.goodsList[index].num
+					}
+				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				console.log(index);
+				this.$http.carList(params).then((data)=>{
 					
 				})
 				this.sum();
 			},
 			sumBlur(index){
+				let params = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						unique_id: uni.getStorageSync('unique_id'),
+						cartID: this.goodsList[index].gid,
+						goodsNum: this.goodsList[index].num
+					}
+				}else{
+					params = {
+						token: uni.getStorageSync('token'),
+						cartID: this.goodsList[index].gid,
+						goodsNum: this.goodsList[index].num
+					}
+				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
 				console.log(index);
-				this.$http.editCar({
-					g_id: this.goodsList[index].gid,
-					num: this.goodsList[index].num
-				}).then((data)=>{
+				this.$http.carList(params).then((data)=>{
 					
 				})
 			},

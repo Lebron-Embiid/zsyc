@@ -30,7 +30,7 @@
 				</view>
 			</view>
 		</view>
-		<button type="primary" class="fixed_bottom_btn">提交</button>
+		<button type="primary" class="fixed_bottom_btn" @tap="submitEval">提交</button>
 	</view>
 </template>
 
@@ -40,6 +40,7 @@
 	export default{
 		data(){
 			return{
+				id: '',
 				rate_txt: '',
 				message: '',
 				num: 0,
@@ -50,7 +51,30 @@
 			uniNavBar,
 			uniRate
 		},
+		onLoad(opt) {
+			if(opt.id != undefined){
+				this.id = opt.id;
+			}
+		},
 		methods:{
+			submitEval(){
+				let params = {
+					token: uni.getStorageSync('token'),
+					img_file: '',
+					order_id: this.id,
+					goods_id: '',
+					store_packge_hidden: '',
+					store_speed_hidden: '',
+					store_sever_hidden: '',
+					anonymous: '',
+					remark: ''
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.orderCommentAdd(params).then((data)=>{
+					
+				})
+			},
 			changeRate(e){
 				console.log(e.value);
 				if(e.value == 1){

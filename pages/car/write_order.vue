@@ -191,10 +191,10 @@
 				this.shipping_code = JSON.parse(JSON.stringify(opt.shipCode));
 				console.log(this.shipping_code);
 			}
-			
-			this.$http.carConfirm({
-				token: uni.getStorageSync('token')
-			}).then((data)=>{
+			let params = {token: uni.getStorageSync('token')};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.carConfirm(params).then((data)=>{
 				this.recinfo = data.data.result.addressList;
 				console.log(data.data);
 				this.pay_price = data.data.result.totalPrice.total_fee;
@@ -207,13 +207,17 @@
 					let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
 					this.phone = tel1;
 					
-					this.$http.submitConfirm({
+					let params1 = {
 						token: uni.getStorageSync('token'),
 						address_id: this.recinfo.address_id,
-						shipping_code: this.shipping_code,
+						shipping_code: JSON.stringify(this.shipping_code),
 						user_money: 0,
 						pay_points: 0
-					}).then((data)=>{
+					};
+					let sign1 = this.$sign.getSign(params1,this.AppSecret);
+					params1.sign = sign1;
+					
+					this.$http.submitConfirm(params1).then((data)=>{
 						
 					})
 				}
@@ -273,15 +277,18 @@
 					key: "submitConfirm",
 					time: 1500,
 					success:()=>{
-						this.$http.submitConfirm({
+						let params = {
 							token: uni.getStorageSync('token'),
 							address_id: this.recinfo.address_id,
-							shipping_code: this.shipping_code,
+							shipping_code: JSON.stringify(this.shipping_code),
 							user_money: 0,
 							pay_points: 0,
 							user_note: JSON.stringify({"7":"留言"}),
 							act: 'submit_order'
-						}).then((data)=>{
+						};
+						let sign = this.$sign.getSign(params,this.AppSecret);
+						params.sign = sign;
+						this.$http.submitConfirm(params).then((data)=>{
 							this.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								setTimeout(()=>{

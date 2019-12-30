@@ -75,14 +75,19 @@
 		},
 		onLoad() {
 			this.url = this.$http.url;
-			this.$http.getGoodsCategoryList().then((data)=>{
+			
+			let params = {};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getGoodsCategoryList(params).then((data)=>{
 				this.categoryNavs = data.data.result;
 				this.cate_id = data.data.result[0].id;
 				console.log(this.cate_id);
 				
-				this.$http.getGoodsSecAndThirdCategoryList({
-					parent_id: this.cate_id
-				}).then((data)=>{
+				let params1 = {parent_id: this.cate_id};
+				let sign1 = this.$sign.getSign(params1,this.AppSecret);
+				params1.sign = sign1;
+				this.$http.getGoodsSecAndThirdCategoryList(params1).then((data)=>{
 					this.categoryList = data.data.result;
 				})
 			})
@@ -110,9 +115,10 @@
 				this.showCategoryIndex = index;
 				this.cate_id = this.categoryNavs[index].id;
 				console.log(this.cate_id);
-				this.$http.getGoodsSecAndThirdCategoryList({
-					parent_id: this.cate_id
-				}).then((data)=>{
+				let params = {parent_id: this.cate_id};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getGoodsSecAndThirdCategoryList(params).then((data)=>{
 					this.categoryList = data.data.result;
 				})
 			},

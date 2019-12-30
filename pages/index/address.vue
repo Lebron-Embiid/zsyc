@@ -54,9 +54,10 @@
 			uniNavBar
 		},
 		onShow() {
-			this.$http.getAddressList({
-				token: uni.getStorageSync('token')
-			}).then((data)=>{
+			let params = {token: uni.getStorageSync('token')};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getAddressList(params).then((data)=>{
 				this.addressList = data.data.result;
 			})
 		},
@@ -73,15 +74,16 @@
 					content: '你将删除这个收货地址',
 					success: (res)=>{
 						if (res.confirm) {
-							that.$http.delAddress({
-								id: row.address_id,
-								token: uni.getStorageSync('token')
-							}).then((data)=>{
+							let params = {id: row.address_id,token: uni.getStorageSync('token')};
+							let sign = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign;
+							that.$http.delAddress(params).then((data)=>{
 								that.$api.msg(data.data.msg);
 								if(data.data.status == 1){
-									that.$http.getAddressList({
-										token: uni.getStorageSync('token')
-									}).then((data)=>{
+									let params1 = {token: uni.getStorageSync('token')};
+									let sign1 = this.$sign.getSign(params1,this.AppSecret);
+									params1.sign = sign1;
+									that.$http.getAddressList(params1).then((data)=>{
 										that.addressList = data.data.result;
 										
 										uni.removeStorage({
@@ -95,15 +97,17 @@
 				});
 			},
 			setDefault(row){
-				this.$http.setDefaultAddress({
-					address_id: row.address_id,
-					token: uni.getStorageSync('token')
-				}).then((data)=>{
+				let params = {address_id: row.address_id,token: uni.getStorageSync('token')};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.setDefaultAddress(params).then((data)=>{
 					// this.$api.msg(data.data.msg);
 					if(data.data.status == 1){
-						this.$http.getAddressList({
-							token: uni.getStorageSync('token')
-						}).then((data)=>{
+						let params1 = {token: uni.getStorageSync('token')};
+						let sign1 = this.$sign.getSign(params1,this.AppSecret);
+						params1.sign = sign1;
+						
+						this.$http.getAddressList(params1).then((data)=>{
 							this.addressList = data.data.result;
 						})
 					}

@@ -44,18 +44,18 @@
 			<image src="/static/icon/arrow.png" mode="widthFix"></image>
 		</view> -->
 		<view class="person_info">
-			<view class="pi_title">亮亮专营店 <text>1866981688</text></view>
-			<view class="pi_info">地址：广东省深圳市南山区西丽镇沙河西路12号</view>
+			<view class="pi_title">{{orderInfo.consignee}} <text>{{orderInfo.mobile}}</text></view>
+			<view class="pi_info">地址：{{orderInfo.province_name+orderInfo.city_name+orderInfo.district_name+orderInfo.address}}</view>
 		</view>
 		<view class="goods_box">
-			<view class="goods_pop_item" v-for="(item,index) in goodsList" :key="index">
-				<image :src="item.src" mode="widthFix"></image>
+			<view class="goods_pop_item" v-for="(item,index) in orderInfo.goods_list" :key="index">
+				<image :src="item.original_img" mode="widthFix"></image>
 				<view class="gp_center">
-					<view class="gp_title">{{item.title}}</view>
-					<view class="gp_info">{{item.info}}</view>
-					<view class="gp_price">￥{{item.price}}</view>
+					<view class="gp_title">{{item.goods_name}}</view>
+					<view class="gp_info">{{item.spec_key_name}}</view>
+					<view class="gp_price">￥{{item.goods_price}}</view>
 				</view>
-				<view class="gp_num">x{{item.num}}</view>
+				<view class="gp_num">x{{item.goods_num}}</view>
 			</view>
 		</view>
 		<view class="order_info_box">
@@ -76,14 +76,14 @@
 			</view>
 		</view>
 		<view class="fixed_order_bottom">
-			<!-- istype: 1：待付款  2：待发货  3：待收货  4：待评价  5：已取消 -->
-			<button v-if="is_type == 3" type="default" size="mini">查看物流</button>
-			<button v-if="is_type == 1 || is_type == 2 || is_type == 5" type="default" size="mini">取消订单</button>
-			<button v-if="is_type == 2 || is_type == 3 || is_type == 4" type="default" size="mini">再次购买</button>
-			<button v-if="is_type == 4" type="default" size="mini">退换货</button>
-			<button v-if="is_type == 3" type="primary" size="mini" class="red">确认收货</button>
-			<button @tap="toEvaluation" v-if="is_type == 4" type="primary" size="mini" class="red">评价有礼</button>
-			<button v-if="is_type == 1" type="primary" size="mini" class="red">付款</button>
+			<!-- istype: WAITPAY：待付款  WAITSEND：待发货  WAITRECEIVE：待收货  WAITCCOMMENT：待评价  5：已取消 -->
+			<button v-if="is_type == 'WAITRECEIVE'" type="default" size="mini">查看物流</button>
+			<button v-if="is_type == 'WAITPAY' || is_type == 'WAITSEND' || is_type == 5" type="default" size="mini">取消订单</button>
+			<button v-if="is_type == 'WAITSEND' || is_type == 'WAITRECEIVE' || is_type == 'WAITCCOMMENT'" type="default" size="mini">再次购买</button>
+			<button v-if="is_type == 'WAITCCOMMENT'" type="default" size="mini">退换货</button>
+			<button v-if="is_type == 'WAITRECEIVE'" type="primary" size="mini" class="red">确认收货</button>
+			<button @tap="toEvaluation" v-if="is_type == 'WAITCCOMMENT'" type="primary" size="mini" class="red">评价有礼</button>
+			<button v-if="is_type == 'WAITPAY'" type="primary" size="mini" class="red">付款</button>
 			<button v-if="is_type == 6 || is_type == 7" type="primary" size="mini" class="red">生成提货码</button>
 		</view>
 	</view>
@@ -98,6 +98,7 @@
 				id: '',
 				is_type: 1,
 				log: '离开【太原中心】，下一站【广州中心】',
+				orderInfo: {},
 				goodsList: [
 					{
 						src: '/static/img/order_img2.png',
@@ -126,6 +127,7 @@
 			uniCountdown
 		},
 		onLoad(opt) {
+			console.log(opt);
 			if(opt.id != undefined){
 				this.id = opt.id;
 				this.is_type = opt.is_type;
@@ -133,6 +135,15 @@
 					this.log = '已签收';
 				}
 			}
+			let params = {
+				id: this.id,
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getOrderDetail(params).then((data)=>{
+				this.orderInfo = data.data.result;
+			})
 		},
 		methods:{
 			toLogistics(){

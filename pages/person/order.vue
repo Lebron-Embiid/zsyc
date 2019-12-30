@@ -1,31 +1,31 @@
 <template>
 	<view class="order">
 		<uni-nav-bar leftIcon="back" title="我的订单" rightText="线下订单" :isBtn="true" @clickRight="clickRightBtn"></uni-nav-bar>
-		<view class="list_nav">
+		<scroll-view scroll-x="true" class="list_nav">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
-		</view>
+		</scroll-view>
 		<scroll-view scroll-y="true" class="my_order_box">
 			<view class="my_order_item" v-for="(item,index) in orderList" :key="index">
 				<view class="moi_top">
 					订单号：{{item.order_sn}}
 					<text>{{item.order_status_desc}}</text>
 				</view>
-				<view class="moi_center" @tap="toOrderDetail(item.id,item.is_type)" v-for="(order,idx) in item.goods_list" :key="idx">
+				<view class="moi_center" @tap="toOrderDetail(item.order_id,item.order_status_code)" v-for="(order,idx) in item.goods_list" :key="idx">
 					<image :src="order.original_img" mode="widthFix"></image>
 					<view class="moi_box">
 						<view class="moi_title">{{order.goods_name}}</view>
 						<view class="moi_info">{{order.spec_key_name}}</view>
 					</view>
 				</view>
-				<view class="moi_all">共{{item.goods_list.length}}件商品 合计：￥{{item.total_amount}}</view>
+				<view class="moi_all">共{{length}}件商品 合计：￥{{item.total_amount}}</view>
 				<view class="moi_bottom">
-					<button @tap="toLogistics(item.id)" v-if="item.is_type == 3" type="default" size="mini" class="pad">查看物流</button>
-					<button @tap="cancelOrder(item.id)" v-if="item.is_type == 1 || item.is_type == 2" type="default" size="mini" class="pad">取消订单</button>
-					<button v-if="item.is_type == 2 || item.is_type == 3 || item.is_type == 4" type="default" size="mini" class="pad">再次购买</button>
-					<button v-if="item.is_type == 4" type="default" size="mini">退换货</button>
-					<button v-if="item.is_type == 3" type="primary" size="mini" class="red pad">确认收货</button>
-					<button @tap="toEvaluation(item.id)" v-if="item.is_type == 4" type="primary" size="mini" class="red pad">评价有礼</button>
-					<button v-if="item.is_type == 1" type="primary" size="mini" class="red">付款</button>
+					<button @tap="toLogistics(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini" class="pad">查看物流</button>
+					<button @tap="cancelOrder(item.order_id)" v-if="item.order_status_code == 'WAITPAY' || item.order_status_code == 'WAITSEND'" type="default" size="mini" class="pad">取消订单</button>
+					<button v-if="item.order_status_code == 'WAITSEND' || item.order_status_code == 'WAITRECEIVE' || item.order_status_code == 'WAITCCOMMENT'" type="default" size="mini" class="pad">再次购买</button>
+					<button v-if="item.order_status_code == 'WAITCCOMMENT'" type="default" size="mini">退换货</button>
+					<button @tap="toConfirm(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="primary" size="mini" class="red pad">确认收货</button>
+					<button @tap="toEvaluation(item.order_id)" v-if="item.order_status_code == 'WAITCCOMMENT'" type="primary" size="mini" class="red pad">评价有礼</button>
+					<button v-if="item.order_status_code == 'WAITPAY'" type="primary" size="mini" class="red">付款</button>
 				</view>
 			</view>
 			<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
@@ -39,7 +39,7 @@
 	export default{
 		data(){
 			return{
-				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"}],
+				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"},{name:"已完成"},{name:"已取消"},{name:"已作废"}],
 				currentTab:0,
 				orderList: [
 					{
@@ -104,6 +104,7 @@
 						is_type: 4
 					}
 				],
+				length: 0,
 				loadingType: 'more'
 			}
 		},
@@ -115,10 +116,12 @@
 			if(opt.id != undefined){
 				this.currentTab = opt.id;
 			}
-			this.$http.getOrderList({
-				token: uni.getStorageSync('token')
-			}).then((data)=>{
+			let params = {token: uni.getStorageSync('token')};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getOrderList(params).then((data)=>{
 				this.orderList = data.data.result;
+				this.length = data.data.result.goods_list.length;
 			})
 		},
 		methods:{
@@ -128,8 +131,18 @@
 				})
 			},
 			navbarTap(e){
-				console.log(e)
 				this.currentTab = e;
+			},
+			toConfirm(id){
+				let params = {
+					token: uni.getStorageSync('token'),
+					order_id: id
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.orderConfirm(params).then((data)=>{
+					this.$api.msg(data.data.msg);
+				})
 			},
 			toOrderDetail(id,type){
 				uni.navigateTo({
@@ -156,6 +169,14 @@
 </script>
 
 <style scoped lang="scss">
+	.list_nav{
+		white-space: nowrap;
+		justify-content: flex-start;
+		view{
+			width: 150rpx;
+			display: inline-block;
+		}
+	}
 	.order{
 		background: #eee;
 	}

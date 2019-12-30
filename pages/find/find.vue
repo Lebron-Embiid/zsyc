@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<view class="list_nav">
-			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
+			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index,item.cat_id)">{{item.cat_name}}</view>
 		</view>
 		<scroll-view scroll-y="true" class="scroll_box">
 			<view class="find_content_box" @tap="toDetail(item.id)" v-for="(item,index) in findList" :key='index'>
@@ -72,8 +72,16 @@
 				]
 			}
 		},
+		onLoad(opt) {
+			let params = {};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.articleClass(params).then((data)=>{
+				this.navbar = data.data.result;
+			})
+		},
 		methods:{
-			navbarTap(e){
+			navbarTap(e,id){
 				console.log(e)
 				this.currentTab = e;
 			},

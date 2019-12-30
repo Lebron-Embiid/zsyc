@@ -129,8 +129,11 @@
 					content: '你将删除这个收货地址',
 					success: (res)=>{
 						if (res.confirm) {
-							this.$http.delAddress({
-								id: this.id
+							let params = {id: this.id};
+							let sign = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign;
+							this.$http.delAddress(params).then((data)=>{
+								
 							})
 							uni.setStorage({
 								key:'delAddress',
@@ -157,7 +160,7 @@
 					key: "addAddress",
 					time: 1500,
 					success:()=>{
-						this.$http.addAddress({
+						let params = {
 							token: uni.getStorageSync('token'),
 							consignee: this.name,
 							mobile: this.tel,
@@ -166,7 +169,10 @@
 							district: this.region.value[2],
 							address: this.detailed,
 							is_default: is_default
-						}).then((data)=>{
+						};
+						let sign = this.$sign.getSign(params,this.AppSecret);
+						params.sign = sign;
+						this.$http.addAddress(params).then((data)=>{
 							this.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								setTimeout(()=>{
@@ -216,7 +222,11 @@
 			}
 		},
 		onLoad(e) {
-			this.$http.getAreaList().then((data)=>{
+			let params = {};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			
+			this.$http.getAreaList(params).then((data)=>{
 				this.linkList = data.data;
 				uni.setStorageSync('address',data.data);
 				// console.log(this.linkList,this.defaultVal);

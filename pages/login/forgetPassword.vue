@@ -104,10 +104,13 @@
 							that.$api.msg('请输入手机号码');
 							return;
 						}
-						that.$http.sendValidateCode({
+						let params = {
 							mobile: that.phone,
 							scene: 2
-						}).then((data)=>{
+						};
+						let sign = this.$sign.getSign(params,this.AppSecret);
+						params.sign = sign;
+						that.$http.sendValidateCode(params).then((data)=>{
 							console.log(data);
 							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
@@ -132,11 +135,14 @@
 					key: "forget",
 					time: 1500,
 					success:()=>{
-						this.$http.forgetPassword({
+						let params = {
 							mobile: this.phone,
 							password: this.password,
 							check_code: this.code
-						}).then((data)=>{
+						};
+						let sign = this.$sign.getSign(params,this.AppSecret);
+						params.sign = sign;
+						this.$http.forgetPassword(params).then((data)=>{
 							this.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								setTimeout(function(){
