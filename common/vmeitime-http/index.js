@@ -680,7 +680,7 @@ export const getUserCollectGoods = (data) => {
     })
 }
 
-// 获取收藏商品列表 
+// 获取发现分类列表 
 export const articleClass = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
@@ -691,6 +691,142 @@ export const articleClass = (data) => {
 	}
     return http.request({
         url: 'Api/Article/articleClass',
+        method: 'POST',
+        data
+    })
+}
+// 获取发现文章列表 
+export const articleList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/articleList',
+        method: 'POST',
+        data
+    })
+}
+// 获取文章内容 
+export const getArticleDetail = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/detail',
+        method: 'POST',
+        data
+    })
+}
+// 文章点赞 
+export const ArticleLike = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/articleLike',
+        method: 'POST',
+        data
+    })
+}
+// 文章收藏 
+export const articleCollect = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/articleCollect',
+        method: 'POST',
+        data
+    })
+}
+// 获取用户文章收藏 
+export const getUserCollectArticle = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/getUserCollectArticle',
+        method: 'POST',
+        data
+    })
+}
+// 文章评论 
+export const articleComment = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/articleComment',
+        method: 'POST',
+        data
+    })
+}
+// 获取文章评论列表 
+export const getCommentList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/getCommentList',
+        method: 'POST',
+        data
+    })
+}
+// 文章评论点赞 
+export const articleCommentLike = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/articleCommentLike',
+        method: 'POST',
+        data
+    })
+}
+
+// 设置支付密码 
+export const setPayPassword = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/payPassword',
         method: 'POST',
         data
     })
@@ -780,5 +916,14 @@ export default {
 	collectStoreOrNo,
 	getUserCollectStore,
 	getUserCollectGoods,
-	articleClass
+	articleClass,
+	articleList,
+	getArticleDetail,
+	ArticleLike,
+	articleCollect,
+	getUserCollectArticle,
+	articleComment,
+	getCommentList,
+	articleCommentLike,
+	setPayPassword
 }

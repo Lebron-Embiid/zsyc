@@ -296,6 +296,24 @@
 					"titleNView": false
 				}
 			}
+		},
+		{
+			"path": "pages/person/changePassword",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/setPayPassword",
+			"style": {
+				"navigationBarTitleText": "设置支付密码",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
 		}
 	],
 	"globalStyle": {

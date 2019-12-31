@@ -16,25 +16,27 @@
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index,item.cat_id)">{{item.cat_name}}</view>
 		</view>
 		<scroll-view scroll-y="true" class="scroll_box">
-			<view class="find_content_box" @tap="toDetail(item.id)" v-for="(item,index) in findList" :key='index'>
+			<view class="find_content_box" @tap="toDetail(item.article_id)" v-for="(item,index) in findList" :key='index'>
 				<view class="find_content_item" v-if="item.type == 1">
 					<view class="find_title">{{item.title}}</view>
-					<image class="pic" :src="item.src" mode="widthFix"></image>
+					<view class="find_desc">{{item.description}}</view>
+					<image class="pic" :src="url+item.thumb" mode="widthFix"></image>
 					<view class="find_bottom">
-						<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.look}}人</view>
-						<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.like}}人</view>
+						<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.look}}</view>
+						<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.like}}</view>
 					</view>
 				</view>
 				<view class="find_content_item1" v-else>
 					<view class="fci_left">
 						<view class="find_title">{{item.title}}</view>
+						<view class="find_desc">{{item.description}}</view>
 						<view class="find_bottom">
-							<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.look}}人</view>
-							<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.like}}人</view>
+							<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.look}}</view>
+							<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.like}}</view>
 						</view>
 					</view>
 					<view class="fci_right">
-						<image :src="item.src" mode="widthFix"></image>
+						<image :src="url+item.thumb" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -46,44 +48,57 @@
 	export default{
 		data(){
 			return{
-				navbar:[{name:"精选"},{name:"上新"},{name:"达人"},{name:"衣装"}],
+				navbar:[],
 				currentTab:0,
 				keywords: '',
 				findList: [
-					{
-						title: '2个步骤挑到满意枕头',
-						src: '/static/img/find_img1.jpg',
-						look: '28.30万',
-						like: '9575',
-						type: 1
-					},{
-						title: '2个步骤挑到满意枕头',
-						src: '/static/img/find_img2.jpg',
-						look: '28.30万',
-						like: '9575',
-						type: 0
-					},{
-						title: '2个步骤挑到满意枕头',
-						src: '/static/img/find_img3.jpg',
-						look: '28.30万',
-						like: '9575',
-						type: 0
-					}
-				]
+					// {
+					// 	title: '2个步骤挑到满意枕头',
+					// 	src: '/static/img/find_img1.jpg',
+					// 	look: '28.30万',
+					// 	like: '9575',
+					// 	type: 1
+					// }
+				],
+				page: 0,
+				url: ''
 			}
 		},
 		onLoad(opt) {
+			this.url = this.$http.url;
+		},
+		onShow() {
 			let params = {};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.articleClass(params).then((data)=>{
 				this.navbar = data.data.result;
+				let params1 = {
+					cid: this.navbar[0].cat_id,
+					page: 0,
+					limit: 10
+				};
+				let sign1 = this.$sign.getSign(params1,this.AppSecret);
+				params1.sign = sign1;
+				this.$http.articleList(params1).then((data)=>{
+					this.findList = data.data.result;
+				})
 			})
 		},
 		methods:{
 			navbarTap(e,id){
-				console.log(e)
+				console.log(e,id)
 				this.currentTab = e;
+				let params = {
+					cid: id,
+					page: 0,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.articleList(params).then((data)=>{
+					this.findList = data.data.result;
+				})
 			},
 			clearInput(){
 				this.keywords = '';
@@ -160,6 +175,18 @@
 				word-wrap: break-word;
 				word-break: break-all;
 			}
+			.find_desc{
+				margin-bottom: 20rpx;
+				font-size: 32rpx;
+				color: #999;
+				overflow : hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				word-wrap: break-word;
+				word-break: break-all;
+			}
 			.pic{
 				display: block;
 				width: 100%;
@@ -179,10 +206,22 @@
 					width: 100%;
 					color: #333;
 					font-size: 36rpx;
+					margin-bottom: 10rpx;
 					overflow : hidden;
 					text-overflow: ellipsis;
 					display: -webkit-box;
 					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					word-wrap: break-word;
+					word-break: break-all;
+				}
+				.find_desc{
+					font-size: 32rpx;
+					color: #999;
+					overflow : hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-line-clamp: 3;
 					-webkit-box-orient: vertical;
 					word-wrap: break-word;
 					word-break: break-all;

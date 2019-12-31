@@ -35,6 +35,12 @@
 			if(opt.id != undefined){
 				this.id = opt.id;
 			}
+			// let params = {};
+			// let sign = this.$sign.getSign(params,this.AppSecret);
+			// params.sign = sign;
+			// this.$http.returnGoodReason(params).then((data)=>{
+			// 	this.array = data.data.result;
+			// })
 		},
 		methods:{
 			clickRightBtn(){
@@ -53,7 +59,7 @@
 				})
 			},
 			bindPickerChange(e) {
-				console.log('picker发送选择改变，携带值为', e.target.value)
+				console.log('picker发送选择改变，携带值为', e.target.value);
 				this.index = e.target.value;
 				this.cancel_txt = this.array[this.index];
 			}

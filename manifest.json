@@ -103,5 +103,13 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
+    },
+    "h5" : {
+        "title" : "掌上衣橱",
+        "domain" : "",
+        "router" : {
+            "mode" : "hash",
+            "base" : "/h5/"
+        }
     }
 }

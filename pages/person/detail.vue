@@ -59,8 +59,8 @@
 			</view>
 		</view>
 		<view class="order_info_box">
-			<view class="oib_item"><text>订单编号：</text>2539129895</view>
-			<view class="oib_item border"><text>下单时间：</text>2019.12.18 18:08</view>
+			<view class="oib_item"><text>订单编号：</text>{{orderInfo.order_sn}}</view>
+			<view class="oib_item border"><text>下单时间：</text>{{orderInfo.add_time}}</view>
 			<view class="oib_item"><text>支付方式：</text>微信支付</view>
 			<view class="oib_item"><text>商品合计：</text>1</view>
 			<view class="oib_item"><text>干洗费：</text>30</view>
@@ -92,6 +92,7 @@
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniCountdown from "@/components/uni-count-down/uni-countdown.vue"
+	import util from "@/common/util.js"
 	export default{
 		data(){
 			return{
@@ -119,7 +120,7 @@
 						price: '118',
 						num: 1
 					}
-				],
+				]
 			}
 		},
 		components:{
@@ -143,6 +144,7 @@
 			params.sign = sign;
 			this.$http.getOrderDetail(params).then((data)=>{
 				this.orderInfo = data.data.result;
+				this.orderInfo.add_time = util.formatTime(this.orderInfo.add_time);
 			})
 		},
 		methods:{

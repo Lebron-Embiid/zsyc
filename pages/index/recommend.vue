@@ -321,7 +321,7 @@
 		}
 	}
 	.offline_scroll{
-		height: 80vh;		
+		height: 79vh;		
 	}
 	.offline_box{
 		padding: 30rpx 30rpx 0;

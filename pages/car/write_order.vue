@@ -207,10 +207,11 @@
 					let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
 					this.phone = tel1;
 					
+					console.log(this.shipping_code);
 					let params1 = {
 						token: uni.getStorageSync('token'),
 						address_id: this.recinfo.address_id,
-						shipping_code: JSON.stringify(this.shipping_code),
+						shipping_code: this.shipping_code,
 						user_money: 0,
 						pay_points: 0
 					};
@@ -280,7 +281,7 @@
 						let params = {
 							token: uni.getStorageSync('token'),
 							address_id: this.recinfo.address_id,
-							shipping_code: JSON.stringify(this.shipping_code),
+							shipping_code: this.shipping_code,
 							user_money: 0,
 							pay_points: 0,
 							user_note: JSON.stringify({"7":"留言"}),

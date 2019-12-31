@@ -42,67 +42,21 @@
 				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"},{name:"已完成"},{name:"已取消"},{name:"已作废"}],
 				currentTab:0,
 				orderList: [
-					{
-						id: 1,
-						order_sn: '021255684',
-						status: '待付款',
-						list: [
-							{
-								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
-							}
-						],
-						num: 1,
-						price: 24,
-						is_type: 1
-					},{
-						id: 2,
-						order_sn: '021255684',
-						status: '待发货',
-						list: [
-							{
-								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
-							},{
-								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
-							}
-						],
-						num: 1,
-						price: 24,
-						is_type: 2
-					},{
-						id: 3,
-						order_sn: '021255684',
-						status: '待收货',
-						list: [
-							{
-								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
-							}
-						],
-						num: 1,
-						price: 24,
-						is_type: 3
-					},{
-						id: 4,
-						order_sn: '021255684',
-						status: '待评价',
-						list: [
-							{
-								src: '/static/img/online_img1.png',
-								title: '普罗旺斯桃红葡萄酒',
-								info: '普罗旺斯产区 优雅精致'
-							}
-						],
-						num: 1,
-						price: 24,
-						is_type: 4
-					}
+					// {
+					// 	id: 1,
+					// 	order_sn: '021255684',
+					// 	status: '待付款',
+					// 	list: [
+					// 		{
+					// 			src: '/static/img/online_img1.png',
+					// 			title: '普罗旺斯桃红葡萄酒',
+					// 			info: '普罗旺斯产区 优雅精致'
+					// 		}
+					// 	],
+					// 	num: 1,
+					// 	price: 24,
+					// 	is_type: 1
+					// }
 				],
 				length: 0,
 				loadingType: 'more'

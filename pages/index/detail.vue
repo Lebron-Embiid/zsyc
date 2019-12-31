@@ -124,10 +124,10 @@
 					<image src="/static/icon/close1.png" @tap="hideSpec" class="close_img" mode="widthFix"></image>
 				</view>
 				<view class="content layer_goods_content">
-					<view class="spec_item" v-for="(item,index) in goods_spec_list" :key="index">
-						<view class="title">{{item.attr_name}}</view>
+					<view class="spec_item" v-for="(item,index) in spec" :key="index">
+						<view class="title">{{item.title}}</view>
 						<view class="sp">
-							<view v-for="(list,idx) in item.attr_list" :class="[list.isShow?'on':'',subIndex[index] == idx?'on':'']" @tap="setSelectSpec(list,index,$event,idx)" :key="idx">{{list}}</view>
+							<view v-for="(list,idx) in item.list" :class="[list.isShow?'on':'',subIndex[index] == idx?'on':'']" @tap="setSelectSpec(list,index,$event,idx)" :key="idx">{{list.key_name}}</view>
 						</view>
 					</view>
 					<!-- v-if="selectSpec!=null" -->
@@ -276,6 +276,7 @@
 
 <script>
 import uParse from '@/components/u-parse/u-parse.vue'
+import util from '@/common/util.js'
 export default {
 	data() {
 		return {
@@ -314,40 +315,40 @@ export default {
 					{name:"正品保证",description:"此商品官方保证为正品"},
 					{name:"极速退款",description:"此商品享受退货极速退款服务"},
 					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
-				],
-				spec:[
-					{
-						title: '颜色',
-						list: [{
-							"name": "粉色"
-						}, {
-							"name": "红色"
-						}, {
-							"name": "蓝色"
-						}, {
-							"name": "黄色"
-						}]
-					},
-					{
-						title: '尺码',
-						list: [{
-							"name": "22"
-						}, {
-							"name": "32"
-						}, {
-							"name": "41"
-						}, {
-							"name": "42"
-						}, {
-							"name": "43"
-						}, {
-							"name": "44"
-						}, {
-							"name": "48"
-						}]
-					}
 				]
 			},
+			spec:[
+				{
+					title: '颜色',
+					list: [{
+						"key_name": "粉色"
+					}, {
+						"key_name": "红色"
+					}, {
+						"key_name": "蓝色"
+					}, {
+						"key_name": "黄色"
+					}]
+				},
+				{
+					title: '尺码',
+					list: [{
+						"key_name": "22"
+					}, {
+						"key_name": "32"
+					}, {
+						"key_name": "41"
+					}, {
+						"key_name": "42"
+					}, {
+						"key_name": "43"
+					}, {
+						"key_name": "44"
+					}, {
+						"key_name": "48"
+					}]
+				}
+			],
 			couriers: [
 				{
 					label: '顺丰',
@@ -375,14 +376,7 @@ export default {
 			couriersTxt: '请选择快递方式',
 			selectCourierVal: {},
 			goods_spec_list: [],
-			comment:[{
-				number:102,
-				userface:'/static/img/face.png',
-				username:'大黑哥',
-				time: '上午08:56',
-				star_num: 5,
-				content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-			}],
+			comment:[],
 			goods_id: '',
 			selectSpec:[-1,-1],//选中规格
 			isKeep:false,//收藏
@@ -446,7 +440,18 @@ export default {
 		let sign1 = this.$sign.getSign(params1,this.AppSecret);
 		params1.sign = sign1;
 		this.$http.getGoodsComment(params1).then((data)=>{
-			this.comment = data.data.result;
+			// this.comment = data.data.result;
+			for(let i in data.data.result){
+				let res = data.data.result;
+				console.log(parseInt(res[i].goods_rank));
+				this.comment.push({
+					add_time: util.formatDate(res[i].add_time),
+					content: res[i].content,
+					goods_rank: parseInt(res[i].goods_rank),
+					img: this.$http.url+res[i].img,
+					reply_num: res[i].reply_num
+				})
+			}
 		})
 		
 		// #ifdef MP
@@ -606,7 +611,7 @@ export default {
 			console.log(this.selectArr);
 		},
 		checkItem(clickIndex) {
-			var option = this.goodsData.goods_attr_list;
+			var option = this.goods_spec_list;
 			for (let i = 0, len = option.length; i < len; i++) {
 				if (i == clickIndex) {
 					continue;
@@ -617,12 +622,12 @@ export default {
 						continue;
 					}
 					let choosed_copy = [...this.selectArr];
-					this.$set(choosed_copy, i, this.goodsData.goods_attr_list[i].attr_list[j].name);
+					this.$set(choosed_copy, i, this.goods_spec_list[i].attr_list[j].name);
 					let choosed_copy2 = choosed_copy.filter(item => item !== '' && typeof item !== 'undefined');
 					if (this.shopItemInfo.hasOwnProperty(choosed_copy2)) {
-						this.$set(this.goodsData.goods_attr_list[i].attr_list[j], 'isShow', true);
+						this.$set(this.goods_spec_list[i].attr_list[j], 'isShow', true);
 					} else {
-						this.$set(this.goodsData.goods_attr_list[i].attr_list[j], 'isShow', false);
+						this.$set(this.goods_spec_list[i].attr_list[j], 'isShow', false);
 					}
 				}
 			}
@@ -660,7 +665,7 @@ export default {
 				let headerHeight = uni.upx2px(100);
 				this.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
 				this.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
-				
+				console.log(this.anchorlist);
 			}).exec();
 		},
 		//返回上一页

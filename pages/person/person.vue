@@ -8,10 +8,13 @@
 		<view class="person_top">
 			<view class="pt_left">
 				<image src="/static/avatar/avatar.png" mode="widthFix"></image>
-				
+				<view class="pl_info">
+					<view class="pl_name">小靓</view>
+					<!-- <view class="pl_person">联合创始人{{personInfo.nickname}}</view> -->
+				</view>
 			</view>
 			<view class="pt_center">
-				<view>昵称：{{personInfo.nickname}}</view>
+				<!-- <view>昵称：</view> -->
 				<view>余额：￥{{personInfo.user_money}}</view>
 				<view>额度：v 150000</view>
 				<view>套餐资格：1</view>
@@ -22,7 +25,7 @@
 					<image src="/static/icon/setting.png" mode="widthFix"></image>
 					<image src="/static/icon/mess.png" mode="widthFix"></image>
 				</view>
-				<text>每日签到 &gt;</text>
+				<!-- <text>每日签到 &gt;</text> -->
 				<button type="primary" size="mini" @tap="logout">退出登录</button>
 			</view>
 		</view>
@@ -31,7 +34,17 @@
 			<view class="my_title" @tap="toOrder">我的订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
 			<view class="order_box">
 				<view class="order_item" v-for="(item,index) in orderNavs" :key="index" @tap="clickNav(index)">
-					<view><image :src="item.icon" mode="widthFix"></image></view>
+					<view><image :src="item.icon" mode="widthFix"></image><text v-if="item.num!=0">{{item.num}}</text></view>
+					<text>{{item.title}}</text>
+				</view>
+			</view>
+		</view>
+		<view class="gray-place"></view>
+		<view class="my_order_box">
+			<view class="my_title" @tap="toMealOrder">套餐订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
+			<view class="order_box">
+				<view class="order_item" v-for="(item,index) in mealNavs" :key="index" @tap="clickNav(index)">
+					<view><image :src="item.icon" mode="widthFix"></image><text v-if="item.num!=0">{{item.num}}</text></view>
 					<text>{{item.title}}</text>
 				</view>
 			</view>
@@ -59,23 +72,56 @@
 					{
 						icon: '/static/icon/order_icon1.png',
 						title: '待付款',
-						url: '/pages/person/order?id=1'
+						url: '/pages/person/order?id=1',
+						num: 1
 					},{
 						icon: '/static/icon/order_icon2.png',
 						title: '待发货',
-						url: '/pages/person/order?id=2'
+						url: '/pages/person/order?id=2',
+						num: 0
 					},{
 						icon: '/static/icon/order_icon3.png',
 						title: '待收货',
-						url: '/pages/person/order?id=3'
+						url: '/pages/person/order?id=3',
+						num: 0
 					},{
 						icon: '/static/icon/order_icon4.png',
 						title: '待评价',
-						url: '/pages/person/order?id=4'
+						url: '/pages/person/order?id=4',
+						num: 0
+					},{
+						icon: '/static/icon/order_icon6.png',
+						title: '已完成',
+						url: '/pages/person/order?id=5',
+						num: 0
+					}
+				],
+				mealNavs: [
+					{
+						icon: '/static/icon/order_icon1.png',
+						title: '待付款',
+						url: '/pages/person/order?id=1',
+						num: 0
+					},{
+						icon: '/static/icon/order_icon2.png',
+						title: '待发货',
+						url: '/pages/person/order?id=2',
+						num: 0
+					},{
+						icon: '/static/icon/order_icon3.png',
+						title: '待收货',
+						url: '/pages/person/order?id=3',
+						num: 2
+					},{
+						icon: '/static/icon/order_icon4.png',
+						title: '待评价',
+						url: '/pages/person/order?id=4',
+						num: 0
 					},{
 						icon: '/static/icon/order_icon5.png',
 						title: '提货码',
-						url: '/pages/person/offline_order?id=2'
+						url: '/pages/person/offline_order?id=2',
+						num: 0
 					}
 				],
 				useList: [
@@ -151,6 +197,11 @@
 					url: '/pages/person/order'
 				})
 			},
+			toMealOrder(){
+				uni.navigateTo({
+					url: '/pages/person/offline_order'
+				})
+			},
 			clickNav(idx){
 				uni.navigateTo({
 					url: this.orderNavs[idx].url
@@ -209,10 +260,14 @@
 		}
 		.pt_right{
 			text-align: right;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-end;
+			align-self: stretch;
 			.pr_box{
 				display: flex;
 				justify-content: flex-end;
-				align-items: center;
+				align-items: flex-start;
 				image{
 					display: block;
 					width: 48rpx;
@@ -230,9 +285,12 @@
 				margin: 30rpx 0 40rpx;
 			}
 			button{
+				display: flex;
+				align-self: flex-end;
 				font-size: 24rpx;
 				background: #f90;
 				padding: 0 30rpx;
+				margin: 0;
 				color: #fff;
 				&:after{
 					border: 0;
@@ -271,11 +329,28 @@
 				text-align: center;
 				view{
 					position: relative;
+					height: 60rpx;
+					display: flex;
+					align-items: center;
+					margin-bottom: 15rpx;
 					image{
 						display: block;
 						width: 52rpx;
 						height: 52rpx;
-						margin: 0 auto 20rpx;
+						margin: 0 auto;
+					}
+					text{
+						position: absolute;
+						width: 30rpx;
+						height: 30rpx;
+						line-height: 30rpx;
+						border-radius: 50%;
+						background: #f00;
+						color: #fff;
+						font-size: 24rpx;
+						text-align: center;
+						right: 20rpx;
+						top: -10rpx;
 					}
 				}
 			}

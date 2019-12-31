@@ -24,8 +24,8 @@
 					<image src="/static/icon/add.png" mode="widthFix"></image>
 					<view>上传图片</view>
 				</view>
-				<view class="upload_img_item" @tap="previewImage(index)" v-for="(item,index) in photoList" :key="index">
-					<image class="img" :src="item" mode="widthFix"></image>
+				<view class="upload_img_item" v-for="(item,index) in photoList" :key="index">
+					<image @tap="previewImage(index)" class="img" :src="item" mode="widthFix"></image>
 					<image class="del_icon" @tap.stop="deletePhoto(index)" src="/static/icon/close.png" mode="widthFix"></image>
 				</view>
 			</view>

@@ -47,8 +47,8 @@
 				</view>
 				<view class="time_goods_box">
 					<view class="time_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in timeList" :key="index">
-						<image :src="item.src" mode="widthFix"></image>
-						<view>￥{{item.price}}</view>
+						<image :src="url+item.original_img" mode="widthFix"></image>
+						<view>￥{{item.shop_price}}</view>
 						<text>仅剩{{item.num}}件</text>
 					</view>
 				</view>
@@ -57,13 +57,13 @@
 			<view class="shop_recommd_box">
 				<view class="time_title bold">
 					<view>{{rec_name}}</view>
-					<navigator url="">更多&gt;</navigator>
+					<navigator url="/pages/index/recommend">更多&gt;</navigator>
 				</view>
 				<image src="/static/img/rec_banner.png" class="rec_banner" mode="widthFix"></image>
 				<view class="rec_goods_box">
 					<view class="rec_item" v-for="(item,index) in recList" :key="index">
-						<image :src="item.src" mode="widthFix"></image>
-						<view class="rec_title">{{item.title}}</view>
+						<image :src="url+item.original_img" mode="widthFix"></image>
+						<view class="rec_title">{{item.goods_name}}</view>
 						<view class="rec_address">{{item.city}}<text>{{item.area}}</text></view>
 					</view>
 				</view>
@@ -72,14 +72,14 @@
 			<view class="shop_recommd_box">
 				<view class="time_title bold">
 					<view>{{pop_name}}</view>
-					<navigator url="/pages/index/category">更多&gt;</navigator>
+					<navigator url="/pages/index/recommend">更多&gt;</navigator>
 				</view>
 				<image src="/static/img/pop_banner.jpg" class="rec_banner" mode="widthFix"></image>
 				<view class="rec_goods_box pop">
 					<view class="rec_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in popList" :key="index">
-						<image :src="item.src" mode="widthFix"></image>
-						<view class="rec_title">{{item.title}}</view>
-						<view class="rec_price">{{item.price}}</view>
+						<image :src="url+item.original_img" mode="widthFix"></image>
+						<view class="rec_title">{{item.goods_name}}</view>
+						<view class="rec_price">{{item.shop_price}}</view>
 					</view>
 				</view>
 			</view>
@@ -90,9 +90,9 @@
 				</view>
 				<view class="recommd_goods_box">
 					<view class="recommd_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in recommdList" :key="index">
-						<image :src="item.src" mode="widthFix"></image>
-						<view class="ri_title">{{item.title}}</view>
-						<view class="ri_price">￥{{item.price}}</view>
+						<image :src="url+item.original_img" mode="widthFix"></image>
+						<view class="ri_title">{{item.goods_name}}</view>
+						<view class="ri_price">￥{{item.shop_price}}</view>
 					</view>
 				</view>
 			</view>
@@ -126,95 +126,42 @@
 				],
 				time_name: '限时抢购',
 				timeList: [
-					{
-						src: '/static/img/time_img1.png',
-						price: '99',
-						num: 45
-					},{
-						src: '/static/img/time_img2.png',
-						price: '76',
-						num: 99
-					},{
-						src: '/static/img/time_img3.png',
-						price: '60',
-						num: 80
-					}
+					// {
+					// 	src: '/static/img/time_img1.png',
+					// 	price: '99',
+					// 	num: 45
+					// }
 				],
 				rec_name: '店铺推荐',
 				recList: [
-					{
-						src: '/static/img/rec_img1.png',
-						title: '乐町专卖店',
-						city: '广州',
-						area: '越秀区'
-					},{
-						src: '/static/img/rec_img2.png',
-						title: '阿卡专卖店',
-						city: '广州',
-						area: '天河区'
-					},{
-						src: '/static/img/rec_img3.png',
-						title: '波司登专卖店',
-						city: '广州',
-						area: '番禺区'
-					}
+					// {
+					// 	src: '/static/img/rec_img1.png',
+					// 	title: '乐町专卖店',
+					// 	city: '广州',
+					// 	area: '越秀区'
+					// }
 				],
 				pop_name: '人气推荐',
 				popList: [
-					{
-						src: '/static/img/pop_img1.jpg',
-						title: '女士连衣裙',
-						price: '169'
-					},{
-						src: '/static/img/pop_img2.png',
-						title: '女士纯羊毛衣',
-						price: '169'
-					},{
-						src: '/static/img/pop_img3.png',
-						title: '男士大衣',
-						price: '329'
-					}
+					// {
+					// 	src: '/static/img/pop_img1.jpg',
+					// 	title: '女士连衣裙',
+					// 	price: '169'
+					// }
 				],
 				recommd_name: '为你推荐',
 				recommdList:[
-					{
-						src: '/static/img/recommd_img1.png',
-						title: '男士皮质夹克',
-						price: '1199'
-					},{
-						src: '/static/img/recommd_img2.png',
-						title: '小领加绒衬衫',
-						price: '159'
-					},{
-						src: '/static/img/recommd_img3.png',
-						title: '男士皮质夹克',
-						price: '1199'
-					},{
-						src: '/static/img/recommd_img4.jpg',
-						title: '男士皮质夹克',
-						price: '1199'
-					},{
-						src: '/static/img/recommd_img5.png',
-						title: '男士皮质夹克',
-						price: '1199'
-					},{
-						src: '/static/img/recommd_img6.png',
-						title: '男士皮质夹克',
-						price: '1199'
-					},{
-						src: '/static/img/recommd_img7.png',
-						title: '男士皮质夹克',
-						price: '1199'
-					},{
-						src: '/static/img/recommd_img8.png',
-						title: '男士皮质夹克',
-						price: '1199'
-					}
+					// {
+					// 	src: '/static/img/recommd_img1.png',
+					// 	title: '男士皮质夹克',
+					// 	price: '1199'
+					// }
 				],
 				hour: 2,
 				minute: 29,
 				second: 60,
-				loadingType: 'more'
+				loadingType: 'more',
+				url: ''
 			}
 		},
 		components:{
@@ -225,6 +172,7 @@
 			fixedList
 		},
 		onLoad() {
+			this.url = this.$http.url;
 			let params = {};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
@@ -276,7 +224,7 @@
 			},
 			toGoodsDetail(id){
 				uni.navigateTo({
-					url: '/pages/index/detail?id='+id
+					url: '/pages/index/detail?cid='+id
 				})
 			}
 		},
@@ -453,6 +401,9 @@
 				}
 				.rec_title{
 					margin: 10rpx 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 				}
 				.rec_address{
 					color: #666;

@@ -18,9 +18,9 @@
 	export default{
 		data(){
 			return{
-				navbar: [{name:"店铺"},{name:"商品"}],
+				navbar: [{name:"店铺"},{name:"商品"},{name:"文章"}],
 				currentTab: 0,
-				page: 1,
+				page: 0,
 				collectList: [],
 				url: ''
 			}
@@ -32,7 +32,7 @@
 			this.url = this.$http.url;
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 1,
+				page: 0,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
@@ -47,7 +47,7 @@
 				this.currentTab = e;
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 1,
+					page: 0,
 					limit: 10
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -56,8 +56,12 @@
 					this.$http.getUserCollectStore(params).then((data)=>{
 						this.collectList = data.data.result;
 					})
-				}else{
+				}else if(e == 1){
 					this.$http.getUserCollectGoods(params).then((data)=>{
+						this.collectList = data.data.result;
+					})
+				}else{
+					this.$http.getUserCollectArticle(params).then((data)=>{
 						this.collectList = data.data.result;
 					})
 				}
