@@ -44,7 +44,7 @@
 		</view>
 		<scroll-view scroll-y="true" class="offline_scroll">
 			<view class="offline_box" :class="[changeList == 1?'list':'']">
-				<view class="offline_item" v-for="(item,index) in offlineList" :key="index">
+				<view class="offline_item" @tap="toStore(index)" v-for="(item,index) in offlineList" :key="index">
 					<image :src="item.src" mode="widthFix"></image>
 					<view class="off_box">
 						<view class="off_title">{{item.title}}</view>
@@ -128,6 +128,11 @@
 				}else{
 					this.changeList = 0;
 				}
+			},
+			toStore(idx){
+				uni.navigateTo({
+					url: '/pages/index/store?id='+idx
+				})
 			}
 		},
 		onLoad() {

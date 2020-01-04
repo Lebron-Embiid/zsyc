@@ -24,9 +24,9 @@
 					<image src="/static/icon/add.png" mode="widthFix"></image>
 					<view>上传图片</view>
 				</view>
-				<view class="upload_img_item" v-for="(item,index) in photoList" :key="index">
+				<view class="upload_img_item" @longtap="deletePhoto(index)" v-for="(item,index) in photoList" :key="index">
 					<image @tap="previewImage(index)" class="img" :src="item" mode="widthFix"></image>
-					<image class="del_icon" @tap.stop="deletePhoto(index)" src="/static/icon/close.png" mode="widthFix"></image>
+					<!-- <image class="del_icon" @tap.stop="deletePhoto(index)" src="/static/icon/close.png" mode="widthFix"></image> -->
 				</view>
 			</view>
 		</view>
@@ -95,37 +95,47 @@
 			choosePhoto(){
 				let that = this;
 				uni.chooseImage({
-					count: 9, //默认9
+					count: 5, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: function (res) {
-						// for(let i in res.tempFilePaths){
-							console.log(res.tempFilePaths[0]);
-							that.photoList.push(res.tempFilePaths[0]);
+						for(let i in res.tempFilePaths){
+							// console.log(res.tempFilePaths[0]);
+							// that.photoList.push(res.tempFilePaths[0]);
 							
-							// uni.uploadFile({
-							// 	url: that.$http.url+'Recharge/uploadFiles', //图片接口
-							// 	filePath: res.tempFilePaths[i],
-							// 	name: 'file',
-							// 	header:{
-							// 		'AUTHORIZATION': uni.getStorageSync('token')
-							// 	},
-							// 	success: (uploadFileRes) => {
-							// 		var data = JSON.parse(uploadFileRes.data);
-							// 		if(data.code == 0){
-							// 			if(that.photoList.length >= 9){
-							// 				uni.showToast({
-							// 					title: "最多发布9张图片",
-							// 					icon: 'none'
-							// 				})
-							// 				return false;
-							// 			}
-							// 			var url = data.data.url;
-							// 			that.photoList.push(url);
-							// 		}
-							// 	}
-							// })
-						// }
+							let params = {
+								'token': uni.getStorageSync('token'),
+								'path': 'comment'
+							};
+							let sign = that.$sign.getSign(params,that.AppSecret);
+							params.sign = sign;
+							
+							uni.uploadFile({
+								url: that.$http.url+'Api/User/uploadFiles', //图片接口
+								filePath: res.tempFilePaths[i],
+								name: 'file',
+								header:{
+									'timestamp': new Date().getTime()
+								},
+								formData: params,
+								success: (uploadFileRes) => {
+									var data = JSON.parse(uploadFileRes.data);
+									if(data.status == 1){
+										if(that.photoList.length >= 5){
+											uni.showToast({
+												title: "最多发布5张图片",
+												icon: 'none'
+											})
+											return;
+										}
+										var url = that.$http.url + data.result;
+										that.photoList.push(url);
+									}else{
+										that.$api.msg(data.msg);
+									}
+								}
+							})
+						}
 					}
 				})
 			},
@@ -193,62 +203,6 @@
 		.textarea_box{
 			padding: 0;
 			border: 1px solid #eee;
-		}
-		.upload_img_box{
-			margin-top: 20rpx;
-			display: flex;
-			justify-content: flex-start;
-			align-items: flex-start;
-			flex-wrap: wrap;
-			.upload_btn{
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				flex-wrap: wrap;
-				width: 150rpx;
-				height: 150rpx;
-				padding: 20rpx 0;
-				box-sizing: border-box;
-				color: #999;
-				font-size: 24rpx;
-				border: 1px solid #ccc;
-				margin-right: 20rpx;
-				margin-bottom: 20rpx;
-				image{
-					display: block;
-					width: 52rpx;
-					height: 52rpx;
-				}
-				view{
-					width: 100%;
-					text-align: center;
-				}
-			}
-			.upload_img_item{
-				width: 150rpx;
-				height: 150rpx;
-				border: 1px solid #ccc;
-				box-sizing: border-box;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				margin-right: 20rpx;
-				margin-bottom: 20rpx;
-				position: relative;
-				.img{
-					display: block;
-					max-width: 100%;
-					max-height: 100% !important;
-				}
-				.del_icon{
-					position: absolute;
-					right: 0;
-					top: 0;
-					width: 40rpx;
-					height: 40rpx;
-					background: #f00;
-				}
-			}
 		}
 	}
 </style>

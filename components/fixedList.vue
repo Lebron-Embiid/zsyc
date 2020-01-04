@@ -5,9 +5,9 @@
 			<view>引导</view>
 		</view>
 		<view class="fixed_right_box" :class="[isShow==true?'active':'']">
-			<view class="fixed_right_item active">
-				<view>女士</view>
-				<view>大衣</view>
+			<view class="fixed_right_item active" @tap="toLink">
+				<view>{{name.substr(0, 2)}}</view>
+				<view>{{name.substr(2, 3)}}</view>
 			</view>
 			<view class="fixed_right_item yellow">
 				<view>女士</view>
@@ -37,8 +37,12 @@
 		name: 'fixedList',
 		data(){
 			return{
-				isShow: false
+				isShow: false,
+				name: '女士大衣'
 			}
+		},
+		onLoad() {
+			
 		},
 		methods:{
 			changeShow(){
@@ -46,6 +50,11 @@
 			},
 			closeShow(){
 				this.isShow = false;
+			},
+			toLink(){
+				uni.navigateTo({
+					url: '/pages/index/recommend'
+				})
 			}
 		}
 	}

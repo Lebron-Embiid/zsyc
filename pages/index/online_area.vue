@@ -12,7 +12,7 @@
 			</view>
 		</scroll-view>
 		<view class="online_content">
-			<view class="content_item" v-for="(item,index) in contentList" :key="index">
+			<view class="content_item" @tap="toDetail(item.id)" v-for="(item,index) in contentList" :key="index">
 				<image :src="item.src" mode="widthFix"></image>
 				<view class="ci_center">
 					<view class="ci_title">{{item.title}}</view>
@@ -59,6 +59,7 @@
 				current: 0,
 				contentList: [
 					{
+						id: 1,
 						src: '/static/img/online_img1.png',
 						title: '白鸭绒羽绒服',
 						type: '大衣',
@@ -66,6 +67,7 @@
 						num: 198,
 						process: 50
 					},{
+						id: 2,
 						src: '/static/img/online_img2.png',
 						title: '宽松长袖毛衣针织衫',
 						type: '毛衣',
@@ -84,6 +86,11 @@
 		methods:{
 			changeOnline(idx){
 				this.current = idx;
+			},
+			toDetail(id){
+				uni.navigateTo({
+					url: '/pages/index/detail?cid='+id
+				})
 			}
 		}
 	}
@@ -143,88 +150,6 @@
 			}
 			.oi_status{
 				font-size: 24rpx;
-			}
-		}
-	}
-	.online_content{
-		background: #fafafa;
-		.content_item{
-			padding: 30rpx;
-			box-sizing: border-box;
-			border-bottom: 1px solid #eee;
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-start;
-			image{
-				display: block;
-				width: 230rpx;
-				height: 230rpx !important;
-			}
-			.ci_center{
-				width: 62%;
-				color: #999;
-				font-size: 24rpx;
-				.ci_title{
-					color: #333;
-					font-size: 32rpx;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
-				.ci_type{
-					margin: 25rpx 0 20rpx;
-				}
-				.ci_car{
-					margin-bottom: 20rpx;
-				}
-				.ci_box{
-					display: flex;
-					justify-content: flex-start;
-					align-items: center;
-					.ci_num{
-						width: 192rpx;
-						padding: 5rpx 0;
-						text-align: center;
-						border-radius: 30rpx;
-						border: 1px solid #fee5e7;
-						position: relative;
-						.text{
-							position: relative;
-							z-index: 3;
-							text{
-								margin-left: 5rpx;
-							}
-						}
-						.process{
-							position: absolute;
-							height: 100%;
-							left: 0;
-							top: 0;
-							background: #feeff0;
-							border-radius: 15rpx;
-						}
-					}
-				}
-			}
-			button{
-				display: flex;
-				justify-content: center;
-				align-self: flex-end;
-				padding: 0;
-				margin: 0;
-				width: 180rpx;
-				height: 60rpx;
-				line-height: 60rpx;
-				background: #f60;
-				margin-left: 30rpx;
-				color: #fff;
-				transition: all .5s ease;
-				&:active{
-					opacity: .8;
-				}
-				&:after{
-					border: 0;
-				}
 			}
 		}
 	}

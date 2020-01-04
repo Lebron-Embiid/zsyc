@@ -339,7 +339,7 @@
 			image{
 				display: block;
 				width: 100%;
-				// height: 260rpx !important;
+				height: 330rpx !important;
 			}
 			.off_title{
 				color: #333;

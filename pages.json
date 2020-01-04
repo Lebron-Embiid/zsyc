@@ -235,9 +235,27 @@
 			}
 		},
 		{
+			"path": "pages/person/online_order",
+			"style": {
+				"navigationBarTitleText": "线上订单",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/person/offline_order",
 			"style": {
 				"navigationBarTitleText": "线下订单",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/sell",
+			"style": {
+				"navigationBarTitleText": "套餐资格挂卖区",
 				"app-plus": {
 					"titleNView": false
 				}
@@ -310,6 +328,249 @@
 			"path": "pages/person/setPayPassword",
 			"style": {
 				"navigationBarTitleText": "设置支付密码",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/settings",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/account",
+			"style": {
+				"navigationBarTitleText": "账户安全",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/auth",
+			"style": {
+				"navigationBarTitleText": "验证身份",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/bind_phone",
+			"style": {
+				"navigationBarTitleText": "绑定新手机",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/wechat_login",
+			"style": {
+				"navigationBarTitleText": "微信登录",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/person_info",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/edit_name",
+			"style": {
+				"navigationBarTitleText": "编辑昵称",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/message",
+			"style": {
+				"navigationBarTitleText": "消息",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/activity",
+			"style": {
+				"navigationBarTitleText": "优惠活动",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/notice",
+			"style": {
+				"navigationBarTitleText": "通知消息",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/chat",
+			"style": {
+				"navigationBarTitleText": "在线客服",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/help_center",
+			"style": {
+				"navigationBarTitleText": "帮助中心",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/recommendMember",
+			"style": {
+				"navigationBarTitleText": "推荐会员",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/my_income",
+			"style": {
+				"navigationBarTitleText": "我的收益",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/income_list",
+			"style": {
+				"navigationBarTitleText": "推荐会员收益",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/transfer_lines",
+			"style": {
+				"navigationBarTitleText": "额度管理",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/upgrade_member",
+			"style": {
+				"navigationBarTitleText": "会员升级",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/application",
+			"style": {
+				"navigationBarTitleText": "提交申请",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/hang_sell",
+			"style": {
+				"navigationBarTitleText": "到挂卖区挂卖",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/index/store",
+			"style": {
+				"navigationBarTitleText": "店铺",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/submit_success",
+			"style": {
+				"navigationBarTitleText": "提交成功",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/sell_list",
+			"style": {
+				"navigationBarTitleText": "挂卖列表",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/complaint",
+			"style": {
+				"navigationBarTitleText": "我要申诉（卖家）",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/see_reply",
+			"style": {
+				"navigationBarTitleText": "查看回复（卖家）",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/order_list",
+			"style": {
+				"navigationBarTitleText": "订单列表（卖家）",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/pay_code",
+			"style": {
+				"navigationBarTitleText": "识别二维码支付",
 				"app-plus": {
 					"titleNView": false
 				}

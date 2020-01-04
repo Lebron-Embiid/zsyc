@@ -1,6 +1,6 @@
 <template>
 	<view class="order">
-		<uni-nav-bar leftIcon="back" title="我的订单" rightText="线下订单" :isBtn="true" @clickRight="clickRightBtn"></uni-nav-bar>
+		<uni-nav-bar leftIcon="back" title="商品订单"></uni-nav-bar>
 		<scroll-view scroll-x="true" class="list_nav">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
 		</scroll-view>
@@ -79,11 +79,6 @@
 			})
 		},
 		methods:{
-			clickRightBtn(){
-				uni.redirectTo({
-					url: '/pages/person/offline_order'
-				})
-			},
 			navbarTap(e){
 				this.currentTab = e;
 			},

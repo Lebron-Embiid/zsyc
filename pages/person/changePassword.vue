@@ -1,5 +1,6 @@
 <template>
 	<view class="changePassword">
+		<view class="page_bg"></view>
 		<uni-nav-bar left-icon="back" title="修改密码"></uni-nav-bar>
 		<view class="form_box">
 			<view class="form_item" v-for="(item,index) in loginPwd" :key="item.id">
@@ -22,7 +23,8 @@
 					<switchc text="可见|***" class="switch_btn" :sid="index" @change="switchchange($event,index)"></switchc>
 				</view>
 			</view>
-			<button class="submit_btn" @tap="submitForm">修改</button>
+			<button v-if="password!='' && new_password!='' && again_password!=''" class="submit_btn red" @tap="submitForm">确定</button>
+			<button v-else class="submit_btn">确定</button>
 		</view>
 	</view>
 </template>
@@ -100,6 +102,9 @@
 </script>
 
 <style scoped lang="scss">
+	.changePassword{
+		background: #eee;
+	}
 	.form_box{
 		padding: 30rpx;
 		box-sizing: border-box;
@@ -109,8 +114,26 @@
 			padding-bottom: 15rpx;
 			border-bottom: 1px solid #f2f2f2;
 		}
+		.form_item{
+			background: #fff;
+			padding: 30rpx 20rpx;
+			margin-bottom: 30rpx;
+			border-bottom: 0;
+			border-radius: 10rpx;
+			input{
+				font-size: 28rpx;
+			}
+		}
 	}
 	.submit_btn{
-		margin: 50rpx;
+		width: 100%;
+		color: #bbb;
+		background: #e6e6e6;
+		margin: 50rpx 0 0;
+		border-radius: 10rpx;
+		&.red{
+			color: #fff;
+			background: #fa6570;
+		}
 	}
 </style>

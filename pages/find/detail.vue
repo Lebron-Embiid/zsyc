@@ -25,8 +25,10 @@
 			<image src="/static/icon/message.png" @tap="toComments" mode="widthFix"></image>
 			<image src="/static/icon/collect.png" v-if="is_collect == 0" @tap="collect" mode="widthFix"></image>
 			<image src="/static/icon/collect1.png" v-else @tap="collectCancel" mode="widthFix"></image>
-			<image src="/static/icon/share1.png" mode="widthFix"></image>
+			<image src="/static/icon/share1.png" @tap="toShare" mode="widthFix"></image>
 		</view>
+		<!-- share弹窗 -->
+		<common-share :shareClass="shareClass" @hide="hideShare"></common-share>
 	</view>
 </template>
 
@@ -34,6 +36,7 @@
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uParse from '@/components/u-parse/u-parse.vue'
 	import Skeleton from '@/components/skeleton/index.vue'
+	import commonShare from "@/components/commonShare.vue"
 	export default{
 		data(){
 			return{
@@ -42,13 +45,15 @@
 				title: '',
 				content: '',
 				say_content: '',
+				shareClass:'',
 				loading: true
 			}
 		},
 		components:{
 			uniNavBar,
 			uParse,
-			Skeleton
+			Skeleton,
+			commonShare
 		},
 		onLoad(opt) {
 			if(opt.id != undefined){
@@ -70,6 +75,15 @@
 			})
 		},
 		methods:{
+			toShare(){
+				this.shareClass = 'show';
+			},
+			hideShare(){
+				this.shareClass = 'hide';
+				// setTimeout(() => {
+					this.shareClass = 'none';
+				// }, 150);
+			},
 			submitForm(){
 				let params = {
 					token: uni.getStorageSync('token'),

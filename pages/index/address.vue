@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar left-icon="back" title="选择地址"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="我的收获地址"></uni-nav-bar>
 		
 		<view class="content">
 			<view class="list">
@@ -17,7 +17,7 @@
 						<view class="name-tel">
 							<view class="top_box">
 								<view class="name">{{row.consignee}}</view>
-								<view class="tel">{{row.mobile}}</view>
+								<view class="tel">{{row.phone}}</view>
 								<view class="default" v-if="row.is_default == 1">
 									默认
 								</view>
@@ -36,7 +36,7 @@
 		</view>
 		<view class="add">
 			<view class="btn" @tap="add">
-				<view class="icon tianjia"></view>新增地址
+				<view class="icon tianjia"></view>新增收获地址
 			</view>
 		</view>
 	</view>
@@ -59,6 +59,13 @@
 			params.sign = sign;
 			this.$http.getAddressList(params).then((data)=>{
 				this.addressList = data.data.result;
+				
+				for(let i in this.addressList){
+					let res = this.addressList;
+					let tel = ""+this.addressList[i].mobile;
+					let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+					this.addressList[i].phone = tel1;
+				}
 			})
 		},
 		onLoad(e) {
@@ -109,6 +116,13 @@
 						
 						this.$http.getAddressList(params1).then((data)=>{
 							this.addressList = data.data.result;
+							
+							for(let i in this.addressList){
+								let res = this.addressList;
+								let tel = ""+this.addressList[i].mobile;
+								let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+								this.addressList[i].phone = tel1;
+							}
 						})
 					}
 				})
@@ -161,21 +175,24 @@
 		// 	&:before{content:"\e81a";}
 		// }
 	}
+	.content{
+		margin-bottom: 120rpx;
+	}
 	.add{
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-		height: 120upx;
+		height: 120rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		.btn{
 			display: flex;
-			box-shadow: 0upx 5upx 10upx rgba(0,0,0,0.4);
+			// box-shadow: 0upx 5upx 10upx rgba(0,0,0,0.4);
 			width: 70%;
 			height: 80upx;
 			border-radius: 80upx;
-			background-color: rgb(255, 153, 0);
+			background-color: #fd6974;
 			color: #fff;
 			justify-content: center;
 			align-items: center;
@@ -186,6 +203,7 @@
 				font-size: 30upx;
 				justify-content: center;
 				align-items: center;
+				margin-right: 10rpx;
 			}
 			font-size: 30upx;
 		}
@@ -196,8 +214,8 @@
 		.row{
 			display: flex;
 			width: 96%;
-			padding: 20upx 2%;
-			border-bottom: 1px solid #f4f4f4;
+			padding: 30rpx;
+			border-bottom: 1px solid #eee;
 			.left{
 				display: flex;
 				width: 90upx;
@@ -227,34 +245,38 @@
 						display: flex;
 						align-items: center;
 						flex-wrap: wrap;
+						height: 44rpx;
 					}
 					.name{
-						font-size: 34upx;
-						width: 200rpx;
+						color: #333;
+						font-size: 32rpx;
+						width: 140rpx;
 						overflow: hidden;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 					}
 					.tel{
-						margin-left: 30upx;
-						font-size: 24upx;
-						color: #777;
+						margin-left: 30rpx;
+						font-size: 32rpx;
+						color: #333;
 					}
 					.default{
-						font-size: 22upx;
-						background-color: #f06c7a;
-						color: #fff;
-						padding: 8upx 18upx 5upx;
-						border-radius: 24upx;
-						margin-left: 20upx;
+						font-size: 22rpx;
+						background-color: #fff;
+						color: #ff2a3a;
+						border: 1px solid #ff2a3a;
+						padding: 5rpx 15rpx 5rpx;
+						border-radius: 5rpx;
+						margin-left: 20rpx;
 					}
 				}
 				.address{
 					display: flex;
 					width: 100%;
-					font-size: 24upx;
+					font-size: 28rpx;
 					align-items: baseline;
-					color: #777;
+					color: #999;
+					margin-top: 10rpx;
 				}
 			}
 			.right{

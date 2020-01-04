@@ -831,6 +831,144 @@ export const setPayPassword = (data) => {
         data
     })
 }
+// 上传图片 
+export const uploadFiles = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/User/uploadFiles',
+        method: 'POST',
+        data
+    })
+}
+
+// 收款方式类型 
+export const payType = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserPayment/payType',
+        method: 'POST',
+        data
+    })
+}
+// 添加收款方式 
+export const addPayment = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserPayment/add',
+        method: 'POST',
+        data
+    })
+}
+// 删除收款方式 
+export const deletePayment = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserPayment/delete',
+        method: 'POST',
+        data
+    })
+}
+// 设置收款方式状态
+export const setDefaultStatus = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserPayment/setDefaultStatus',
+        method: 'POST',
+        data
+    })
+}
+// 设置会员资格挂卖
+export const setUserCount = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCount/add',
+        method: 'POST',
+        data
+    })
+}
+// 会员资格挂卖列表
+export const getUserCountlist = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCount/listData',
+        method: 'POST',
+        data
+    })
+}
+// 取消挂卖
+export const cancelUserCount = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCount/cancel',
+        method: 'POST',
+        data
+    })
+}
 
 // if(data.data.status == 40001){
 // 	this.$api.msg('请登录');
@@ -925,5 +1063,13 @@ export default {
 	articleComment,
 	getCommentList,
 	articleCommentLike,
-	setPayPassword
+	setPayPassword,
+	uploadFiles,
+	payType,
+	addPayment,
+	deletePayment,
+	setDefaultStatus,
+	setUserCount,
+	getUserCountlist,
+	cancelUserCount
 }

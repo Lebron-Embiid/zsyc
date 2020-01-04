@@ -8,7 +8,7 @@
 		<view class="fixed_search_top">
 			<image @tap="scanCode" src="/static/icon/scan.png" class="scan_icon" mode="widthFix"></image>
 			<view @tap="toSearch"><image src="/static/icon/search.png" class="search_icon" mode="widthFix"></image>搜索商品</view>
-			<image src="/static/icon/mess.png" class="mess_icon" mode="widthFix"></image>
+			<image @tap="toMessage" src="/static/icon/mess.png" class="mess_icon" mode="widthFix"></image>
 		</view>
 		<scroll-view scroll-y="true" class="index_scroll">
 			<view class="swiper-box">
@@ -222,6 +222,11 @@
 					url: '/pages/index/search'
 				})
 			},
+			toMessage(){
+				uni.navigateTo({
+					url: '/pages/person/message'
+				})
+			},
 			toGoodsDetail(id){
 				uni.navigateTo({
 					url: '/pages/index/detail?cid='+id
@@ -360,7 +365,7 @@
 			image{
 				display: block;
 				width: 100%;
-				// height: 240rpx !important;
+				height: 220rpx !important;
 			}
 			view{
 				color: #f52f3e;
@@ -397,7 +402,7 @@
 				image{
 					display: block;
 					width: 100%;
-					height: 260rpx !important;
+					height: 220rpx !important;
 				}
 				.rec_title{
 					margin: 10rpx 0;
@@ -423,7 +428,7 @@
 					image{
 						display: block;
 						width: 100%;
-						height: 214rpx !important;
+						height: 220rpx !important;
 					}
 				}
 			}
@@ -440,6 +445,7 @@
 			image{
 				display: block;
 				width: 100%;
+				height: 220rpx !important;
 			}
 			.ri_title{
 				color: #333;

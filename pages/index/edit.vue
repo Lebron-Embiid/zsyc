@@ -1,22 +1,22 @@
 <template>
 	<view>
-		<uni-nav-bar left-icon="back" title="添加地址"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="添加地址" rightText="保存" @clickRight="save"></uni-nav-bar>
 		
 		<view class="content">
 			<view class="row">
 				<view class="nominal">
-					收件人
+					收货人
 				</view>
 				<view class="input">
-					<input placeholder="请输入收件人姓名" type="text" v-model="name" />
+					<input placeholder="请填写收货人姓名" type="text" v-model="name" />
 				</view>
 			</view>
 			<view class="row">
 				<view class="nominal">
-					电话号码
+					手机号
 				</view>
 				<view class="input">
-					<input placeholder="请输入收件人电话号码" type="text" v-model="tel" />
+					<input placeholder="请填写收货人手机号" type="text" v-model="tel" />
 				</view>
 			</view>
 			<view class="row">
@@ -33,15 +33,15 @@
 					详细地址
 				</view>
 				<view class="input">
-					<textarea v-model="detailed" auto-height="true" placeholder="输入详细地址"></textarea>
+					<textarea v-model="detailed" auto-height="true" placeholder="如街道、楼牌号等"></textarea>
 				</view>
 			</view>
 			<view class="row">
-				<view class="nominal">
-					设置默认地址
+				<view class="nominal width">
+					设为默认收获地址
 				</view>
 				<view class="input switch">
-					<switch color="rgb(255, 153, 0)" :checked="isDefault" @change=isDefaultChange />
+					<switch color="#4cd864" :checked="isDefault" @change=isDefaultChange />
 				</view>
 			</view>
 			<view class="row" v-if="editType=='edit'" @tap="del">
@@ -50,11 +50,11 @@
 				</view>
 			</view>
 		</view>
-		<view class="save" @tap="save">
+		<!-- <view class="save" @tap="save">
 			<view class="btn">
 				保存地址
 			</view>
-		</view>
+		</view> -->
 		<!-- <simple-address 
 			ref="simpleAddress" 
 			:pickerValueDefault="pickerValueDefault" 
@@ -306,6 +306,9 @@
 				font-weight: 200;
 				font-size: 30upx;
 				align-items: center;
+				&.width{
+					width: 50%;
+				}
 			}
 			.input{
 				width: 70%;

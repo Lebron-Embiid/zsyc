@@ -7,10 +7,12 @@
 			<view class="qt_txt">资格剩余：<text>8333</text>个</view>
 			<view class="qt_txt">价格：<text>10</text>元/个</view>
 			<view class="qt_txt">现有资格：<text>0</text>个</view>
+			<button type="primary" size="mini" class="sell_btn" @tap="toHangSell">到挂卖区挂卖</button>
+			<button type="primary" size="mini" class="buy_btn" @tap="toSell">到挂卖区购买</button>
 		</view>
 		<view class="qualify_content">
 			<view class="qc_title">购买数量</view>
-			<input type="number" value="" />
+			<input type="number" v-model="buy_num" />
 			<view class="textarea_box">
 				<textarea @input="changeNum" v-model="message" placeholder="买家留言，80字以内" />
 				<text>{{num}}/80</text>
@@ -29,6 +31,7 @@
 		data(){
 			return{
 				message: '',
+				buy_num: '',
 				num: 0
 			}
 		},
@@ -38,6 +41,16 @@
 		methods:{
 			changeNum(e){
 				this.num = e.detail.value.length;
+			},
+			toSell(){
+				uni.navigateTo({
+					url: '/pages/person/sell'
+				})
+			},
+			toHangSell(){
+				uni.navigateTo({
+					url: '/pages/person/hang_sell'
+				})
 			}
 		}
 	}
@@ -55,23 +68,41 @@
 		background: #eee;
 	}
 	.qualify_top{
-		padding: 30rpx;
+		padding: 40rpx 30rpx;
 		box-sizing: border-box;
 		background: #fff url('~@/static/icon/bottom_bg.png') left bottom repeat-x;
 		color: #999;
 		font-size: 28rpx;
 		font-weight: bold;
+		position: relative;
 		.qt_title{
 			color: #333;
 			font-size: 32rpx;
-			margin-bottom: 10rpx;
+			margin-bottom: 20rpx;
 		}
 		.qt_txt{
-			margin-top: 5rpx;
+			margin-top: 10rpx;
 			text{
 				color: #f00;
 				margin-right: 5rpx;
 			}
+		}
+		button{
+			display: block;
+			background: #f60;
+			position: absolute;
+			&:after{
+				border: 0;
+			}
+		}
+		.buy_btn{
+			right: 50rpx;
+			bottom: 30rpx;
+		}
+		.sell_btn{
+			bottom: 110rpx;
+			right: 50rpx;
+			background: #090;
 		}
 	}
 	.qualify_content{

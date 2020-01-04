@@ -7,32 +7,45 @@
 		<!-- #endif -->  
 		<view class="person_top">
 			<view class="pt_left">
-				<image src="/static/avatar/avatar.png" mode="widthFix"></image>
-				<view class="pl_info">
-					<view class="pl_name">小靓</view>
-					<!-- <view class="pl_person">联合创始人{{personInfo.nickname}}</view> -->
+				<view class="pl_top">
+					<image src="/static/avatar/avatar.png" mode="widthFix"></image>
+					<view class="pl_info">
+						<view class="pl_name">{{personInfo.nickname}}</view>
+						<view class="pl_person">联合创始人</view>
+					</view>
 				</view>
-			</view>
-			<view class="pt_center">
-				<!-- <view>昵称：</view> -->
-				<view>余额：￥{{personInfo.user_money}}</view>
-				<view>额度：v 150000</view>
-				<view>套餐资格：1</view>
-				<view>套餐名额：2</view>
+				<view class="pl_bottom">
+					<!-- <view>昵称：</view> -->
+					<view>余额：￥{{personInfo.user_money}}</view>
+					<view>额度：v 150000</view>
+					<view>套餐资格：1</view>
+					<view>套餐名额：2</view>
+				</view>
 			</view>
 			<view class="pt_right">
 				<view class="pr_box">
-					<image src="/static/icon/setting.png" mode="widthFix"></image>
-					<image src="/static/icon/mess.png" mode="widthFix"></image>
+					<image src="/static/icon/setting.png" @tap="toSettings" mode="widthFix"></image>
+					<image src="/static/icon/mess.png" @tap="toMessage" mode="widthFix"></image>
 				</view>
-				<!-- <text>每日签到 &gt;</text> -->
-				<button type="primary" size="mini" @tap="logout">退出登录</button>
+				<view class="txt" @tap="toOrderList">资格订单&gt;</view>
+				<view class="txt" @tap="toLines">额度管理&gt;</view>
+				<!-- <button type="primary" size="mini" @tap="logout">退出登录</button> -->
+			</view>
+		</view>
+		<view class="gray-place"></view>
+		<view class="common_use_box">
+			<view class="my_title">常用功能 <view><button type="primary" size="mini" @tap="toLevel">会员升级</button><button type="primary" size="mini" @tap="toRecommend">推荐会员</button></view></view>
+			<view class="use_box">
+				<view class="use_item" @tap="clickUse(index)" v-for="(item,index) in useList" :key="index">
+					<view><image :src="item.icon" mode="widthFix"></image></view>
+					<text>{{item.title}}</text>
+				</view>
 			</view>
 		</view>
 		<view class="gray-place"></view>
 		<view class="my_order_box">
-			<view class="my_title" @tap="toOrder">我的订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
-			<view class="order_box">
+			<view class="my_title" @tap="toOrder">商品订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
+			<view class="order_box white">
 				<view class="order_item" v-for="(item,index) in orderNavs" :key="index" @tap="clickNav(index)">
 					<view><image :src="item.icon" mode="widthFix"></image><text v-if="item.num!=0">{{item.num}}</text></view>
 					<text>{{item.title}}</text>
@@ -40,22 +53,22 @@
 			</view>
 		</view>
 		<view class="gray-place"></view>
-		<view class="my_order_box">
+		<view class="my_order_box pb30">
 			<view class="my_title" @tap="toMealOrder">套餐订单<image src="/static/icon/arrow.png" mode="widthFix"></image></view>
-			<view class="order_box">
-				<view class="order_item" v-for="(item,index) in mealNavs" :key="index" @tap="clickNav(index)">
-					<view><image :src="item.icon" mode="widthFix"></image><text v-if="item.num!=0">{{item.num}}</text></view>
-					<text>{{item.title}}</text>
+			<view class="order_wrap_box">
+				<view class="ob_title">线上发货订单</view>
+				<view class="order_box">
+					<view class="order_item" v-for="(item,index) in mealNavs" :key="index" @tap="clickMeal(index)">
+						<view><image :src="item.icon" mode="widthFix"></image><text v-if="item.num!=0">{{item.num}}</text></view>
+						<text>{{item.title}}</text>
+					</view>
 				</view>
-			</view>
-		</view>
-		<view class="gray-place"></view>
-		<view class="common_use_box">
-			<view class="my_title">常用功能</view>
-			<view class="use_box">
-				<view class="use_item" @tap="clickUse(index)" v-for="(item,index) in useList" :key="index">
-					<view><image :src="item.icon" mode="widthFix"></image></view>
-					<text>{{item.title}}</text>
+				<view class="ob_title">线下提货订单</view>
+				<view class="order_box">
+					<view class="order_item" v-for="(item,index) in mealNavs2" :key="index" @tap="clickMeal2(index)">
+						<view><image :src="item.icon" mode="widthFix"></image><text v-if="item.num!=0">{{item.num}}</text></view>
+						<text>{{item.title}}</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -100,27 +113,50 @@
 					{
 						icon: '/static/icon/order_icon1.png',
 						title: '待付款',
-						url: '/pages/person/order?id=1',
+						url: '/pages/person/online_order?id=1',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon2.png',
 						title: '待发货',
-						url: '/pages/person/order?id=2',
+						url: '/pages/person/online_order?id=2',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon3.png',
 						title: '待收货',
-						url: '/pages/person/order?id=3',
+						url: '/pages/person/online_order?id=3',
 						num: 2
 					},{
 						icon: '/static/icon/order_icon4.png',
-						title: '待评价',
-						url: '/pages/person/order?id=4',
+						title: '已完成',
+						url: '/pages/person/online_order?id=4',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon5.png',
-						title: '提货码',
+						title: '换货',
+						url: '/pages/person/online_order?id=2',
+						num: 0
+					}
+				],
+				mealNavs2: [
+					{
+						icon: '/static/icon/order_icon1.png',
+						title: '待付款',
+						url: '/pages/person/offline_order?id=1',
+						num: 0
+					},{
+						icon: '/static/icon/order_icon2.png',
+						title: '待提货',
 						url: '/pages/person/offline_order?id=2',
+						num: 0
+					},{
+						icon: '/static/icon/order_icon4.png',
+						title: '已完成',
+						url: '/pages/person/offline_order?id=4',
+						num: 0
+					},{
+						icon: '/static/icon/order_icon5.png',
+						title: '换货',
+						url: '/pages/person/offline_order?id=3',
 						num: 0
 					}
 				],
@@ -136,23 +172,23 @@
 					},{
 						icon: '/static/icon/use_icon3.png',
 						title: '我的收益',
-						url: ''
+						url: '/pages/person/my_income'
 					},{
 						icon: '/static/icon/use_icon4.png',
 						title: '账户安全',
-						url: ''
+						url: '/pages/person/account'
 					},{
 						icon: '/static/icon/use_icon5.png',
 						title: '在线客服',
-						url: ''
+						url: '/pages/person/chat'
 					},{
 						icon: '/static/icon/use_icon6.png',
 						title: '帮助中心',
-						url: ''
+						url: '/pages/person/help_center'
 					},{
 						icon: '/static/icon/use_icon7.png',
 						title: '意见反馈',
-						url: ''
+						url: '/pages/person/feedback'
 					},{
 						icon: '/static/icon/use_icon8.png',
 						title: '我的收藏',
@@ -199,12 +235,22 @@
 			},
 			toMealOrder(){
 				uni.navigateTo({
-					url: '/pages/person/offline_order'
+					url: '/pages/person/online_order'
 				})
 			},
 			clickNav(idx){
 				uni.navigateTo({
 					url: this.orderNavs[idx].url
+				})
+			},
+			clickMeal(idx){
+				uni.navigateTo({
+					url: this.mealNavs[idx].url
+				})
+			},
+			clickMeal2(idx){
+				uni.navigateTo({
+					url: this.mealNavs2[idx].url
 				})
 			},
 			clickUse(idx){
@@ -217,12 +263,45 @@
 						url: this.useList[idx].url
 					})
 				}
+			},
+			toSettings(){
+				uni.navigateTo({
+					url: '/pages/person/settings'
+				})
+			},
+			toMessage(){
+				uni.navigateTo({
+					url: '/pages/person/message'
+				})
+			},
+			toLevel(){
+				uni.navigateTo({
+					url: '/pages/person/upgrade_member'
+				})
+			},
+			toRecommend(){
+				uni.navigateTo({
+					url: '/pages/person/recommendMember'
+				})
+			},
+			toLines(){
+				uni.navigateTo({
+					url: '/pages/person/transfer_lines'
+				})
+			},
+			toOrderList(){
+				uni.navigateTo({
+					url: '/pages/person/order_list'
+				})
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
+	.gray-place{
+		background: #fafafa;
+	}
 	.status_bar{
 		background: #ff7d0b;
 	}
@@ -234,36 +313,71 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		flex-wrap: wrap;
 		color: #fff;
 		.pt_left{
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			flex-wrap: wrap;
+			width: 75%;
 			font-size: 32rpx;
 			font-weight: bold;
 			text-align: center;
-			margin-right: 20rpx;
-			image{
-				display: block;
-				width: 128rpx;
-				height: 128rpx;
-				border-radius: 50%;
-				margin-bottom: 10rpx;
+			// margin-right: 20rpx;
+			.pl_top{
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				width: 100%;
+				image{
+					display: block;
+					width: 128rpx;
+					height: 128rpx;
+					border-radius: 50%;
+					margin-right: 20rpx;
+				}
+				.pl_info{
+					width: 60%;
+					text-align: left;
+					.pl_name{
+						width: 100%;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+					.pl_person{
+						font-size: 28rpx;
+						font-weight: normal;
+						margin-top: 5rpx;
+					}
+				}
 			}
-		}
-		.pt_center{
-			width: 60%;
-			font-size: 28rpx;
-			view{
-				margin-bottom: 5rpx;
-				&:last-child{
-					margin-bottom: 0;
+			.pl_bottom{
+				width: 100%;
+				font-size: 28rpx;
+				display: flex;
+				justify-content: flex-start;
+				align-items: flex-start;
+				flex-wrap: wrap;
+				text-align: left;
+				margin-top: 15rpx;
+				view{
+					width: 50%;
+					margin-top: 5rpx;
+					&:last-child{
+						margin-bottom: 0;
+					}
 				}
 			}
 		}
 		.pt_right{
+			width: 25%;
 			text-align: right;
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-end;
-			align-self: stretch;
+			align-self: flex-start;
 			.pr_box{
 				display: flex;
 				justify-content: flex-end;
@@ -275,14 +389,14 @@
 					margin-left: 30rpx;
 				}
 			}
-			text{
+			.txt{
 				display: inline-block;
-				padding: 5rpx 15rpx 8rpx;
+				padding: 5rpx 12rpx 8rpx;
 				box-sizing: border-box;
 				border: 1px solid #fff;
 				border-radius: 10rpx;
 				font-size: 28rpx;
-				margin: 30rpx 0 40rpx;
+				margin: 20rpx 0 0;
 			}
 			button{
 				display: flex;
@@ -290,7 +404,7 @@
 				font-size: 24rpx;
 				background: #f90;
 				padding: 0 30rpx;
-				margin: 0;
+				margin: 0 0 20rpx;
 				color: #fff;
 				&:after{
 					border: 0;
@@ -312,15 +426,39 @@
 			width: 16rpx;
 			height: 32rpx;
 		}
+		button{
+			margin: 0;
+			background: #f90;
+			color: #fff;
+			font-size: 28rpx;
+			margin-left: 20rpx;
+			&:after{
+				border: 0;
+			}
+		}
 	}
 	.my_order_box{
 		padding: 0 30rpx;
 		box-sizing: border-box;
+		&.pb30{
+			padding-bottom: 30rpx;
+		}
+		.order_wrap_box{
+			.ob_title{
+				color: #333;
+				font-size: 28rpx;
+				padding: 15rpx 0;
+			}
+		}
 		.order_box{
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 			padding: 20rpx 0;
+			background: #fafafa;
+			&.white{
+				background: #fff;
+			}
 			.order_item{
 				width: 20%;
 				padding: 10rpx 0;
@@ -357,7 +495,7 @@
 		}
 	}
 	.common_use_box{
-		padding: 0 30rpx 30rpx;
+		padding: 0 30rpx;
 		box-sizing: border-box;
 		.use_box{
 			display: flex;
@@ -371,6 +509,9 @@
 				color: #666;
 				font-size: 28rpx;
 				text-align: center;
+				&:nth-child(n+5){
+					border-bottom: 0;
+				}
 				view{
 					width: 66rpx;
 					height: 66rpx;

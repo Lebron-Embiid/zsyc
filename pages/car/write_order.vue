@@ -16,7 +16,7 @@
 				<image v-for="(item,index) in goodsList" :key="index" :src="item.src" mode="widthFix"></image>
 			</view>
 			<view class="og_right">
-				共6件商品
+				共{{goodsList.length}}件商品
 				<image src="/static/icon/arrow.png" mode="widthFix"></image>
 			</view>
 		</view>
@@ -111,36 +111,6 @@
 				},
 				goodsList: [
 					{
-						src: '/static/img/order_img2.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
-						src: '/static/img/order_img3.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
-						src: '/static/img/order_img1.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
-						src: '/static/img/order_img2.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
-						src: '/static/img/order_img2.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
 						src: '/static/img/order_img2.png',
 						title: '精装女士大衣',
 						info: '普罗旺斯 优雅精致',
@@ -274,6 +244,10 @@
 				this.num = e.detail.value.length;
 			},
 			toPay(){
+				if(this.recinfo == null){
+					this.$api.msg('请选择地址');
+					return;
+				}
 				this.$Debounce.canDoFunction({
 					key: "submitConfirm",
 					time: 1500,

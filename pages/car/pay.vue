@@ -3,7 +3,7 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar left-icon="back" title="选择付款方式"></uni-nav-bar>
 		<view class="pay_box">
-			<radio-group name="" @change="selectPay">
+			<radio-group @change="selectPay">
 				<view class="pay_item" v-for="(item,index) in payList" :key="index">
 					<radio :value="item.value" color="#fb5860" :checked="item.checked" />
 					<image :src="item.icon" mode="widthFix"></image>
@@ -11,7 +11,7 @@
 				</view>
 			</radio-group>
 		</view>
-		<button type="primary" class="fixed_bottom_btn">确定</button>
+		<button type="primary" @tap="toNext" class="fixed_bottom_btn">确定</button>
 	</view>
 </template>
 
@@ -20,6 +20,7 @@
 	export default{
 		data(){
 			return{
+				type: '',
 				payList: [
 					{
 						name: '支付宝支付',
@@ -38,9 +39,28 @@
 		components:{
 			uniNavBar
 		},
+		onLoad() {
+			// let params = {};
+			// let sign = this.$sign.getSign(params,this.AppSecret);
+			// params.sign = sign;
+			// this.$http.payType(params).then((data)=>{
+				
+			// })
+		},
 		methods:{
 			selectPay(e){
-				console.log(e.detail.value);
+				this.type = e.detail.value;
+			},
+			toNext(){
+				if(this.type == 'wx'){
+					uni.navigateTo({
+						url: '/pages/person/pay_code?type=wechat'
+					})
+				}else{
+					uni.navigateTo({
+						url: '/pages/person/pay_code?type=alipay'
+					})
+				}
 			}
 		}
 	}
