@@ -23,7 +23,7 @@
 						<image :src="item.ad_code" mode="widthFix"></image>
 					</swiper-item>
 				</swiper>
-				<view class="index_nav_box">
+				<view class="index_nav_box" v-if="is_discount == 0">
 					<view @tap="clickNav(index)" :class="[index == 1?'yellow':'']" v-for="(item,index) in navs" :key="index">
 						<image :src="item.icon" mode="widthFix"></image>
 						<text>{{item.title}}</text>
@@ -61,7 +61,7 @@
 				</view>
 				<image src="/static/img/rec_banner.png" class="rec_banner" mode="widthFix"></image>
 				<view class="rec_goods_box">
-					<view class="rec_item" v-for="(item,index) in recList" :key="index">
+					<view class="rec_item" @tap="toGoodsDetail(item.goods_id)" v-for="(item,index) in recList" :key="index">
 						<image :src="url+item.original_img" mode="widthFix"></image>
 						<view class="rec_title">{{item.goods_name}}</view>
 						<view class="rec_address">{{item.city}}<text>{{item.area}}</text></view>
@@ -160,6 +160,7 @@
 				hour: 2,
 				minute: 29,
 				second: 60,
+				is_discount: 0,
 				loadingType: 'more',
 				url: ''
 			}
@@ -190,6 +191,12 @@
 				this.recommdList = res.goods[3].goods_list;
 			})
 		},
+		onTabItemTap(obj) {
+			console.log(obj);
+			if(obj.index == 0){
+				this.is_discount = 0;
+			}
+		},
 		methods:{
 			scanCode(){
 				let that = this;
@@ -204,9 +211,10 @@
 			},
 			clickNav(idx){
 				if(idx == 0){
-					uni.navigateTo({
-						url: '/pages/index/discount'
-					})
+					this.is_discount = 1;
+					// uni.navigateTo({
+					// 	url: '/pages/index/discount'
+					// })
 				}else if(idx == 1){
 					uni.navigateTo({
 						url: '/pages/index/online_area'
@@ -321,7 +329,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 20rpx 0 40rpx;
+		margin: 20rpx 0;
+		padding-bottom: 20rpx;
 		view{
 			width: 32%;
 			display: flex;
@@ -350,6 +359,7 @@
 		}
 	}
 	.time_title{
+		margin-top: 20rpx;
 		.countdown{
 			margin-left: 20rpx;
 		}

@@ -1,7 +1,7 @@
 <template>
 	<view class="meal">
 		<view class="page_bg"></view>
-		<uni-nav-bar title="我的套餐"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="我的套餐"></uni-nav-bar>
 		<view class="list_nav">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
 		</view>

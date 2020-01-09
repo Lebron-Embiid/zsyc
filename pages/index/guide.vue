@@ -69,9 +69,12 @@
 				 * 向本地存储中设置launchFlag的值，即启动标识；
 				 */
 				uni.setStorage({
-					key: 'launchFlag',
-					data: true,
-				});
+					key: 'launchFlag', 
+					data: true, 
+					success: function () {
+						console.log('error时存储launchFlag');
+					} 
+				}); 
 				uni.reLaunch({
 					url: '/pages/login/login'
 				});
@@ -85,11 +88,12 @@
 
 <style scoped lang="scss">
 	page,
+	.guide,
 	.content{
 		width: 100%;
 		height: 100%;
 		background-size: 100% auto;
-		background: $free-orange-low;
+		background: #ffa116;
 		padding: 0;
 	}
 	.swiper{

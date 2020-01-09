@@ -1,11 +1,11 @@
 <template>
-	<view class="application">
+	<view class="complaint">
 		<view class="page_bg"></view>
-		<uni-nav-bar left-icon="back" title="我要申诉（卖家）" rightText="提交" @clickRight="submit"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="我要申诉" :rightText="right_txt" @clickRight="submit"></uni-nav-bar>
 		<view v-if="is_submit == 0">
-			<picker :range="feedback_arr" @change="selectFeedback">
+			<picker :range="complaint_arr" @change="selectComplaintback">
 				<view class="feedback_item">
-					{{feed_type}}
+					{{complaint_type}}
 					<image src="/static/icon/arrow.png" mode="widthFix"></image>
 				</view>
 			</picker>
@@ -13,7 +13,7 @@
 				<input type="text" v-model="phone" placeholder="请填写手机号，方便我们联系你" />
 			</view>
 			<view class="feedback_item">
-				<textarea v-model="feed_content" @input="valNum" maxlength="200" placeholder="请如实填写申诉内容" />
+				<textarea v-model="complaint_content" @input="valNum" maxlength="200" placeholder="请如实填写申诉内容" />
 				<text class="len">{{length}}/200</text>
 			</view>
 			<view class="upload_title">上传图片（最多4张）</view>
@@ -21,7 +21,7 @@
 				<view class="upload_btn" @tap="choosePhoto">
 					<image src="/static/icon/add.png" mode="widthFix"></image>
 				</view>
-				<view class="upload_img_item" @longtap="deletePhoto(index)" v-for="(item,index) in photoList" :key="index">
+				<view class="upload_img_item" @longtap="deletePhoto(index)" v-for="(item,index) in photoList1" :key="index">
 					<image @tap="previewImage(index)" class="img" :src="item" mode="widthFix"></image>
 					<!-- <image class="del_icon" @tap.stop="deletePhoto(index)" src="/static/icon/close.png" mode="widthFix"></image> -->
 				</view>
@@ -41,21 +41,54 @@
 	export default{
 		data(){
 			return{
-				feed_type: '请选择反馈类型',
+				order_id: '',
+				right_txt: '提交',
+				type: 0,	//0: 买家   1: 卖家
+				complaint_type: '请选择反馈类型',
+				complaint_current: '',
 				phone: '',
-				feed_content: '',
-				feedback_arr: ['买家申诉不实','少付金额','没收到金额'],
+				complaint_content: '',
+				complaint_arr: [],
 				length: 0,
 				photoList: [],
+				photoList1: [],
 				is_submit: 0
 			}
 		},
 		components:{
 			uniNavBar
 		},
+		onLoad(opt) {
+			if(opt.id != undefined){
+				this.order_id = opt.id;
+			}
+			if(opt.type != undefined){
+				this.type = opt.type;
+			}
+			console.log(opt);
+		},
+		onShow(){
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			if(this.type == 0){
+				// 买家申诉
+				this.$http.buyApplyType(params).then((data)=>{
+					this.complaint_arr = data.data.result;
+				})
+			}else{
+				// 卖家申诉
+				this.$http.sellApplyType(params).then((data)=>{
+					this.complaint_arr = data.data.result;
+				})
+			}
+		},
 		methods:{
-			selectFeedback(e){
-				this.feed_type = this.feedback_arr[e.detail.value];
+			selectComplaintback(e){
+				this.complaint_current = e.detail.value;
+				this.complaint_type = this.complaint_arr[e.detail.value];
 			},
 			valNum(e){
 				this.length = e.detail.value.length;
@@ -73,7 +106,7 @@
 							
 							let params = {
 								'token': uni.getStorageSync('token'),
-								'path': 'comment'
+								'path': 'appeal'
 							};
 							let sign = that.$sign.getSign(params,that.AppSecret);
 							params.sign = sign;
@@ -96,8 +129,10 @@
 											})
 											return;
 										}
-										var url = that.$http.url + data.result;
+										var url = data.result;
+										var url1 = that.$http.url + data.result;
 										that.photoList.push(url);
+										that.photoList1.push(url1);
 									}else{
 										that.$api.msg(data.msg);
 									}
@@ -110,8 +145,8 @@
 			previewImage(e){
 				let that = this;
 				uni.previewImage({
-					current: that.photoList[e],
-					urls: that.photoList
+					current: that.photoList1[e],
+					urls: that.photoList1
 				})
 			},
 			deletePhoto(e){
@@ -121,20 +156,55 @@
 					content: "确定删除图片？",
 					success: (res) => {
 						if(res.confirm){
+							that.photoList1.splice(e, 1);
 							that.photoList.splice(e, 1);
 						}
 					}
 				})
 			},
 			submit(){
-				this.is_submit = 1;
+				let photoArr = {};
+				for(let i in this.photoList){
+					photoArr[i] = this.photoList[i];
+				}
+				console.log(photoArr);
+				if(this.complaint_current == ''){
+					this.$api.msg('请选择反馈类型');
+					return;
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					order_id: this.order_id,
+					type: this.complaint_current,
+					message: this.complaint_content,
+					pic: JSON.stringify(photoArr)
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.appeal(params).then((data)=>{
+					if(data.data.status == 1){
+						this.$api.msg(data.data.result);
+						this.complaint_type = '请选择反馈类型';
+						this.complaint_current = '';
+						this.phone = '';
+						this.complaint_content = '';
+						this.photoList = [];
+						this.photoList1 = [];
+						this.right_txt = '';
+						setTimeout(()=>{
+							this.is_submit = 1;
+						},1500)
+					}else{
+						this.$api.msg(data.data.msg);
+					}
+				})
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	.application{
+	.complaint{
 		background: #eee;
 	}
 	.success_box{

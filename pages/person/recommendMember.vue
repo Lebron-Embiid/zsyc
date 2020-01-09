@@ -30,21 +30,18 @@
 			uniNavBar
 		},
 		onLoad() {
-			this.$http.shareCode().then((data)=>{
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.shareCode(params).then((data)=>{
 				this.code_img = this.$http.url+data.data.img_url;
 				this.link = data.data.code;
 			})
 		},
 		onShow(){
-			this.$http.getUserInfo().then((data)=>{
-				this.name = data.data.username;
-				if(data.data.username == ''){
-					this.name = data.data.mobile;
-				}
-			})
-		},
-		onUnload() {
-			uni.hideLoading();
+			
 		},
 		methods:{
 			changeCode(){

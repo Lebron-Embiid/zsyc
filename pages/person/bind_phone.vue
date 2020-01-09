@@ -12,8 +12,8 @@
 				</view>
 				<view class="yzm" :class="{ yzms: second>0 }" @tap="getcode">{{yanzhengma}}</view>
 			</view>
-			<button v-if="phone!='' && code!=''" class="submit_btn red" @tap="next">下一步</button>
-			<button v-else class="submit_btn">下一步</button>
+			<button v-if="phone!='' && code!=''" class="submit_btn red" @tap="submit">确定</button>
+			<button v-else class="submit_btn">确定</button>
 		</view>
 	</view>
 </template>
@@ -42,6 +42,11 @@
 			uniNavBar
 		},
 		methods:{
+			submit(){
+				this.$api.msg('新手机号绑定成功！');
+				this.phone = '';
+				this.code = '';
+			},
 			getcode(){
 				this.$Debounce.canDoFunction({
 				    key: "getcode",
@@ -57,7 +62,7 @@
 						}
 						that.$http.sendValidateCode({
 							mobile: that.phone,
-							scene: 1
+							scene: 2
 						}).then((data)=>{
 							console.log(data);
 							that.$api.msg(data.data.msg);

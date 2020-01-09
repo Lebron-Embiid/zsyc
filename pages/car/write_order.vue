@@ -13,10 +13,10 @@
 		</view>
 		<view class="order_goods" @tap="showGoodsPopup">
 			<view class="og_left">
-				<image v-for="(item,index) in goodsList" :key="index" :src="item.src" mode="widthFix"></image>
+				<image v-for="(item,index) in goodsList" :key="index" :src="item.bar_code" mode="widthFix"></image>
 			</view>
 			<view class="og_right">
-				共{{goodsList.length}}件商品
+				共{{goodsNum}}件商品
 				<image src="/static/icon/arrow.png" mode="widthFix"></image>
 			</view>
 		</view>
@@ -52,18 +52,18 @@
 		<uni-popup ref="goods" type="bottom">
 			<view class="goods_popup_box">
 				<view class="goods_popup_top">
-					<view>商品清单 <text>(共6件商品)</text></view>
+					<view>商品清单 <text>(共{{goodsNum}}件商品)</text></view>
 					<image @tap="closePop" src="/static/icon/close1.png" mode="widthFix"></image>
 				</view>
 				<scroll-view scroll-y="true" class="goods_pop_scroll">
 					<view class="goods_pop_item" v-for="(item,index) in goodsList" :key="index">
 						<image :src="item.src" mode="widthFix"></image>
 						<view class="gp_center">
-							<view class="gp_title">{{item.title}}</view>
-							<view class="gp_info">{{item.info}}</view>
-							<view class="gp_price">￥{{item.price}}</view>
+							<view class="gp_title">{{item.goods_name}}</view>
+							<view class="gp_info">{{item.spec_key_name}}</view>
+							<view class="gp_price">￥{{item.goods_price}}</view>
 						</view>
-						<view class="gp_num">x{{item.num}}</view>
+						<view class="gp_num">x{{item.goods_num}}</view>
 					</view>
 				</scroll-view>
 				<button type="primary">确定</button>
@@ -106,9 +106,7 @@
 		data(){
 			return{
 				phone: '',
-				recinfo: {
-					
-				},
+				recinfo: {},
 				goodsList: [
 					{
 						src: '/static/img/order_img2.png',
@@ -152,6 +150,11 @@
 				pay_price: ''
 			}
 		},
+		computed:{
+			goodsNum(){
+				return this.goodsList.length;
+			}
+		},
 		components:{
 			uniNavBar,
 			uniPopup
@@ -166,7 +169,7 @@
 			params.sign = sign;
 			this.$http.carConfirm(params).then((data)=>{
 				this.recinfo = data.data.result.addressList;
-				console.log(data.data);
+				this.goodsList = data.data.result.cartList;
 				this.pay_price = data.data.result.totalPrice.total_fee;
 				if(this.recinfo == null){
 					this.has_address = false;

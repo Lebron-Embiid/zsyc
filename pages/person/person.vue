@@ -8,18 +8,18 @@
 		<view class="person_top">
 			<view class="pt_left">
 				<view class="pl_top">
-					<image src="/static/avatar/avatar.png" mode="widthFix"></image>
+					<image :src="personInfo.head_pic" mode="widthFix"></image>
 					<view class="pl_info">
 						<view class="pl_name">{{personInfo.nickname}}</view>
-						<view class="pl_person">联合创始人</view>
+						<view class="pl_person">{{personInfo.level_name}}</view>
 					</view>
 				</view>
 				<view class="pl_bottom">
 					<!-- <view>昵称：</view> -->
 					<view>余额：￥{{personInfo.user_money}}</view>
 					<view>额度：v 150000</view>
-					<view>套餐资格：1</view>
-					<view>套餐名额：2</view>
+					<view>套餐资格：{{personInfo.user_count}}</view>
+					<view>已购套餐：2</view>
 				</view>
 			</view>
 			<view class="pt_right">
@@ -34,7 +34,14 @@
 		</view>
 		<view class="gray-place"></view>
 		<view class="common_use_box">
-			<view class="my_title">常用功能 <view><button type="primary" size="mini" @tap="toLevel">会员升级</button><button type="primary" size="mini" @tap="toRecommend">推荐会员</button></view></view>
+			<view class="my_title">常用功能 
+				<view>
+					<block v-if="personInfo.level != 5">
+						<button type="primary" size="mini" @tap="toLevel">会员升级</button>
+					</block>
+					<button type="primary" size="mini" @tap="toRecommend">推荐会员</button>
+				</view>
+			</view>
 			<view class="use_box">
 				<view class="use_item" @tap="clickUse(index)" v-for="(item,index) in useList" :key="index">
 					<view><image :src="item.icon" mode="widthFix"></image></view>
@@ -81,6 +88,7 @@
 		data(){
 			return{
 				personInfo:{},
+				recInfo: '',
 				orderNavs: [
 					{
 						icon: '/static/icon/order_icon1.png',
@@ -198,6 +206,18 @@
 			}
 		},
 		onLoad() {
+			
+		},
+		onShow() {
+			let params1 = {
+				token: uni.getStorageSync('token')
+			};
+			let sign1 = this.$sign.getSign(params1,this.AppSecret);
+			params1.sign = sign1;
+			this.$http.getParentCount(params1).then((data)=>{
+				this.recInfo = data.data.result;
+			})
+			
 			let params = {
 				token: uni.getStorageSync('token')
 			};
@@ -205,6 +225,10 @@
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
 				this.personInfo = data.data.result;
+				if(this.personInfo.head_pic == ''){
+					this.personInfo.head_pic = '/static/avatar/avatar.png';
+				}
+				getApp().globalData.user_id = data.data.result.user_id;
 			})
 		},
 		methods:{
@@ -254,10 +278,17 @@
 				})
 			},
 			clickUse(idx){
-				if(idx == 0){
-					uni.switchTab({
-						url: this.useList[idx].url
-					})
+				console.log(this.recInfo);
+				if(idx == 1){
+					if(this.recInfo == null){
+						uni.navigateTo({
+							url: '/pages/person/sell?count='+this.personInfo.user_count
+						})
+					}else{
+						uni.navigateTo({
+							url: this.useList[idx].url+'?count='+this.personInfo.user_count+'&level='+this.personInfo.level
+						})
+					}
 				}else{
 					uni.navigateTo({
 						url: this.useList[idx].url

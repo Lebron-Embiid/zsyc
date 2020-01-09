@@ -315,6 +315,7 @@ export default {
 					}]
 				}
 			],
+			selectSpecList: {},
 			couriers: [
 				{
 					label: '顺丰',
@@ -344,7 +345,7 @@ export default {
 			goods_spec_list: [],
 			comment:[],
 			goods_id: '',
-			selectSpec:[-1,-1],//选中规格
+			selectSpec:[],//选中规格
 			isKeep:false,//收藏
 			//商品描述html
 			content: '',
@@ -353,7 +354,7 @@ export default {
 			selectArr: [], //存放被选中的值
 			shopItemInfo: {}, //存放要和选中的值进行匹配的数据
 			subIndex: [], //是否选中 因为不确定是多规格还是但规格，所以这里定义数组来判断
-			btn: 0	,//0:加入购物车  1:立即购买
+			btn: 0,//0:加入购物车  1:立即购买
 			is_time: 0,
 			navbar:[{name:"商品介绍"},{name:"规则参数"},{name:"常见问题"}],
 			currentTab:0
@@ -661,27 +662,31 @@ export default {
 			return;
 		},
 		finishSpec(){
-			if(this.btn == 0){
-				// if(this.selectArr.length == 0){
-				// 	this.$api.msg('请选择规格');
-				// 	return;
-				// }
-				let params = {};
-				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
-					params = {
-						goods_id: this.goodsData.goods_id,
-						goods_num: this.number,
-						unique_id: uni.getStorageSync('unique_id')
-					}
-				}else{
-					params = {
-						goods_id: this.goodsData.goods_id,
-						goods_num: this.number,
-						token: uni.getStorageSync('token')
-					}
+			console.log(this.selectArr);
+			 // || this.selectArr.length != this.goods_spec_list.length
+			if(this.selectArr.length == 0){
+				this.$api.msg('请选择规格');
+				return;
+			}
+			let params = {};
+			if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+				params = {
+					goods_id: this.goodsData.goods_id,
+					goods_num: this.number,
+					goods_spec: this.selectSpec,
+					unique_id: uni.getStorageSync('unique_id')
 				}
-				let sign = this.$sign.getSign(params,this.AppSecret);
-				params.sign = sign;
+			}else{
+				params = {
+					goods_id: this.goodsData.goods_id,
+					goods_num: this.number,
+					goods_spec: this.selectSpec,
+					token: uni.getStorageSync('token')
+				}
+			}
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			if(this.btn == 0){
 				this.$http.addCar(params).then((data)=>{
 					if(data.data.status == 1){
 						uni.showToast({title: "已加入购物车"});
@@ -693,12 +698,21 @@ export default {
 					}
 				})
 			}else{
-				this.specClass = 'hide';
-				this.specClass = 'none';
-				
-				uni.navigateTo({
-					url:'/pages/car/write_order?id='+this.goodsData.goods_id+'&num='+this.number+'&shipCode='+JSON.stringify(this.selectCourierVal)
+				this.$http.addCar(params).then((data)=>{
+					if(data.data.status == 1){
+						uni.switchTab({
+							url: '/pages/car/car'
+						})
+						this.specClass = 'hide';
+						this.specClass = 'none';
+					}else{
+						this.$api.msg(data.data.msg);
+					}
 				})
+				
+				// uni.navigateTo({
+				// 	url:'/pages/car/write_order?id='+this.goodsData.goods_id+'&num='+this.number+'&shipCode='+JSON.stringify(this.selectCourierVal)
+				// })
 			}
 		},
 		//关闭规格弹窗

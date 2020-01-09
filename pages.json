@@ -535,15 +535,21 @@
 			"path": "pages/person/sell_list",
 			"style": {
 				"navigationBarTitleText": "挂卖列表",
+				"enablePullDownRefresh": true,
 				"app-plus": {
-					"titleNView": false
+					"titleNView": false,
+					"pullToRefresh": {
+						"support": true,
+						"color": "#ff0036",
+						"style": "circle"
+					}
 				}
 			}
 		},
 		{
 			"path": "pages/person/complaint",
 			"style": {
-				"navigationBarTitleText": "我要申诉（卖家）",
+				"navigationBarTitleText": "我要申诉",
 				"app-plus": {
 					"titleNView": false
 				}
@@ -552,7 +558,7 @@
 		{
 			"path": "pages/person/see_reply",
 			"style": {
-				"navigationBarTitleText": "查看回复（卖家）",
+				"navigationBarTitleText": "查看回复",
 				"app-plus": {
 					"titleNView": false
 				}
@@ -561,7 +567,7 @@
 		{
 			"path": "pages/person/order_list",
 			"style": {
-				"navigationBarTitleText": "订单列表（卖家）",
+				"navigationBarTitleText": "订单列表",
 				"app-plus": {
 					"titleNView": false
 				}
@@ -571,6 +577,24 @@
 			"path": "pages/person/pay_code",
 			"style": {
 				"navigationBarTitleText": "识别二维码支付",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/payment",
+			"style": {
+				"navigationBarTitleText": "收款方式",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/apply_record",
+			"style": {
+				"navigationBarTitleText": "申请记录",
 				"app-plus": {
 					"titleNView": false
 				}
@@ -596,10 +620,10 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/meal/meal",
+				"pagePath": "pages/index/category",
 				"iconPath": "static/tabbar/tabbar2.png",
 				"selectedIconPath": "static/tabbar/tabbar2_on.png",
-				"text": "套餐"
+				"text": "分类"
 			}, {
 				"pagePath": "pages/find/find",
 				"iconPath": "static/tabbar/tabbar3.png",

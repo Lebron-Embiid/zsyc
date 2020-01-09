@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import api from '@/common/vmeitime-http/'
 import Debounce from '@/common/debounce.js'
+import './js_sdk/ican-clipBoard/ican-clipBoard.js'
 import sign from '@/common/sign.js'
 
 Vue.config.productionTip = false

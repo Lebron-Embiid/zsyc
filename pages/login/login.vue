@@ -11,7 +11,7 @@
 					<view class="right_box all">
 						<view class="ipt_box">
 							<input type="text" placeholder="手机号码" v-model="phone" />
-							<image :class="[phone!=''?'active':'']" @tap="clearPhone" src="/static/clear.svg" mode="widthFix"></image>
+							<image :class="[phone!=''?'active':'']" @tap="clearPhone" src="/static/icon/clear.svg" mode="widthFix"></image>
 						</view>
 					</view>
 				</view>
@@ -21,9 +21,17 @@
 						<view class="ipt_box">
 							<input type="password" placeholder="登录密码" v-if="input_type == 0" v-model="password" />
 							<input type="text" placeholder="登录密码" v-else v-model="password" />
-							<image :class="[password!=''?'active':'']" @tap="clearPwd" src="/static/clear.svg" mode="widthFix"></image>
+							<image :class="[password!=''?'active':'']" @tap="clearPwd" src="/static/icon/clear.svg" mode="widthFix"></image>
 						</view>
 						<switchc text="可见|***" class="switch_btn" :sid="0" @change="switchchange"></switchc>
+					</view>
+				</view>
+				<view class="form_item nopad">
+					<view class="right_box">
+						<view class="ipt_box">
+							<input type="text" placeholder="请输入验证码" v-model="v_code" />
+						</view>
+						<valid-code :value.sync="validCode" @update:value="getCode"></valid-code>
 					</view>
 				</view>
 				<view class="forget_txt"><text @tap="toForgetPwd">忘记密码</text></view>
@@ -38,6 +46,7 @@
 
 <script>
     import switchc from '@/components/zz-switchc/zz-switchc.vue'
+	import validCode from '@/components/validCode.vue'
 	export default{
 		data(){
 			return{
@@ -46,11 +55,14 @@
 				phone: '',
 				password: '',
 				input_type: '',
+				v_code: '',
+				validCode: '',
 				is_success: false
 			}
 		},
 		components: {
-			switchc
+			switchc,
+			validCode
 		},
 		onShow() {
 			this.logoSrc = getApp().globalData.app_logo;
@@ -63,6 +75,10 @@
 				}else{
 					this.input_type = 0;
 				}
+			},
+			getCode(value){
+			  // console.log(value);
+			  this.validCode = value.toLowerCase();
 			},
 			clearPhone(){
 				this.phone = '';
@@ -86,6 +102,14 @@
 				    time:1500,//如果传入time字段，则为定时器后，自动解除锁定状态，单位（毫秒）
 				    success:()=>{//成功中调用应该操作的方法，被锁定状态不会执行此代码块内的方法
 						console.log(getApp().globalData.is_login);
+						if(this.v_code == ''){
+							this.$api.msg('请输入验证码');
+							return;
+						}
+						if(this.v_code.toLowerCase() != this.validCode){
+							this.$api.msg('请输入正确的验证码');
+							return;
+						}
 						this.$http.userLogin({
 							username: this.phone,
 							password: this.password
@@ -138,6 +162,11 @@
 </script>
 
 <style scoped lang="scss">
+	.form_item{
+		&.nopad{
+			padding: 10rpx 0;
+		}
+	}
 	.login_top{
 		background: $free-orange-low;
 		text-align: center;
@@ -156,7 +185,7 @@
 		}
 	}
 	.login_box{
-		padding: 120rpx 80rpx 20rpx;
+		padding: 60rpx 80rpx 20rpx;
 		box-sizing: border-box;
 		.create_btn{
 			display: block;

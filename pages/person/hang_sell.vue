@@ -3,38 +3,46 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar left-icon="back" title="到挂卖区挂卖"></uni-nav-bar>
 		<view class="hangsell_top">
+			<view class="sell_title">选择收款方式 <text @tap="toAddPayment">添加收款</text></view>
 			<view class="pay_box">
-				<radio-group @change="selectPay">
+				<!-- <radio-group @change="selectPay">
 					<view class="pay_item" v-for="(item,index) in payList" :key="index">
-						<radio :value="item.value" color="#fb5860" :checked="item.checked" />
+						<radio :value="item.value" color="#fb5860" />
 						<image :src="item.icon" mode="widthFix"></image>
 						<text>{{item.name}}</text>
 					</view>
-				</radio-group>
+				</radio-group> -->
+				<checkbox-group @change="selectPay">
+					<view class="pay_item" v-for="(item,index) in payList" :key="index">
+						<checkbox :value="item.value" color="#fb5860" :checked="item.checked" />
+						<image :src="item.icon" mode="widthFix"></image>
+						<text>{{item.name}}</text>
+					</view>
+				</checkbox-group>
 			</view>
 		</view>
 		<view class="hangsell_content">
 			<view class="hangsell_ipx">
 				<text>挂卖单价</text>
-				<input type="text" v-model="sell_price" />
+				<input type="digit" v-model="sell_price" />
 			</view>
 			<view class="hangsell_ipx">
 				<text>挂卖数量</text>
-				<input type="text" v-model="sell_num" />
+				<input type="number" v-model="sell_num" />
 			</view>
-			<view class="hangsell_txt">资格剩余：<text>{{over}}</text>个</view>
-			<view class="upload_title">上传收款图片</view>
+			<view class="hangsell_txt">资格剩余：<text>{{count}}</text>个</view>
+			<!-- <view class="upload_title">上传收款图片</view>
 			<view class="upload_img_box">
-				<view class="upload_btn" @tap="choosePhoto" v-if="photo == ''">
+				<view class="upload_btn" @tap="choosePhoto" v-if="photo1 == ''">
 					<image src="/static/icon/add.png" mode="widthFix"></image>
 				</view>
 				<view class="upload_img_item" @longtap="deletePhoto" @tap="choosePhoto" v-else>
-					<image class="img" :src="photo" mode="widthFix"></image>
+					<image class="img" :src="photo1" mode="widthFix"></image>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		<view class="fixed_pay_bottom">
-			<view>挂卖总额：￥<text>10000.00</text></view>
+			<view>挂卖总额：￥<text>{{total_price}}</text></view>
 			<button type="primary" @tap="toSubmit">确定提交</button>
 		</view>
 	</view>
@@ -47,25 +55,47 @@
 			return{
 				sell_price: '',
 				sell_num: '',
-				over: 8333,
+				count: '',
 				photo: '',
+				photo1: '',
+				pay: {},
+				pay_name: '',
+				pay_current: 1,
 				payList: [
 					{
 						name: '支付宝支付',
 						icon: '/static/icon/pay_icon1.png',
-						value: 'zfb',
-						checked: true
+						value: 'alipay',
+						checked: false
 					},{
 						name: '微信支付',
 						icon: '/static/icon/pay_icon2.png',
-						value: 'wx',
+						value: 'wechat',
 						checked: false
 					}
 				]
 			}
 		},
+		computed: {
+			total_price(){
+				return this.sell_price*this.sell_num
+			}
+		},
 		components:{
 			uniNavBar
+		},
+		onLoad(opt) {
+			
+		},
+		onShow() {
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getUserInfo(params).then((data)=>{
+				this.count = data.data.result.user_count;
+			})
 		},
 		methods:{
 			choosePhoto(){
@@ -77,7 +107,7 @@
 					success: function (res) {
 						let params = {
 							'token': uni.getStorageSync('token'),
-							'path': 'comment'
+							'path': 'user_payment'
 						};
 						let sign = that.$sign.getSign(params,that.AppSecret);
 						params.sign = sign;
@@ -93,8 +123,10 @@
 							success: (uploadFileRes) => {
 								var data = JSON.parse(uploadFileRes.data);
 								if(data.status == 1){
-									var url = that.$http.url + data.result;
+									var url = data.result;
+									var url1 = that.$http.url + data.result;
 									that.photo = url;
+									that.photo1 = url1;
 								}else{
 									that.$api.msg(data.msg);
 								}
@@ -111,16 +143,53 @@
 					success: (res) => {
 						if(res.confirm){
 							that.photo = '';
+							that.photo1 = '';
 						}
 					}
 				})
 			},
+			toAddPayment(){
+				uni.navigateTo({
+					url: '/pages/person/payment'
+				})
+			},
 			selectPay(e){
 				console.log(e.detail.value);
+				this.pay = e.detail.value;
 			},
 			toSubmit(){
-				uni.redirectTo({
-					url: '/pages/person/submit_success?type=success'
+				let payList = {};
+				for(let i in this.pay){
+					payList[i] = this.pay[i];
+				}
+				// console.log(payList);
+				
+				let params = {
+					token: uni.getStorageSync('token'),
+					price: this.sell_price,
+					num: this.sell_num,
+					payment: JSON.stringify(payList)
+				};
+				
+				let info = {
+					price: this.sell_price,
+					num: this.sell_num,
+					total: parseInt(this.sell_price)*this.sell_num
+				}
+				
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.setUserCount(params).then((data)=>{
+					if(data.data.status == 1){
+						this.$api.msg(data.data.result);
+						setTimeout(()=>{
+							uni.redirectTo({
+								url: '/pages/person/submit_success?type=success&sell=1&info='+JSON.stringify(info)
+							})
+						},1500)
+					}else{
+						this.$api.msg(data.data.msg);
+					}
 				})
 			}
 		}
@@ -139,6 +208,21 @@
 		font-size: 28rpx;
 		font-weight: bold;
 		position: relative;
+		.sell_title{
+			color: #333;
+			font-size: 32rpx;
+			font-weight: normal;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20rpx 30rpx;
+			box-sizing: border-box;
+			border-bottom: 1px solid #eee;
+			text{
+				color: #f60;
+				font-size: 28rpx;
+			}
+		}
 		.pay_box{
 			background: #fff;
 			.pay_item{
@@ -150,7 +234,7 @@
 				align-items: center;
 				color: #333;
 				font-size: 32rpx;
-				radio{
+				checkbox,radio{
 					transform: scale(.8);
 				}
 				image{

@@ -55,6 +55,16 @@
 			if(opt.id != undefined){
 				this.id = opt.id;
 			}
+			
+			let params = {
+				token: uni.getStorageSync('token'),
+				id: this.id
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getOrderDetail(params).then((data)=>{
+				
+			})
 		},
 		methods:{
 			submitEval(){

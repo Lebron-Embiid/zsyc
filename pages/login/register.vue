@@ -181,8 +181,8 @@
 							mobile: that.phone,
 							scene: 1
 						}).then((data)=>{
-							console.log(data);
-							that.$api.msg(data.data.msg);
+							that.code = data.data.msg;
+							// that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								that.second = 60;
 								timer = setInterval(function(){

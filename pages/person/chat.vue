@@ -48,7 +48,7 @@
 			</scroll-view>
 		</view>
 		<!-- 表情栏 -->
-		<view class="emoji-box" :class="showEmji" @touchmove.stop.prevent="discard">
+		<!-- <view class="emoji-box" :class="showEmji" @touchmove.stop.prevent="discard">
 			<swiper class="swiper" indicator-dots="true" duration="150">
 				<swiper-item v-for="(page,pid) in emojiList" :key="pid">
 					<view v-for="(em,eid) in page" :key="eid" @tap="addEmoji(em)">
@@ -56,35 +56,35 @@
 					</view>
 				</swiper-item>
 			</swiper>
-		</view>
+		</view> -->
 		<!-- 底部输入栏 -->
 		<view class="input-box" :class="showEmji" @touchmove.stop.prevent="discard">
 			<!-- H5下不能录音，输入栏布局改动一下 -->
 			<!-- #ifndef H5 -->
-			<view class="voice">
+			<!-- <view class="voice">
 				<view class="icon" :class="isVoice?'jianpan':'yuyin'" @tap="switchVoice"></view>
-			</view>
+			</view> -->
 			<!-- #endif -->
 			<!-- #ifdef H5 -->
-			<view class="more" @tap="chooseImage">
+			<!-- <view class="more" @tap="chooseImage">
 				<view class="icon tupian"></view>
-			</view>
+			</view> -->
 			<!-- #endif -->
 			<view class="textbox">
-				<view class="voice-mode" :class="[isVoice?'':'hidden',recording?'recording':'']" @touchstart="voiceBegin" @touchmove.stop.prevent="voiceIng" @touchend="voiceEnd" @touchcancel="voiceCancel">{{voiceTis}}</view>
+				<!-- <view class="voice-mode" :class="[isVoice?'':'hidden',recording?'recording':'']" @touchstart="voiceBegin" @touchmove.stop.prevent="voiceIng" @touchend="voiceEnd" @touchcancel="voiceCancel">{{voiceTis}}</view> -->
 				<view class="text-mode"  :class="isVoice?'hidden':''">
 					<view class="box">
 						<textarea auto-height="true" v-model="textMsg" id="textMsg" />
 					</view>
-					<view class="em" @tap="chooseEmoji">
+					<!-- <view class="em" @tap="chooseEmoji">
 						<view class="icon biaoqing"></view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 			<!-- #ifndef H5 -->
-			<view class="more" @tap="chooseImage">
+			<!-- <view class="more" @tap="chooseImage">
 				<view class="icon tupian"></view>
-			</view>
+			</view> -->
 			<!-- #endif -->
 			<label for="textMsg">
 			<view class="send" :class="isVoice?'hidden':''" @tap="sendText">
@@ -175,12 +175,12 @@
 			getMsgList(){
 				// 消息列表
 				let list = [
-					{id:0,uid:0,username:"大黑哥",face:"/static/img/face.jpg",time:"12:56",type:"text",msg:{content:"为什么温度会相差那么大？"}},
-					{id:1,uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg",time:"12:57",type:"text",msg:{content:"这个是有偏差的，两个温度相差十几二十度是很正常的，如果相差五十度，那即是质量问题了。"}},
-					{id:2,uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg",time:"12:59",type:"voice",msg:{url:"/static/voice/3.aac",length:"00:06"}},
-					{id:3,uid:0,username:"大黑哥",face:"/static/img/face.jpg",time:"13:05",type:"voice",msg:{url:"/static/voice/2.mp3",length:"00:06"}},
-					{id:4,uid:0,username:"大黑哥",face:"/static/img/face.jpg",time:"13:05",type:"img",msg:{url:"/static/img/goods/p10.jpg",w:200,h:200}},
-					{id:5,uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg",time:"12:59",type:"img",msg:{url:"/static/img/q.jpg",w:1920,h:1080}}
+					// {id:0,uid:0,username:"大黑哥",face:"/static/img/face.jpg",time:"12:56",type:"text",msg:{content:"为什么温度会相差那么大？"}},
+					// {id:1,uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg",time:"12:57",type:"text",msg:{content:"这个是有偏差的，两个温度相差十几二十度是很正常的，如果相差五十度，那即是质量问题了。"}},
+					// {id:2,uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg",time:"12:59",type:"voice",msg:{url:"/static/voice/3.aac",length:"00:06"}},
+					// {id:3,uid:0,username:"大黑哥",face:"/static/img/face.jpg",time:"13:05",type:"voice",msg:{url:"/static/voice/2.mp3",length:"00:06"}},
+					// {id:4,uid:0,username:"大黑哥",face:"/static/img/face.jpg",time:"13:05",type:"img",msg:{url:"/static/img/goods/p10.jpg",w:200,h:200}},
+					// {id:5,uid:1,username:"售后客服008",face:"/static/img/im/face/face_2.jpg",time:"12:59",type:"img",msg:{url:"/static/img/q.jpg",w:1920,h:1080}}
 				]
 				// 获取消息中的图片,并处理显示尺寸
 				for(let i=0;i<list.length;i++){

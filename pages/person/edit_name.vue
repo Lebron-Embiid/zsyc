@@ -13,15 +13,34 @@
 	export default{
 		data(){
 			return{
-				
+				name: ''
 			}
 		},
 		components:{
 			uniNavBar
 		},
+		onLoad(opt) {
+			if(opt.name != undefined){
+				this.name = opt.name;
+			}
+		},
 		methods:{
 			clickRightBtn(){
-				
+				if(this.name == ''){
+					this.$api.msg('昵称不能为空！');
+					return;
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					nickname: this.name
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.updateUserInfo(params).then((data)=>{
+					uni.navigateBack({
+						delta: 1
+					})
+				})
 			}
 		}
 	}

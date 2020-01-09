@@ -3,7 +3,7 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar left-icon="back" title="提交申请"></uni-nav-bar>
 		<view v-if="is_submit == 0">
-			<picker :range="feedback_arr" @change="selectFeedback">
+			<picker :range="feedback_arr" range-key="level_name" @change="selectFeedback">
 				<view class="feedback_item">
 					{{feed_type}}
 					<image src="/static/icon/arrow.png" mode="widthFix"></image>
@@ -18,12 +18,11 @@
 			</view>
 			<view class="upload_title">上传资料图片</view>
 			<view class="upload_img_box">
-				<view class="upload_btn" @tap="choosePhoto">
+				<view class="upload_btn" @tap="choosePhoto" v-if="photo1 == ''">
 					<image src="/static/icon/add.png" mode="widthFix"></image>
 				</view>
-				<view class="upload_img_item" @longtap="deletePhoto(index)" v-for="(item,index) in photoList" :key="index">
-					<image @tap="previewImage(index)" class="img" :src="item" mode="widthFix"></image>
-					<!-- <image class="del_icon" @tap.stop="deletePhoto(index)" src="/static/icon/close.png" mode="widthFix"></image> -->
+				<view class="upload_img_item" @longtap="deletePhoto" @tap="choosePhoto" v-else>
+					<image class="img" :src="photo1" mode="widthFix"></image>
 				</view>
 			</view>
 			<button type="primary" size="mini" class="application_btn" @tap="submit">提 交</button>
@@ -41,21 +40,35 @@
 	export default{
 		data(){
 			return{
+				level_id: '',
 				feed_type: '请选择会员级别',
 				phone: '',
 				feed_content: '',
-				feedback_arr: ['联合创始人','直营店','分公司'],
+				feedback_arr: [],
 				length: 0,
-				photoList: [],
+				photo: '',
+				photo1: '',
 				is_submit: 0
 			}
 		},
 		components:{
 			uniNavBar
 		},
+		onLoad() {
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.vipLevel(params).then((data)=>{
+				this.feedback_arr = data.data.result;
+				console.log(this.feedback_arr);
+			})
+		},
 		methods:{
 			selectFeedback(e){
-				this.feed_type = this.feedback_arr[e.detail.value];
+				this.feed_type = this.feedback_arr[e.detail.value].level_name;
+				this.level_id = this.feedback_arr[e.detail.value].level_id;
 			},
 			valNum(e){
 				this.length = e.detail.value.length;
@@ -63,55 +76,38 @@
 			choosePhoto(){
 				let that = this;
 				uni.chooseImage({
-					count: 5, //默认9
+					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: function (res) {
-						for(let i in res.tempFilePaths){
-							// console.log(res.tempFilePaths[0]);
-							// that.photoList.push(res.tempFilePaths[0]);
-							
-							let params = {
-								'token': uni.getStorageSync('token'),
-								'path': 'comment'
-							};
-							let sign = that.$sign.getSign(params,that.AppSecret);
-							params.sign = sign;
-							
-							uni.uploadFile({
-								url: that.$http.url+'Api/User/uploadFiles', //图片接口
-								filePath: res.tempFilePaths[i],
-								name: 'file',
-								header:{
-									'timestamp': new Date().getTime()
-								},
-								formData: params,
-								success: (uploadFileRes) => {
-									var data = JSON.parse(uploadFileRes.data);
-									if(data.status == 1){
-										if(that.photoList.length >= 5){
-											uni.showToast({
-												title: "最多发布5张图片",
-												icon: 'none'
-											})
-											return;
-										}
-										var url = that.$http.url + data.result;
-										that.photoList.push(url);
-									}else{
-										that.$api.msg(data.msg);
-									}
+						let params = {
+							'token': uni.getStorageSync('token'),
+							'path': 'level'
+						};
+						let sign = that.$sign.getSign(params,that.AppSecret);
+						params.sign = sign;
+						
+						uni.uploadFile({
+							url: that.$http.url+'Api/User/uploadFiles', //图片接口
+							filePath: res.tempFilePaths[0],
+							name: 'file',
+							header:{
+								'timestamp': new Date().getTime()
+							},
+							formData: params,
+							success: (uploadFileRes) => {
+								var data = JSON.parse(uploadFileRes.data);
+								if(data.status == 1){
+									var url = data.result;
+									var url1 = that.$http.url + data.result;
+									that.photo = url;
+									that.photo1 = url1;
+								}else{
+									that.$api.msg(data.msg);
 								}
-							})
-						}
+							}
+						})
 					}
-				})
-			},
-			previewImage(e){
-				let that = this;
-				uni.previewImage({
-					current: that.photoList[e],
-					urls: that.photoList
 				})
 			},
 			deletePhoto(e){
@@ -121,13 +117,32 @@
 					content: "确定删除图片？",
 					success: (res) => {
 						if(res.confirm){
-							that.photoList.splice(e, 1);
+							that.photo1 = '';
+							that.photo = '';
 						}
 					}
 				})
 			},
 			submit(){
-				this.is_submit = 1;
+				let params = {
+					token: uni.getStorageSync('token'),
+					level_id: this.level_id,
+					mobile: this.phone,
+					memo: this.feed_content,
+					pic: this.photo
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.applyLevel(params).then((data)=>{
+					if(data.data.status == 1){
+						this.$api.msg(data.data.result);
+						setTimeout(()=>{
+							this.is_submit = 1;
+						},1500)
+					}else{
+						this.$api.msg(data.data.msg);
+					}
+				})
 			}
 		}
 	}

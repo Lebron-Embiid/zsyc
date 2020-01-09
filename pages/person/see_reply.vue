@@ -1,13 +1,14 @@
 <template>
 	<view class="process">
 		<view class="page_bg"></view>
-		<uni-nav-bar leftIcon="back" title="查看回复（卖家）"></uni-nav-bar>
+		<uni-nav-bar leftIcon="back" title="查看回复"></uni-nav-bar>
 		<view class="logist_content">
 			<view class="logist_box">
 				<view class="logist_item" v-for="(item,index) in replyList" :key="index">
 					<view class="li_box">
-						<view class="li_time">{{item.time}}</view>
-						<view class="li_title">{{item.content}}</view>
+						<view class="li_time">{{item.type_msg}}</view>
+						<view class="li_title" v-if="c_type == 0">【{{item.buy_user_name}}】{{item.message}}</view>
+						<view class="li_title" v-else>【卖家】{{item.sell_user_name}}：{{item.message}}</view>
 					</view>
 				</view>
 				<block v-if="replyList == '' || replyList.length == 0">
@@ -23,27 +24,44 @@
 	export default{
 		data(){
 			return{
+				order_id: '',
+				page: 0,
+				c_type: '',	//投诉类型   0:买家  1:卖家
 				replyList:[
-					{
-						content: '【我】没有收到款',
-						time: '2018.08.18 08:08'
-					},{
-						content: '【买家】NICK：已提交申诉，上传支付凭证',
-						time: '2018.08.18 08:08'
-					},{
-						content: '【我】已确认订单',
-						time: '2018.08.18 08:08'
-					}
+					// {
+					// 	message: '没有收到款',
+					// 	time: '2018.08.18 08:08'
+					// },{
+					// 	message: '已提交申诉，上传支付凭证',
+					// 	time: '2018.08.18 08:08'
+					// },{
+					// 	message: '已确认订单',
+					// 	time: '2018.08.18 08:08'
+					// }
 				]
 			}
 		},
 		components:{
 			uniNavBar
 		},
-		methods:{
-			
-		},
 		onLoad(opt) {
+			if(opt.id != undefined){
+				this.order_id = opt.id;
+				this.c_type = opt.type;
+			}
+			let params = {
+				token: uni.getStorageSync('token'),
+				order_id: this.order_id,
+				page: 0,
+				limit: 10
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.appealList(params).then((data)=>{
+				this.replyList = data.data.result;
+			})
+		},
+		methods:{
 			
 		}
 	}

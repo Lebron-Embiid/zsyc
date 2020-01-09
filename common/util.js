@@ -75,6 +75,19 @@ const formatDate = date => {
     return [year, month, day].map(formatNumber).join('-');
     // return [month, day].map(formatNumber).join('.');
 }
+// 时间戳转年月日
+const formatDate1 = date => {
+    date = new Date(parseInt(date)*1000);
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+    const second = date.getSeconds()
+
+    // return [year, month, day].map(formatNumber).join('-');
+    return [year, month, day].map(formatNumber).join('.');
+}
 
 const formatNumber = n => {
     n = n.toString()
@@ -84,5 +97,6 @@ const formatNumber = n => {
 export default{
 	friendlyDate,
 	formatTime,
-	formatDate
+	formatDate,
+	formatDate1
 }

@@ -20,6 +20,7 @@
 	export default{
 		data(){
 			return{
+				id: '',
 				type: '',
 				payList: [
 					{
@@ -39,13 +40,16 @@
 		components:{
 			uniNavBar
 		},
-		onLoad() {
-			// let params = {};
-			// let sign = this.$sign.getSign(params,this.AppSecret);
-			// params.sign = sign;
-			// this.$http.payType(params).then((data)=>{
+		onLoad(opt) {
+			if(opt.id != undefined){
+				this.id = opt.id;
+			}
+			let params = {};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.payType(params).then((data)=>{
 				
-			// })
+			})
 		},
 		methods:{
 			selectPay(e){
@@ -54,11 +58,11 @@
 			toNext(){
 				if(this.type == 'wx'){
 					uni.navigateTo({
-						url: '/pages/person/pay_code?type=wechat'
+						url: '/pages/person/pay_code?type=wechat&id='+this.id
 					})
 				}else{
 					uni.navigateTo({
-						url: '/pages/person/pay_code?type=alipay'
+						url: '/pages/person/pay_code?type=alipay&id='+this.id
 					})
 				}
 			}

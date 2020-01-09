@@ -38,21 +38,21 @@
 				<view class="income_title">本月</view>
 				<view class="income_list_item">
 					<view class="item_left">
-						<view class="ili_title">推荐会员 小贾</view>
+						<view class="ili_title">分享会员 小贾</view>
 						<view class="ili_time">2018.10.22</view>
 					</view>
-					<view class="item_center">直推</view>
+					<view class="item_center">分享</view>
 					<view class="item_right">+9000</view>
 				</view>
 			</view>
 			<view class="income_list_box" v-if="currentTab == 1">
-				<view class="income_title">本月</view>
-				<view class="income_list_item">
+				<!-- <view class="income_title">本月</view> -->
+				<view class="income_list_item" v-for="(item,index) in teamList" :key="index">
 					<view class="item_left">
-						<view class="ili_title">小贾</view>
-						<view class="ili_time">2018.10.22</view>
+						<view class="ili_title">{{item.mobile}}</view>
+						<view class="ili_time">{{util.formatDate1(item.reg_time)}}</view>
 					</view>
-					<view class="item_right" style="font-size: 28rpx;">会员</view>
+					<view class="item_right" style="font-size: 28rpx;">{{item.level_name}}</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -61,33 +61,73 @@
 
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import util from "@/common/util.js"
 	export default{
 		data(){
 			return{
-				navbar:[{name: '推荐收益'},{name: '我的会员'}],
+				navbar:[{name: '分享收益'},{name: '我的会员'}],
 				currentTab:0,
 				down_icon_on: '/static/icon/down1.png',
 				down_icon: '/static/icon/down.png',
-				title: '推荐会员收益',
+				title: '分享会员收益',
+				type: '',
 				levels: ["会员"],
 				sort_one: 0,
 				sort_two: 0,
 				sort_three: 0,
 				sort_four: 0,
 				sort_five: 0,
-			}
-		},
-		onLoad(opt) {
-			if(opt.type != undefined){
-				this.title = opt.type;
+				page: 0,
+				util: '',
+				teamList: []
 			}
 		},
 		components:{
 			uniNavBar
 		},
+		onLoad(opt) {
+			this.util = util;
+			if(opt.name != undefined){
+				this.title = opt.name;
+				this.type = opt.type;
+			}
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: 0,
+				limit: 10,
+				type: opt.type
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.rewardListData(params).then((data)=>{
+				
+			})
+		},
 		methods:{
 			navbarTap(e){
 				this.currentTab = e;
+				if(this.currentTab == 0){
+					let params = {
+						token: uni.getStorageSync('token')
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getReward(params).then((data)=>{
+						
+					})
+				}else{
+					let params = {
+						token: uni.getStorageSync('token'),
+						page: 0,
+						limit: 10
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.myTeam(params).then((data)=>{
+						this.teamList = data.data.result;
+						// new Date(parseInt(date)*1000).date.getMonth() + 1
+					})
+				}
 			},
 			bindLevelChange(e){
 				console.log(e.detail.value);
@@ -206,7 +246,7 @@
 		}
 	}
 	.income_scroll{
-		height: 78vh;
+		height: 79vh;
 		.income_list_box{
 			.income_title{
 				color: #999;

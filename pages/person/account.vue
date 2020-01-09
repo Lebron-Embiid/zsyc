@@ -10,6 +10,10 @@
 			<view class="set_left">登录密码</view>
 			<view class="set_right">去设置<image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</navigator>
+		<navigator url="/pages/person/auth?type=2" class="setting_box line">
+			<view class="set_left">支付密码</view>
+			<view class="set_right">去设置<image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
+		</navigator>
 		<view class="account_title">绑定第三方账号</view>
 		<view class="setting_box line" @tap="toBind">
 			<view class="set_left">微信</view>
@@ -31,13 +35,21 @@
 	export default{
 		data(){
 			return{
-				phone: '18666666666'
+				phone: ''
 			}
 		},
 		onShow() {
-			let tel = ""+this.phone;
-			let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
-			this.phone = tel1;
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getUserInfo(params).then((data)=>{
+				
+				let tel = ""+data.data.result.mobile;
+				let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+				this.phone = tel1;
+			})
 		},
 		components:{
 			uniNavBar

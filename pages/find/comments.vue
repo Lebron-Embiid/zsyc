@@ -11,8 +11,8 @@
 							<view class="com_time">{{item.add_time}}</view>
 						</view>
 						<view class="com_like" @tap="toLove(index,item.id)">
-							<image src="/static/icon/love.png" v-if="item.is_love == 0" mode="widthFix"></image>
-							<image src="/static/icon/love1.png" v-if="item.is_love == 1" mode="widthFix"></image>
+							<image src="/static/icon/love.png" v-if="item.is_zan == 0" mode="widthFix"></image>
+							<image src="/static/icon/love1.png" v-if="item.is_zan == 1" mode="widthFix"></image>
 							{{item.zan}}
 						</view>
 					</view>
@@ -25,10 +25,10 @@
 		</view>
 		<view class="mb100"></view>
 		<view class="fixed_bottom">
-			<form @submit="submitForm">
+			<form>
 				<view class="form_input_item">
-					<input type="text" placeholder="说点什么吧">
-					<button type="primary" size="mini">发送</button>
+					<input type="text" v-model="say_content" placeholder="说点什么吧">
+					<button type="primary" @tap="submitForm" size="mini">发送</button>
 				</view>
 			</form>
 		</view>
@@ -53,6 +53,7 @@
 					// 	is_love: 0
 					// }
 				],
+				say_content: '',
 				loadingType: 'more',
 				page: 0,
 				url: ''
@@ -71,6 +72,7 @@
 		},
 		onShow() {
 			let params = {
+				token: uni.getStorageSync('token'),
 				article_id: this.id,
 				page: 0,
 				limit: 10
@@ -78,31 +80,31 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getCommentList(params).then((data)=>{
-				// this.commentsList = data.data.result;
-				let res = data.data.result;
-				console.log(res);
-				for(let i in res){
-					this.commentsList.push({
-						add_time: util.friendlyDate(res[i].add_time*1000),
-						content: res[i].content,
-						head_pic: res[i].head_pic,
-						id: res[i].id,
-						nickname: res[i].nickname,
-						zan: res[i].zan,
-						is_love: 0
-					})
-				}
-				console.log(this.commentsList);
+				this.commentsList = data.data.result;
+				// let res = data.data.result;
+				// console.log(res);
+				// for(let i in res){
+				// 	this.commentsList.push({
+				// 		add_time: util.friendlyDate(res[i].add_time*1000),
+				// 		content: res[i].content,
+				// 		head_pic: res[i].head_pic,
+				// 		id: res[i].id,
+				// 		nickname: res[i].nickname,
+				// 		zan: res[i].zan,
+				// 		is_love: 0
+				// 	})
+				// }
+				// console.log(this.commentsList);
 			})
 		},
 		methods:{
 			toLove(idx,cid){
-				if(this.commentsList[idx].is_love == 0){
-					this.commentsList[idx].is_love = 1;
-					// this.commentsList[idx].zan++;
+				if(this.commentsList[idx].is_zan == 0){
+					this.commentsList[idx].is_zan = 1;
+					this.commentsList[idx].zan++;
 				}else{
-					this.commentsList[idx].is_love = 0;
-					// this.commentsList[idx].zan--;
+					this.commentsList[idx].is_zan = 0;
+					this.commentsList[idx].zan--;
 				}
 				let params = {
 					token: uni.getStorageSync('token'),
@@ -116,8 +118,46 @@
 				})
 			},
 			submitForm(){
-				this.$api.msg('发送成功');
+				let params = {
+					token: uni.getStorageSync('token'),
+					article_id: this.id,
+					content: this.say_content
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.articleComment(params).then((data)=>{
+					this.$api.msg(data.data.msg);
+					if(data.data.status == 1){
+						this.say_content = '';
+						
+						let params1 = {
+							token: uni.getStorageSync('token'),
+							article_id: this.id,
+							page: 0,
+							limit: 10
+						};
+						let sign1 = this.$sign.getSign(params1,this.AppSecret);
+						params1.sign = sign1;
+						this.$http.getCommentList(params1).then((data)=>{
+							this.commentsList = data.data.result;
+						})
+					}
+				})
 			}
+		},
+		onReachBottom() {
+			this.page++;
+			let params = {
+				token: uni.getStorageSync('token'),
+				article_id: this.id,
+				page: this.page,
+				limit: 10
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getCommentList(params).then((data)=>{
+				this.commentsList = this.commentsList.concat(data.data.result);
+			})
 		}
 	}
 </script>

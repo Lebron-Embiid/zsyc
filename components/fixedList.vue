@@ -53,7 +53,7 @@
 			},
 			toLink(){
 				uni.navigateTo({
-					url: '/pages/index/recommend'
+					url: '/pages/meal/meal'
 				})
 			}
 		}

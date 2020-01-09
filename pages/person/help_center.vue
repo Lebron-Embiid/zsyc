@@ -10,7 +10,9 @@
 					<image src="/static/icon/arrow.png" mode="widthFix"></image>
 				</view>
 				<view class="help_bottom">
-					{{item.content}}
+					<block v-if="item.content!=''">
+						<u-parse :content="item.content"></u-parse>
+					</block>
 				</view>
 			</view>
 			<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
@@ -21,38 +23,43 @@
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
+	import uParse from "@/components/u-parse/u-parse.vue"
 	export default{
 		data(){
 			return{
 				loadingType: 'more',
 				helpList: [
-					{
-						is_click: 0,
-						title: '1、如何获得套餐资格？如何使用？',
-						content: '您可以通过个人中心点击购买资格即可。'
-					},{
-						is_click: 0,
-						title: '2、如何获取购物发票？',
-						content: 'a、订单备注留言您的开票抬头，我们默认是开增值税电子普通发票，b、如有特别要求，请联系客服。'
-					},{
-						is_click: 0,
-						title: '3、下单后可以修改收货地址吗？',
-						content: '下单后，如果还未付款，或付款后商品还未寄出的情况下，可以联系客服为您修改收货地址。'
-					},{
-						is_click: 0,
-						title: '4、怎么计算快递费用？如何免快递费？',
-						content: '快递费根据商品的质量和寄送的距离来计算，详情请见：商品详情页 > 常见问题。'
-					},{
-						is_click: 0,
-						title: '5、付款可以使用那些支付方式？',
-						content: '可以使用微信或支付宝进行付款。'
-					}
+					// {
+					// 	is_click: 0,
+					// 	title: '1、如何获得套餐资格？如何使用？',
+					// 	content: '您可以通过个人中心点击购买资格即可。'
+					// }
 				]
 			}
 		},
 		components:{
 			uniNavBar,
-			uniLoadMore
+			uniLoadMore,
+			uParse
+		},
+		onLoad(opt) {
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.helpList(params).then((data)=>{
+				let res = data.data.result;
+				for(let i in res){
+					this.helpList.push({
+						is_click: 0,
+						id: res[i].id,
+						time: res[i].add_time,
+						title: res[i].title,
+						content: res[i].content
+					})
+				}
+			})
 		},
 		methods:{
 			toClick(e){

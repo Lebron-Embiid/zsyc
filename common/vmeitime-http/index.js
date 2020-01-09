@@ -909,6 +909,21 @@ export const deletePayment = (data) => {
         data
     })
 }
+// 收款方式列表 
+export const paymentList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserPayment/paymentList',
+        method: 'POST',
+        data
+    })
+}
 // 设置收款方式状态
 export const setDefaultStatus = (data) => {
 	http.interceptor.request = (config) => {
@@ -939,6 +954,22 @@ export const setUserCount = (data) => {
         data
     })
 }
+// 会员上级资格挂卖 
+export const getParentCount = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCount/getParentCount',
+        method: 'POST',
+        data
+    })
+}
+
 // 会员资格挂卖列表
 export const getUserCountlist = (data) => {
 	http.interceptor.request = (config) => {
@@ -965,6 +996,292 @@ export const cancelUserCount = (data) => {
 	}
     return http.request({
         url: 'Api/UserCount/cancel',
+        method: 'POST',
+        data
+    })
+}
+// 购买资格下单
+export const addUserCountOrder = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/add',
+        method: 'POST',
+        data
+    })
+}
+// 购买资格订单列表
+export const userCountOrderList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/listData',
+        method: 'POST',
+        data
+    })
+}
+// 购买资格订单详情
+export const userCountOrderInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/info',
+        method: 'POST',
+        data
+    })
+}
+// 资格订单买家确认付款
+export const userCountOrderConfirmOrder = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/confirmOrder',
+        method: 'POST',
+        data
+    })
+}
+// 买家取消订单
+export const userCountOrderCancel = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/cancel',
+        method: 'POST',
+        data
+    })
+}
+// 卖家确认会员资格订单
+export const userCountSuccessOrder = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/successOrder',
+        method: 'POST',
+        data
+    })
+}
+// 买家申诉反馈类型
+export const buyApplyType = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/buyApplyType',
+        method: 'POST',
+        data
+    })
+}
+// 卖家申诉反馈类型
+export const sellApplyType = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/sellApplyType',
+        method: 'POST',
+        data
+    })
+}
+// 发起申诉
+export const appeal = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/appeal',
+        method: 'POST',
+        data
+    })
+}
+// 查看回复
+export const appealList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserCountOrder/appealList',
+        method: 'POST',
+        data
+    })
+}
+// 会员升级页面
+export const vipLevel = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/level',
+        method: 'POST',
+        data
+    })
+}
+// 提交升级
+export const applyLevel = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/applyLevel',
+        method: 'POST',
+        data
+    })
+}
+// 升级申请记录
+export const applyLevelList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/applyLevelList',
+        method: 'POST',
+        data
+    })
+}
+// 帮助中心
+export const helpList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Article/helpList',
+        method: 'POST',
+        data
+    })
+}
+// 推荐二维码
+export const shareCode = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/shareCode',
+        method: 'POST',
+        data
+    })
+}
+// 我的收益
+export const getReward = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Reward/index',
+        method: 'POST',
+        data
+    })
+}
+// 我的会员
+export const myTeam = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Reward/myTeam',
+        method: 'POST',
+        data
+    })
+}
+// 奖金类型名称
+export const rewardName = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Reward/rewardName',
+        method: 'POST',
+        data
+    })
+}
+
+// 收益列表
+export const rewardListData = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Reward/listData',
         method: 'POST',
         data
     })
@@ -1068,8 +1385,29 @@ export default {
 	payType,
 	addPayment,
 	deletePayment,
+	paymentList,
 	setDefaultStatus,
 	setUserCount,
+	getParentCount,
 	getUserCountlist,
-	cancelUserCount
+	cancelUserCount,
+	addUserCountOrder,
+	userCountOrderList,
+	userCountOrderInfo,
+	userCountOrderConfirmOrder,
+	userCountOrderCancel,
+	userCountSuccessOrder,
+	buyApplyType,
+	sellApplyType,
+	appeal,
+	appealList,
+	vipLevel,
+	applyLevel,
+	applyLevelList,
+	helpList,
+	shareCode,
+	getReward,
+	myTeam,
+	rewardName,
+	rewardListData
 }

@@ -44,9 +44,17 @@
 			}
 		},
 		onShow() {
-			let tel = ""+this.phone;
-			let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
-			this.phone_show = tel1;
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getUserInfo(params).then((data)=>{
+				this.phone = data.data.result.mobile;
+				let tel = ""+data.data.result.mobile;
+				let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+				this.phone_show = tel1;
+			})
 		},
 		components:{
 			uniNavBar
@@ -54,12 +62,16 @@
 		methods:{
 			next(){
 				if(this.is_type == 0){
-					uni.navigateTo({
+					uni.redirectTo({
 						url: '/pages/person/bind_phone'
 					})
+				}else if(this.is_type == 1){
+					uni.redirectTo({
+						url: '/pages/person/changePassword?type=login'
+					})
 				}else{
-					uni.navigateTo({
-						url: '/pages/person/changePassword'
+					uni.redirectTo({
+						url: '/pages/person/changePassword?type=pay'
 					})
 				}
 			},
@@ -78,7 +90,7 @@
 						}
 						that.$http.sendValidateCode({
 							mobile: that.phone,
-							scene: 1
+							scene: 2
 						}).then((data)=>{
 							console.log(data);
 							that.$api.msg(data.data.msg);

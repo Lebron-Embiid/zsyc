@@ -1,22 +1,25 @@
 <template>
 	<view class="my_income">
-		<uni-nav-bar left-icon="back" title="推荐会员"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="我的收益"></uni-nav-bar>
 		<view class="income_bg">
 			<image class="bg" src="/static/img/income_bg.png" mode="widthFix"></image>
 			<view class="layer">
 				<image class="avatar" src="/static/avatar/avatar.png" mode="widthFix"></image>
-				<view class="income_price">我的收益 <text>995599</text> 元</view>
+				<view class="income_price">
+					<view>我的收益 <text>995599</text> 元</view>
+					<view class="last"><text>88888</text>认购积分</view>
+				</view>
 			</view>
 		</view>
 		<view class="message_box">
-			<view class="message_item" @tap="toIncome(index,item.type)" v-for="(item,index) in incomeList" :key="index">
-				<view class="icon_box">
-					<image class="icon" :src="item.icon" mode="widthFix"></image>
+			<view class="message_item" @tap="toIncome(index,item.name,item.type)" v-for="(item,index) in incomeList" :key="index">
+				<view class="icon_box" v-if="item.type == 'ztj'">
+					<image class="icon" :src="'/static/icon/income_icon'+(index+1)+'.png'" mode="widthFix"></image>
 				</view>
-				<view class="msg_content">
+				<view class="msg_content" :class="[item.type != 'ztj'?'width':'']">
 					<view class="msg_box">
-						<view class="msg_title">{{item.type}}<view>已推：<text>{{item.number}}</text>人</view></view>
-						<view class="msg_info">总收益：<text>{{item.income}}</text>元</view>
+						<view class="msg_title">{{item.name}}<view v-if="index<4">已推：<text>{{item.tj_num}}</text>人</view></view>
+						<view class="msg_info">总收益：<text>{{item.sum_reward}}</text>元</view>
 					</view>
 					<image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image>
 				</view>
@@ -31,27 +34,27 @@
 		data(){
 			return{
 				incomeList: [
-					{
-						icon: '/static/icon/income_icon1.png',
-						type: '推荐会员收益',
-						number: 500,
-						income: 88888
-					},{
-						icon: '/static/icon/income_icon2.png',
-						type: '推荐直营店收益',
-						number: 500,
-						income: 88888
-					},{
-						icon: '/static/icon/income_icon3.png',
-						type: '推荐分公司收益',
-						number: 500,
-						income: 88888
-					},{
-						icon: '/static/icon/income_icon4.png',
-						type: '推荐联合创始人收益',
-						number: 500,
-						income: 88888
-					}
+					// {
+					// 	icon: '/static/icon/income_icon1.png',
+					// 	type: '分享会员收益',
+					// 	number: 500,
+					// 	income: 88888
+					// },{
+					// 	icon: '/static/icon/income_icon2.png',
+					// 	type: '分享直营店收益',
+					// 	number: 500,
+					// 	income: 88888
+					// },{
+					// 	icon: '/static/icon/income_icon3.png',
+					// 	type: '分享分公司收益',
+					// 	number: 500,
+					// 	income: 88888
+					// },{
+					// 	icon: '/static/icon/income_icon4.png',
+					// 	type: '分享联合创始人收益',
+					// 	number: 500,
+					// 	income: 88888
+					// }
 				]
 			}
 		},
@@ -59,12 +62,19 @@
 			uniNavBar
 		},
 		onLoad(opt) {
-			
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getReward(params).then((data)=>{
+				this.incomeList = data.data.result;
+			})
 		},
 		methods:{
-			toIncome(idx,type){
+			toIncome(idx,name,type){
 				uni.navigateTo({
-					url: '/pages/person/income_list?type='+type+'&idx='+idx
+					url: '/pages/person/income_list?type='+type+'&idx='+idx+'&name='+name
 				})
 			}
 		}
@@ -93,22 +103,32 @@
 				margin: 100rpx auto 0;
 			}
 			.income_price{
-				width: 50%;
-				transform: translateX(80%);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
 				color: #fff;
 				font-size: 32rpx;
 				font-weight: bold;
-				display: inline-flex;
-				align-items: center;
-				text{
-					font-size: 50rpx;
-					margin: 0 5rpx 0 10rpx;
+				margin-top: 5rpx;
+				// width: 50%;
+				// transform: translateX(80%);
+				// display: inline-flex;
+				// align-items: center;
+				view{
+					&.last{
+						margin-left: 30rpx;
+					}
+					text{
+						font-size: 40rpx;
+						margin: 0 5rpx 0 10rpx;
+					}
 				}
 			}
 		}
 	}
 	.message_box{
-		padding-top: 20rpx;
+		padding: 20rpx 0 50rpx;
 		.message_item{
 			&:active{
 				background: #eee;
@@ -120,6 +140,9 @@
 				}
 			}
 			.msg_content{
+				&.width{
+					width: 100%;
+				}
 				.msg_box{
 					.msg_title{
 						display: flex;
