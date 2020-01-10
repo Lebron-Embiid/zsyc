@@ -14,7 +14,7 @@
 			<view class="set_left">收款方式</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</navigator>
-		<navigator url="/pages/person/cash_account" class="setting_box mb20">
+		<navigator url="/pages/person/cash_list" class="setting_box mb20">
 			<view class="set_left">提现账号</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</navigator>

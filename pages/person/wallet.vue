@@ -118,6 +118,10 @@
 				})
 			},
 			toWithdraw(){
+				uni.navigateTo({
+					url: '/pages/person/withdraw'
+				})
+				return;
 				let params = {
 					token: uni.getStorageSync('token')
 				};
