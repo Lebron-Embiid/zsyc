@@ -1679,6 +1679,283 @@ export const rewardListData = (data) => {
     })
 }
 
+// 商城订单支付页面
+export const shopOrderPay = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Cart/cart4',
+        method: 'POST',
+        data
+    })
+}
+// 调取第三方支付（提交支付）
+export const thirdPay = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Payment/getCode',
+        method: 'POST',
+        data
+    })
+}
+// 提现收款类型
+export const accountName = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/accountName',
+        method: 'POST',
+        data
+    })
+}
+// 添加提现收款账号
+export const addAccountName = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/add',
+        method: 'POST',
+        data
+    })
+}
+// 设置提现账号默认状态
+export const setAccountDefault = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/setDefaultStatus',
+        method: 'POST',
+        data
+    })
+}
+// 编辑提现收款账号
+export const editAccount = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/edit',
+        method: 'POST',
+        data
+    })
+}
+// 删除提现收款账号
+export const deleteAccount = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/delete',
+        method: 'POST',
+        data
+    })
+}
+// 获取默认提现账号
+export const getAccountDefault = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/getDefault',
+        method: 'POST',
+        data
+    })
+}
+
+// 提现收款账号列表
+export const getAccountList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/UserBank/listData',
+        method: 'POST',
+        data
+    })
+}
+
+// 提现申请页面
+export const withdrawApply = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/User/withdrawalsIndex',
+        method: 'POST',
+        data
+    })
+}
+// 申请提现
+export const withdrawals = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/withdrawals',
+        method: 'POST',
+        data
+    })
+}
+// 提现申请列表
+export const withdrawalsList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/withdrawalsList',
+        method: 'POST',
+        data
+    })
+}
+// 提现订单详情
+export const withdrawalsInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/withdrawalsInfo',
+        method: 'POST',
+        data
+    })
+}
+// 提现确认同意
+export const withdrawalsConfirm = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/withdrawalsConfirm',
+        method: 'POST',
+        data
+    })
+}
+// 获取在线支付方式 
+export const onlinePay = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/onlinePay',
+        method: 'POST',
+        data
+    })
+}
+// 申请充值 
+export const recharge = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/User/recharge',
+        method: 'POST',
+        data
+    })
+}
+
 // if(data.data.status == 40001){
 // 	this.$api.msg('请登录');
 // 	setTimeout(function(){
@@ -1802,5 +2079,21 @@ export default {
 	getLevel,
 	myTeam,
 	rewardName,
-	rewardListData
+	rewardListData,
+	shopOrderPay,
+	thirdPay,
+	accountName,
+	addAccountName,
+	setAccountDefault,
+	editAccount,
+	deleteAccount,
+	getAccountDefault,
+	getAccountList,
+	withdrawApply,
+	withdrawals,
+	withdrawalsList,
+	withdrawalsInfo,
+	withdrawalsConfirm,
+	onlinePay,
+	recharge
 }

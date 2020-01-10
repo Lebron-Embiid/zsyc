@@ -71,7 +71,8 @@
 						price: '+800'
 					}
 				],
-				util: ''
+				util: '',
+				list: []
 			}
 		},
 		components:{
@@ -93,7 +94,7 @@
 					this.avatar = '/static/avatar/avatar.png';
 				}
 				this.nickname = data.data.result.nickname;
-				this.level = data.data.result.level;
+				this.level = data.data.result.level_name;
 				this.price = data.data.result.user_money;
 			})
 		},
@@ -117,8 +118,33 @@
 				})
 			},
 			toWithdraw(){
-				uni.navigateTo({
-					url: '/pages/person/withdraw'
+				let params = {
+					token: uni.getStorageSync('token')
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.withdrawalsList(params).then((data)=>{
+					this.list = data.data.result;
+					let is_with = false;
+					for(let i in this.list){
+						console.log(this.list[i].status);
+						if(this.list[i].status == 0){
+							is_with = true;
+							setTimeout(()=>{
+								if(is_with == true){
+									uni.navigateTo({
+										url: '/pages/person/withdraw_apply'
+									})
+									return;
+								}else{
+									uni.navigateTo({
+										url: '/pages/person/withdraw'
+									})
+									return;
+								}
+							},500)
+						}
+					}
 				})
 			}
 		}

@@ -6,7 +6,7 @@
 			<view class="logist_box">
 				<view class="logist_item" v-for="(item,index) in withdrawList" :key="index">
 					<view class="li_box">
-						<view class="li_time">{{util.formatTime(item.add_time)}}</view>
+						<view class="li_time">{{util.formatTime(item.create_time)}}</view>
 						<view class="li_title">【提现申请】
 							<block v-if="item.status == 0">
 								已提交申请，正在受理
@@ -23,7 +23,7 @@
 			</view>
 		</view>
 		<view class="apply_till">当你账户收到准确资金，请点击提现确认按钮，可进行下一笔提现操作。若有异议请点击客服申诉进行沟通。</view>
-		<button @tap="submit" type="primary">提现确认</button>
+		<button v-if="item.status == 1" @tap="submit" type="primary">提现确认</button>
 		<button @tap="toCustomer" type="primary" class="red">客服申诉</button>
 	</view>
 </template>
@@ -34,18 +34,7 @@
 	export default{
 		data(){
 			return{
-				withdrawList: [
-					{
-						add_time: 1578380070,
-						status: 0
-					},{
-						add_time: 1578380070,
-						status: 1
-					},{
-						add_time: 1578380070,
-						status: 2
-					}
-				],
+				withdrawList: [],
 				util: ''
 			}
 		},
@@ -54,6 +43,14 @@
 		},
 		onLoad(opt) {
 			this.util = util;
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.withdrawalsList(params).then((data)=>{
+				this.withdrawList = data.data.result;
+			})
 		},
 		methods:{
 			submit(){

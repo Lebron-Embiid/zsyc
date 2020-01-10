@@ -4,10 +4,10 @@
 		
 		<view class="content">
 			<view class="list">
-				<view class="no-txt" v-if="addressList.length == 0">
+				<view class="no-txt" v-if="accountList.length == 0">
 					暂无提现账号
 				</view>
-				<view class="row" v-for="(row,index) in addressList" :key="index" @tap="select(row)">
+				<view class="row" v-for="(row,index) in accountList" :key="index" @tap="select(row)">
 					<view class="left">
 						<view class="default" v-if="row.is_default == 1">
 							默认
@@ -20,16 +20,16 @@
 						<view class="address">
 							账号：{{row.account}}
 						</view>
-						<view class="address">
-							开户行：{{row.account}}
+						<view class="address" v-if="row.code != 'alipay'">
+							开户行：{{row.bank_name}}
 						</view>
 						<view class="address">
-							户名：{{row.account}}
+							户名：{{row.realname}}
 						</view>
 					</view>
 					<view class="right">
 						<!-- <view class="icon shanchu" @tap.stop="del(row)"></view> -->
-						<image src="/static/icon/edit.png" @tap.stop="toEdit(row.id)" mode="widthFix"></image>
+						<image src="/static/icon/edit.png" @tap.stop="toEdit(row)" mode="widthFix"></image>
 						<!-- <text @tap.stop="setDefault(row)">设为默认</text> -->
 					</view>
 				</view>
@@ -48,25 +48,22 @@
 		data() {
 			return {
 				isSelect:false,
-				addressList:[]
+				accountList:[]
 			};
 		},
 		components:{
 			uniNavBar
 		},
 		onShow() {
-			let params = {token: uni.getStorageSync('token')};
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: 0,
+				limit: 10
+			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
-			this.$http.getAddressList(params).then((data)=>{
-				this.addressList = data.data.result;
-				
-				for(let i in this.addressList){
-					let res = this.addressList;
-					let tel = ""+this.addressList[i].mobile;
-					let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
-					this.addressList[i].phone = tel1;
-				}
+			this.$http.getAccountList(params).then((data)=>{
+				this.accountList = data.data.result;
 			})
 		},
 		onLoad(e) {
@@ -91,8 +88,8 @@
 									let params1 = {token: uni.getStorageSync('token')};
 									let sign1 = this.$sign.getSign(params1,this.AppSecret);
 									params1.sign = sign1;
-									that.$http.getAddressList(params1).then((data)=>{
-										that.addressList = data.data.result;
+									that.$http.getAccountList(params1).then((data)=>{
+										that.accountList = data.data.result;
 										
 										uni.removeStorage({
 											key:'selectAccount'
@@ -115,8 +112,8 @@
 						let sign1 = this.$sign.getSign(params1,this.AppSecret);
 						params1.sign = sign1;
 						
-						this.$http.getAddressList(params1).then((data)=>{
-							this.addressList = data.data.result;
+						this.$http.getAccountList(params1).then((data)=>{
+							this.accountList = data.data.result;
 							
 							for(let i in this.addressList){
 								let res = this.addressList;

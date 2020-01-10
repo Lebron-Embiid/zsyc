@@ -165,6 +165,9 @@
 				this.shipping_code = JSON.parse(JSON.stringify(opt.shipCode));
 				console.log(this.shipping_code);
 			}
+			
+		},
+		onShow() {
 			let params = {token: uni.getStorageSync('token')};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
@@ -196,26 +199,25 @@
 						
 					})
 				}
+				
+				if(uni.getStorageSync('selectAddress') != ''){
+					uni.getStorage({
+						key:'selectAddress',
+						success: (e) => {
+							console.log(e);
+							this.recinfo = e.data;
+							
+							let tel = ""+this.recinfo.mobile;
+							let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
+							this.phone = tel1;
+							
+							this.has_address = true;
+						}
+					})
+				}else{
+					this.has_address = false;
+				}
 			})
-		},
-		onShow() {
-			if(uni.getStorageSync('selectAddress') != ''){
-				uni.getStorage({
-					key:'selectAddress',
-					success: (e) => {
-						console.log(e);
-						this.recinfo = e.data;
-						
-						let tel = ""+this.recinfo.mobile;
-						let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
-						this.phone = tel1;
-						
-						this.has_address = true;
-					}
-				})
-			}else{
-				this.has_address = false;
-			}
 		},
 		methods:{
 			selectAddress(){
