@@ -34,6 +34,7 @@
 		data(){
 			return{
 				avatar: '',
+				avatar1: '',
 				avatarList: ['拍照','我的相册'],
 				username: '',
 				nickname: '',
@@ -53,8 +54,8 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
-				if(data.data.result.head_pic != ''){
-					this.avatar = data.data.result.head_pic;
+				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+					this.avatar = this.$http.url+data.data.result.head_pic;
 				}else{
 					this.avatar = '/static/avatar/avatar.png';
 				}
@@ -100,7 +101,7 @@
 						
 						let params = {
 							'token': uni.getStorageSync('token'),
-							'path': 'comment'
+							'path': 'head_pic'
 						};
 						let sign = that.$sign.getSign(params,that.AppSecret);
 						params.sign = sign;
@@ -117,15 +118,15 @@
 								var data = JSON.parse(uploadFileRes.data);
 								if(data.status == 1){
 									that.avatar = that.$http.url + data.result;
+									that.avatar1 = data.result;
 								
 									let params = {
 										token: uni.getStorageSync('token'),
-										head_pic: that.avatar
+										head_pic: that.avatar1
 									};
 									let sign = that.$sign.getSign(params,that.AppSecret);
 									params.sign = sign;
 									that.$http.updateUserInfo(params).then((data)=>{})
-									
 								}else{
 									that.$api.msg(data.msg);
 								}

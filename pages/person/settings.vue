@@ -10,8 +10,12 @@
 			<view class="set_left">收货地址</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</navigator>
-		<navigator url="/pages/person/payment" class="setting_box mb20">
+		<navigator url="/pages/person/payment" class="setting_box line">
 			<view class="set_left">收款方式</view>
+			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
+		</navigator>
+		<navigator url="/pages/person/cash_account" class="setting_box mb20">
+			<view class="set_left">提现账号</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</navigator>
 		<navigator url="/pages/person/account" class="setting_box line">
@@ -28,10 +32,10 @@
 			<view class="set_right">{{cookie}}<image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</view>
 		<!-- #endif -->
-		<view class="setting_box line">
+		<navigator url="/pages/person/about_us" class="setting_box line">
 			<view class="set_left">关于我们</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
-		</view>
+		</navigator>
 		<view class="setting_box mb20" @tap="toShare">
 			<view class="set_left">分享APP</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
@@ -68,8 +72,8 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
-				if(data.data.result.head_pic != ''){
-					this.avatar = data.data.result.head_pic;
+				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+					this.avatar = this.$http.url+data.data.result.head_pic;
 				}else{
 					this.avatar = '/static/avatar/avatar.png';
 				}

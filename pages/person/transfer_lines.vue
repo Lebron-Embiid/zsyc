@@ -1,6 +1,6 @@
 <template>
 	<view class="transfer_lines">
-		<uni-nav-bar left-icon="back" title="额度管理" rightText="额度转出" @clickRight="toShowPopup"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="额度管理" rightText="额度转出" :isBtn="true" @clickRight="toShowPopup"></uni-nav-bar>
 		<view class="list_nav">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
 		</view>

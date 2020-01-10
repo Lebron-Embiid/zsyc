@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<view class="list_nav">
-			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index,item.cat_id)">{{item.cat_name}}</view>
+			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @tap="navbarTap(index,item.cat_id)">{{item.cat_name}}</view>
 		</view>
 		<scroll-view scroll-y="true" class="scroll_box">
 			<view class="find_content_box" @tap="toDetail(item.article_id)" v-for="(item,index) in findList" :key='index'>

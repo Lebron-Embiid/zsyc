@@ -215,55 +215,130 @@
 				this.total_price = parseInt(this.price)*this.num;
 			},
 			changeSortOne(){
+				this.page = 0;
 				this.sort_two = 0;
 				this.sort_three = 0;
 				this.sort_type = null;
 				if(this.sort_one == 0){
 					this.sort_one = 1;
-					// let params = {
-					// 	id: this.id,
-					// 	sort: 'goods_id',
-					// 	sort_asc: 'desc'
-					// };
-					// let sign = this.$sign.getSign(params,this.AppSecret);
-					// params.sign = sign;
-					// this.$http.getGoodsList(params).then((data)=>{
-					// 	this.recommendList = data.data.result.goods_list;
-					// })
+					
+					let params = {
+						token: uni.getStorageSync('token'),
+						sort_name: 'add_time',
+						page: 0,
+						limit: 10,
+						is_seller: 0
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getUserCountlist(params).then((data)=>{
+						this.sellList = data.data.result;
+					})
 				}else{
 					this.sort_one = 0;
 				}
 			},
 			changeSortTwo(){
+				this.page = 0;
 				this.sort_one = 0;
 				this.sort_three = 0;
 				this.sort_type = null;
 				if(this.sort_two == 0){
 					this.sort_two = 1;
+					
+					let params = {
+						token: uni.getStorageSync('token'),
+						sort_name: 'sell_count',
+						page: 0,
+						limit: 10,
+						is_seller: 0
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getUserCountlist(params).then((data)=>{
+						this.sellList = data.data.result;
+					})
 				}else{
 					this.sort_two = 0;
 				}
 			},
 			changeSortThree(){
+				this.page = 0;
 				this.sort_two = 0;
 				this.sort_one = 0;
 				this.sort_type = null;
 				if(this.sort_three == 0){
 					this.sort_three = 1;
+					
+					let params = {
+						token: uni.getStorageSync('token'),
+						sort_name: 'num',
+						page: 0,
+						limit: 10,
+						is_seller: 0
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getUserCountlist(params).then((data)=>{
+						this.sellList = data.data.result;
+					})
 				}else{
 					this.sort_three = 0;
 				}
 			},
 			changeSort(){
+				this.page = 0;
 				this.sort_one = 0;
 				this.sort_two = 0;
 				this.sort_three = 0;
 				if(this.sort_type == null){
 					this.sort_type = 0;
+					
+					let params = {
+						token: uni.getStorageSync('token'),
+						sort_name: 'price',
+						page: 0,
+						limit: 10,
+						is_seller: 0,
+						sort: 'asc'
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getUserCountlist(params).then((data)=>{
+						this.sellList = data.data.result;
+					})
 				}else if(this.sort_type == 0){
 					this.sort_type = 1;
+					
+					let params = {
+						token: uni.getStorageSync('token'),
+						sort_name: 'price',
+						page: 0,
+						limit: 10,
+						is_seller: 0,
+						sort: 'desc'
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getUserCountlist(params).then((data)=>{
+						this.sellList = data.data.result;
+					})
 				}else{
 					this.sort_type = 0;
+					
+					let params = {
+						token: uni.getStorageSync('token'),
+						sort_name: 'price',
+						page: 0,
+						limit: 10,
+						is_seller: 0,
+						sort: 'asc'
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.getUserCountlist(params).then((data)=>{
+						this.sellList = data.data.result;
+					})
 				}
 			}
 		}

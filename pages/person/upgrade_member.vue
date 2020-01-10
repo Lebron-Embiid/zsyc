@@ -1,7 +1,8 @@
 <template>
 	<view class="upgrade_member">
 		<view class="page_bg"></view>
-		<uni-nav-bar left-icon="back" title="会员升级" rightText="申请记录" @clickRight="toApplyRecord"></uni-nav-bar>
+		 <!-- rightText="申请记录" @clickRight="toApplyRecord" -->
+		<uni-nav-bar left-icon="back" title="会员升级"></uni-nav-bar>
 		<view class="help_box">
 			<view class="member_top">
 				<text>会员级别以及说明</text>
@@ -16,6 +17,27 @@
 					{{item.content}}
 				</view>
 			</view>
+			<view class="apply_title" v-if="is_apply == 1">{{apply_name}}申请中</view>
+			<view class="logist_content">
+				<view class="logist_box">
+					<view class="logist_item" v-for="(item,index) in applyList" :key="index">
+						<view class="li_box">
+							<view class="li_time">{{util.formatTime(item.add_time)}}</view>
+							<view class="li_title">【升级成为{{item.new_rank_name}}】
+								<block v-if="item.status == 0">
+									已提交申请，正在受理
+								</block>
+								<block v-if="item.status == 1">
+									申请成功！
+								</block>
+								<block v-if="item.status == 2">
+									申请失败，如有疑问请联系客服。
+								</block>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
 			<!-- <uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more> -->
 		</view>
 	</view>
@@ -24,6 +46,7 @@
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
+	import util from "@/common/util.js"
 	export default{
 		data(){
 			return{
@@ -42,7 +65,11 @@
 					// 	title: '★ 分公司',
 					// 	content: '后台开通分公司等级。权益：1.会员权益 2.公司配置服装3000件指定服装发货给分公司并开通APP的店铺，配置3000个会员资格给分公司，通过线上APP-我的店铺进行分享，推荐一个用户成为会员，则分公司拿50%也就是1000元（2000*50%）。'
 					// }
-				]
+				],
+				applyList: [],
+				is_apply: 0,	//0:暂无申请  1:申请中
+				apply_name: '',
+				util: ''
 			}
 		},
 		components:{
@@ -50,12 +77,16 @@
 			uniLoadMore
 		},
 		onLoad() {
+			this.util = util;
+		},
+		onShow() {
 			let params = {
 				token: uni.getStorageSync('token')
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.vipLevel(params).then((data)=>{
+				this.memberList = [];
 				let res = data.data.result;
 				for(let i in res){
 					this.memberList.push({
@@ -64,6 +95,21 @@
 						title: res[i].level_name,
 						content: res[i].describe
 					})
+				}
+			})
+			
+			let params1 = {
+				token: uni.getStorageSync('token')
+			};
+			let sign1 = this.$sign.getSign(params1,this.AppSecret);
+			params1.sign = sign1;
+			this.$http.applyLevelList(params1).then((data)=>{
+				this.applyList = data.data.result;
+				for(let i in data.data.result){
+					if(data.data.result[i].status == 0){
+						this.is_apply = 1;
+						this.apply_name = data.data.result[i].new_rank_name;
+					}
 				}
 			})
 		},
@@ -77,6 +123,10 @@
 				this.memberList[e].is_click = !this.memberList[e].is_click;
 			},
 			toSubmit(){
+				if(this.is_apply == 1){
+					this.$api.msg('已提交申请，请等待审核！');
+					return;
+				}
 				uni.navigateTo({
 					url: '/pages/person/application'
 				})
@@ -143,6 +193,76 @@
 				.help_bottom{
 					display: block;
 				}
+			}
+		}
+	}
+	.apply_title{
+		background: #eee;
+		color: #999;
+		font-size: 32rpx;
+		text-align: center;
+		padding-top: 40rpx;
+	}
+	.logist_content{
+		background: #eee;
+		padding-top: 30rpx;
+		.logist_box{
+			padding: 0 30rpx;
+			.logist_item{
+				padding-left: 40rpx;
+				padding-top: 30rpx;
+				position: relative;
+				:before{
+					content: "";
+					display: block;
+					width: 1px;
+					height: 100%;
+					position: absolute;
+					left: 13rpx;
+					top: 0;
+					background: #E2E2E2;
+					z-index: 1;
+				}
+				:after{
+					content: "";
+					display: block;
+					width: 13px;
+					height: 13px;
+					border-radius: 50%;
+					background: #fff;
+					box-sizing: border-box;
+					border: 1px solid #ccc;
+					position: absolute;
+					left: 0;
+					top: 60rpx;
+					z-index: 2;
+				}
+				.li_box{
+					background: #fff;
+					border-radius: 10rpx;
+					padding: 25rpx;
+					box-sizing: border-box;
+					border-bottom: 1px solid #F1F1F1;
+					.li_title{
+						color: #333;
+						font-size: 32rpx;
+					}
+					.li_time{
+						color: #999;
+						font-size: 28rpx;
+						margin-bottom: 5rpx;
+					}
+				}
+				// &:first-of-type{
+				// 	.li_box{
+				// 		.li_title{
+				// 			color: #fa3d34;
+				// 		}
+				// 	}
+				// 	:after{
+				// 		background: #fa3d34;
+				// 	}
+				// }
 			}
 		}
 	}

@@ -4,7 +4,8 @@
 		<uni-nav-bar left-icon="back" title="填写订单"></uni-nav-bar>
 		<view class="order_address" @tap="selectAddress">
 			<view class="oa_left" v-if="has_address==false">
-				<view class="oa_title">请选择地址</view></view>
+				<view class="oa_title">请选择地址</view>
+			</view>
 			<view class="oa_left" v-else>
 				<view class="oa_title">{{recinfo.consignee}} <text>{{phone}}</text></view>
 				<view class="oa_address">地址：{{recinfo.province_name}}{{recinfo.city_name}}{{recinfo.district_name}}{{recinfo.address}}</view>

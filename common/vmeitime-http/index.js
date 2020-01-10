@@ -124,24 +124,9 @@ export const getIndexList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status === 40001){
+		if(response.data.status == '-102' || response.data.status == '-100'){
 			uni.showToast({
-				title: '登录失效,请重新登录',
-				icon: 'none',
-				duration: 1500,
-				mask: true
-			});
-			uni.removeStorageSync('token');
-			setTimeout(function(){
-				uni.reLaunch({
-					url: '/pages/login/login'
-				})
-			},1500)
-			return;
-		}
-		if(response.data.status === 40002){
-			uni.showToast({
-				title: '账号已冻结',
+				title: '登录超时,请重新登录!',
 				icon: 'none',
 				duration: 1500,
 				mask: true
@@ -262,7 +247,7 @@ export const carList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102'){
+		if(response.data.status == '-102' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -308,6 +293,23 @@ export const carConfirm = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/Cart/cart2',
         method: 'POST', 
@@ -324,6 +326,23 @@ export const submitConfirm = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/Cart/cart3',
         method: 'POST', 
@@ -338,6 +357,23 @@ export const getOrderList = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -493,6 +529,23 @@ export const getOrderDetail = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/User/getOrderDetail',
         method: 'POST', 
@@ -553,6 +606,23 @@ export const returnGoodsList = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/User/return_goods_list',
         method: 'POST', 
@@ -596,6 +666,23 @@ export const getUserInfo = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -658,6 +745,23 @@ export const getUserCollectStore = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/User/getUserCollectStore',
         method: 'POST',
@@ -671,6 +775,23 @@ export const getUserCollectGoods = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -749,6 +870,23 @@ export const articleCollect = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/Article/articleCollect',
         method: 'POST',
@@ -779,6 +917,23 @@ export const articleComment = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/Article/articleComment',
         method: 'POST',
@@ -792,6 +947,23 @@ export const getCommentList = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -841,7 +1013,7 @@ export const uploadFiles = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102'){
+		if(response.data.status == '-102' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -918,6 +1090,23 @@ export const paymentList = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/UserPayment/paymentList',
         method: 'POST',
@@ -948,6 +1137,23 @@ export const setUserCount = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/UserCount/add',
         method: 'POST',
@@ -961,6 +1167,23 @@ export const getParentCount = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -977,6 +1200,23 @@ export const getUserCountlist = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -1024,6 +1264,23 @@ export const userCountOrderList = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/UserCountOrder/listData',
         method: 'POST',
@@ -1037,6 +1294,23 @@ export const userCountOrderInfo = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -1159,6 +1433,23 @@ export const vipLevel = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/User/level',
         method: 'POST',
@@ -1219,6 +1510,23 @@ export const shareCode = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/User/shareCode',
         method: 'POST',
@@ -1234,12 +1542,62 @@ export const getReward = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/Reward/index',
         method: 'POST',
         data
     })
 }
+// 获取级别
+export const getLevel = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/Reward/getLevel',
+        method: 'POST',
+        data
+    })
+}
+
 // 我的会员
 export const myTeam = (data) => {
 	http.interceptor.request = (config) => {
@@ -1264,6 +1622,23 @@ export const rewardName = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'Api/Reward/rewardName',
         method: 'POST',
@@ -1278,6 +1653,23 @@ export const rewardListData = (data) => {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			'token': uni.getStorageSync('token'),
 			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
 		}
 	}
     return http.request({
@@ -1407,6 +1799,7 @@ export default {
 	helpList,
 	shareCode,
 	getReward,
+	getLevel,
 	myTeam,
 	rewardName,
 	rewardListData

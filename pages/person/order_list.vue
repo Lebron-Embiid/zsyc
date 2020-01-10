@@ -31,7 +31,7 @@
 						<view class="oc_total">订单总价：<text>{{item.total}}</text>元</view>
 						<view class="oc_num">购买数量：<text>{{item.num}}</text>个</view>
 					</view>
-					<view class="oli_bottom" :class="[item.status == 3?'no':'']">
+					<view class="oli_bottom" :class="[item.status == 3||item.status == 4||item.status == 5||item.status == 6?'no':'']">
 						<button @tap="successOrder(item.id,item.status)" type="primary" v-if="item.status == 1">确认</button>
 						<button @tap="toSeeDetail(item.id,item.status)" type="primary" v-if="item.status == 0 || item.status == 2">查看详情</button>
 						<text>{{item.status_name}}</text>

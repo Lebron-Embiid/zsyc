@@ -15,7 +15,6 @@
 				</view>
 				<view class="pay_till">（长按收款图片删除）</view>
 			</view>
-			<button type="primary" @tap="addPayment">确定</button>
 			<view class="pay_title">
 				<view><image src="/static/icon/pay_icon2.png" mode="widthFix"></image>添加微信收款</view>
 				<switchc text="启用|禁用" :value="open1" class="switch_btn" :sid="1" @change="switchchange1($event,1)"></switchc>
@@ -29,7 +28,7 @@
 				</view>
 				<view class="pay_till">（长按收款图片删除）</view>
 			</view>
-			<button type="primary" @tap="addPayment1">确定</button>
+			<button type="primary" @tap="addPayment">确定</button>
 		</view>
 	</view>
 </template>
@@ -106,38 +105,40 @@
 				})
 			},
 			addPayment(){
-				let params = {
-					token: uni.getStorageSync('token'),
-					pic: this.photo,
-					pay_code: 'alipay'
-				};
-				let sign = this.$sign.getSign(params,this.AppSecret);
-				params.sign = sign;
-				this.$http.addPayment(params).then((data)=>{
-					if(data.data.status == 1){
-						this.$api.msg(data.data.result);
-						this.paymentInit();
-					}else{
-						this.$api.msg(data.data.msg);
-					}
-				})
-			},
-			addPayment1(){
-				let params1 = {
-					token: uni.getStorageSync('token'),
-					pic: this.wx_photo,
-					pay_code: 'wechat'
-				};
-				let sign1 = this.$sign.getSign(params1,this.AppSecret);
-				params1.sign = sign1;
-				this.$http.addPayment(params1).then((data)=>{
-					if(data.data.status == 1){
-						this.$api.msg(data.data.result);
-						this.paymentInit();
-					}else{
-						this.$api.msg(data.data.msg);
-					}
-				})
+				if(this.photo != ''){
+					let params = {
+						token: uni.getStorageSync('token'),
+						pic: this.photo,
+						pay_code: 'alipay'
+					};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.addPayment(params).then((data)=>{
+						if(data.data.status == 1){
+							this.$api.msg(data.data.result);
+							this.paymentInit();
+						}else{
+							this.$api.msg(data.data.msg);
+						}
+					})
+				}
+				if(this.wx_photo != ''){
+					let params1 = {
+						token: uni.getStorageSync('token'),
+						pic: this.wx_photo,
+						pay_code: 'wechat'
+					};
+					let sign1 = this.$sign.getSign(params1,this.AppSecret);
+					params1.sign = sign1;
+					this.$http.addPayment(params1).then((data)=>{
+						if(data.data.status == 1){
+							this.$api.msg(data.data.result);
+							this.paymentInit();
+						}else{
+							this.$api.msg(data.data.msg);
+						}
+					})
+				}
 			},
 			choosePhoto(){
 				let that = this;

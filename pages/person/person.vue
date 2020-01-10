@@ -225,7 +225,9 @@
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
 				this.personInfo = data.data.result;
-				if(this.personInfo.head_pic == ''){
+				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+					this.personInfo.head_pic = this.$http.url+data.data.result.head_pic;
+				}else{
 					this.personInfo.head_pic = '/static/avatar/avatar.png';
 				}
 				getApp().globalData.user_id = data.data.result.user_id;
@@ -280,7 +282,7 @@
 			clickUse(idx){
 				console.log(this.recInfo);
 				if(idx == 1){
-					if(this.recInfo == null){
+					if(this.recInfo == null || this.recInfo == []){
 						uni.navigateTo({
 							url: '/pages/person/sell?count='+this.personInfo.user_count
 						})

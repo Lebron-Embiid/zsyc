@@ -599,6 +599,87 @@
 					"titleNView": false
 				}
 			}
+		},
+		{
+			"path": "pages/person/cash_account",
+			"style": {
+				"navigationBarTitleText": "提现账号",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/about_us",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/wallet",
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/cash_list",
+			"style": {
+				"navigationBarTitleText": "提现列表",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/cash_edit",
+			"style": {
+				"navigationBarTitleText": "新建提现账号",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/wallet",
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/recharge",
+			"style": {
+				"navigationBarTitleText": "我要充值",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/withdraw",
+			"style": {
+				"navigationBarTitleText": "我要提现",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/withdraw_apply",
+			"style": {
+				"navigationBarTitleText": "提现申请",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
 		}
 	],
 	"globalStyle": {

@@ -2,9 +2,11 @@
 	<view class="apply_record">
 		<uni-nav-bar left-icon="back" title="会员申请记录"></uni-nav-bar>
 		<view class="record_box">
-			<view class="record_item">
+			<view class="record_item" v-for="(item,index) in applyList" :key="index">
 				<view>旧等级  新等级</view>
-				<text>状态</text>
+				<text v-if="item.status == 0">{{item.status_name}}</text>
+				<text v-if="item.status == 2" class="red">{{item.status_name}}</text>
+				<text v-if="item.status == 1" class="green">{{item.status_name}}</text>
 			</view>
 		</view>
 	</view>
@@ -15,7 +17,12 @@
 	export default{
 		data(){
 			return{
-				page: 0
+				page: 0,
+				applyList: [
+					{
+						
+					}
+				]
 			}
 		},
 		onLoad(opt) {
@@ -48,8 +55,14 @@
 			align-items: center;
 			border-bottom: 1px solid #eee;
 			text{
-				color: #f00;
+				color: #999;
 				font-size: 32rpx;
+				&.red{
+					color: #f00;
+				}
+				&.green{
+					color: #1cd300;
+				}
 			}
 		}
 	}

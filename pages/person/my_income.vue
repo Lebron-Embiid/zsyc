@@ -1,22 +1,22 @@
 <template>
 	<view class="my_income">
-		<uni-nav-bar left-icon="back" title="我的收益"></uni-nav-bar>
+		<uni-nav-bar left-icon="back" title="我的收益" rightText="我的钱包" :isBtn="true" @clickRight="toMyWallet"></uni-nav-bar>
 		<view class="income_bg">
 			<image class="bg" src="/static/img/income_bg.png" mode="widthFix"></image>
 			<view class="layer">
-				<image class="avatar" src="/static/avatar/avatar.png" mode="widthFix"></image>
+				<image class="avatar" :src="avatar" mode="widthFix"></image>
 				<view class="income_price">
-					<view>我的收益 <text>995599</text> 元</view>
-					<view class="last"><text>88888</text>认购积分</view>
+					<view>我的收益 <text>{{income}}</text> 元</view>
+					<view class="last"><text>{{point}}</text>认购积分</view>
 				</view>
 			</view>
 		</view>
 		<view class="message_box">
 			<view class="message_item" @tap="toIncome(index,item.name,item.type)" v-for="(item,index) in incomeList" :key="index">
-				<view class="icon_box" v-if="item.type == 'ztj'">
+				<view class="icon_box">
 					<image class="icon" :src="'/static/icon/income_icon'+(index+1)+'.png'" mode="widthFix"></image>
 				</view>
-				<view class="msg_content" :class="[item.type != 'ztj'?'width':'']">
+				<view class="msg_content">
 					<view class="msg_box">
 						<view class="msg_title">{{item.name}}<view v-if="index<4">已推：<text>{{item.tj_num}}</text>人</view></view>
 						<view class="msg_info">总收益：<text>{{item.sum_reward}}</text>元</view>
@@ -33,6 +33,9 @@
 	export default{
 		data(){
 			return{
+				avatar: '',
+				income: 0,
+				point: 0,
 				incomeList: [
 					// {
 					// 	icon: '/static/icon/income_icon1.png',
@@ -69,9 +72,32 @@
 			params.sign = sign;
 			this.$http.getReward(params).then((data)=>{
 				this.incomeList = data.data.result;
+				for(let i=0;i<=3;i++){
+					this.income += parseInt(this.incomeList[i].sum_reward);
+				}
+				this.point = data.data.result[4].sum_reward;
+			})
+		},
+		onShow() {
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getUserInfo(params).then((data)=>{
+				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+					this.avatar = this.$http.url+data.data.result.head_pic;
+				}else{
+					this.avatar = '/static/avatar/avatar.png';
+				}
 			})
 		},
 		methods:{
+			toMyWallet(){
+				uni.navigateTo({
+					url: '/pages/person/wallet'
+				})
+			},
 			toIncome(idx,name,type){
 				uni.navigateTo({
 					url: '/pages/person/income_list?type='+type+'&idx='+idx+'&name='+name

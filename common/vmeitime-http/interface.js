@@ -112,6 +112,7 @@ export default {
 			if (process.env.NODE_ENV === 'development') {
 				// console.log("【" + _config.requestId + "】 地址：" + _config.url)
 				if (_config.data) {
+					
 					// console.log("【" + _config.requestId + "】 参数：" + JSON.stringify(_config.data))
 				}
 			}

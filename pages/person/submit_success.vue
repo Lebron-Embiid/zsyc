@@ -40,7 +40,7 @@
 				
 				<view class="success_info" v-if="type == 'success' || status == 0">买家挂卖请求已经成功提交</view>
 				<view class="success_info" v-if="type == 'order' || status == 1">
-					已发放 <text>{{num}}</text> 个资格到买家 <text>{{buyname}}</text>
+					已发放 <text>1</text> 个资格到买家 <text>{{buyname}}</text>
 				</view>
 				<view class="complaint_txt" v-if="type == 'complaint' || status == 2">
 					<view class="com_title">申诉内容</view>
