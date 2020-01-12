@@ -278,6 +278,7 @@
 					font-size: 26rpx;
 					background: #f60;
 					margin-bottom: 20rpx;
+					padding: 5rpx 0;
 					&:after{
 						border: 0;
 					}

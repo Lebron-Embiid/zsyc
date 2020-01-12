@@ -35,9 +35,9 @@
 				<view class="income_list_item" v-for="(item,index) in withdrawList" :key="index">
 					<view class="item_left">
 						<view class="ili_title">{{item.title}}</view>
-						<view class="ili_time">{{util.formatDate1(item.reg_time)}}</view>
+						<view class="ili_time">{{util.formatDate1(item.create_time)}}</view>
 					</view>
-					<view class="item_right" style="font-size: 28rpx;">{{item.price}}</view>
+					<view class="item_right" style="font-size: 28rpx;">{{item.money}}</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -72,7 +72,8 @@
 					}
 				],
 				util: '',
-				list: []
+				list: [],
+				page: 0
 			}
 		},
 		components:{
@@ -97,6 +98,17 @@
 				this.level = data.data.result.level_name;
 				this.price = data.data.result.user_money;
 			})
+			
+			let params1 = {
+				token: uni.getStorageSync('token'),
+				page: 0,
+				limit: 10
+			};
+			let sign1 = this.$sign.getSign(params1,this.AppSecret);
+			params1.sign = sign1;
+			this.$http.withdrawalsList(params1).then((data)=>{
+				this.withdrawList = data.data.result;
+			})
 		},
 		methods:{
 			navbarTap(e){
@@ -118,10 +130,6 @@
 				})
 			},
 			toWithdraw(){
-				uni.navigateTo({
-					url: '/pages/person/withdraw'
-				})
-				return;
 				let params = {
 					token: uni.getStorageSync('token')
 				};
@@ -134,19 +142,17 @@
 						console.log(this.list[i].status);
 						if(this.list[i].status == 0){
 							is_with = true;
-							setTimeout(()=>{
-								if(is_with == true){
-									uni.navigateTo({
-										url: '/pages/person/withdraw_apply'
-									})
-									return;
-								}else{
-									uni.navigateTo({
-										url: '/pages/person/withdraw'
-									})
-									return;
-								}
-							},500)
+							if(is_with == true){
+								uni.navigateTo({
+									url: '/pages/person/withdraw_apply'
+								})
+								return;
+							}else{
+								uni.navigateTo({
+									url: '/pages/person/withdraw'
+								})
+								return;
+							}
 						}
 					}
 				})

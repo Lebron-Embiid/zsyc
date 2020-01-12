@@ -23,7 +23,7 @@
 			</view>
 		</view>
 		<view class="apply_till">当你账户收到准确资金，请点击提现确认按钮，可进行下一笔提现操作。若有异议请点击客服申诉进行沟通。</view>
-		<button v-if="item.status == 1" @tap="submit" type="primary">提现确认</button>
+		<button v-if="status == 1" @tap="submit" type="primary">提现确认</button>
 		<button @tap="toCustomer" type="primary" class="red">客服申诉</button>
 	</view>
 </template>
@@ -35,6 +35,7 @@
 		data(){
 			return{
 				withdrawList: [],
+				status: '',
 				util: ''
 			}
 		},
@@ -50,6 +51,13 @@
 			params.sign = sign;
 			this.$http.withdrawalsList(params).then((data)=>{
 				this.withdrawList = data.data.result;
+				for(let i in this.withdrawList){
+					if(this.withdrawList[i].status == 0){
+						this.status = 0;
+					}else{
+						this.status = 1;
+					}
+				}
 			})
 		},
 		methods:{

@@ -104,6 +104,10 @@
 				})
 			},
 			submit(){
+				if(this.has_account == false){
+					this.$api.msg('请选择提现账号');
+					return;
+				}
 				let params = {
 					token: uni.getStorageSync('token'),
 					bank_id: this.recinfo.id,
