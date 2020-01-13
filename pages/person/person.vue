@@ -16,7 +16,7 @@
 				</view>
 				<view class="pl_bottom">
 					<!-- <view>昵称：</view> -->
-					<view>余额：￥{{personInfo.user_money}}</view>
+					<view>余额：￥{{parseInt(personInfo.user_money)}}</view>
 					<view>额度：v 150000</view>
 					<view>套餐资格：{{personInfo.user_count}}</view>
 					<view>已购套餐：2</view>
@@ -225,7 +225,8 @@
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
 				this.personInfo = data.data.result;
-				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+				// '/public/image/toux-icon.png'
+				if(data.data.result.head_pic != null){
 					this.personInfo.head_pic = this.$http.url+data.data.result.head_pic;
 				}else{
 					this.personInfo.head_pic = '/static/avatar/avatar.png';

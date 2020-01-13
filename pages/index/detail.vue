@@ -89,7 +89,7 @@
 					<image src="/static/icon/close1.png" @tap="hideSpec" class="close_img" mode="widthFix"></image>
 				</view>
 				<view class="content layer_goods_content">
-					<view class="spec_item" v-for="(item,index) in spec" :key="index">
+					<view class="spec_item" v-for="(item,index) in goods_spec_list" :key="index">
 						<view class="title">{{item.title}}</view>
 						<view class="sp">
 							<view v-for="(list,idx) in item.list" :class="[list.isShow?'on':'',subIndex[index] == idx?'on':'']" @tap="setSelectSpec(list,index,$event,idx)" :key="idx">{{list.key_name}}</view>
@@ -192,9 +192,9 @@
 			</view>
 			<view class="comment" v-for="(com,index) in comment" :key="index">
 				<view class="user-info">
-					<view class="face"><image :src="com.img"></image></view>
+					<view class="face"><image :src="url+com.img"></image></view>
 					<view class="user_right">
-						<view class="username"><view>{{com.username}}</view><text>{{com.add_time}}</text></view>
+						<view class="username"><view>{{com.username}}</view><text>{{util.formatDate(com.add_time)}}</text></view>
 						<view class="userstar"><image v-for="index in com.goods_rank" :key="index" src="/static/icon/star1.png" mode="widthFix"></image></view>
 					</view>
 				</view>
@@ -284,36 +284,36 @@ export default {
 				]
 			},
 			spec:[
-				{
-					title: '颜色',
-					list: [{
-						"key_name": "粉色"
-					}, {
-						"key_name": "红色"
-					}, {
-						"key_name": "蓝色"
-					}, {
-						"key_name": "黄色"
-					}]
-				},
-				{
-					title: '尺码',
-					list: [{
-						"key_name": "22"
-					}, {
-						"key_name": "32"
-					}, {
-						"key_name": "41"
-					}, {
-						"key_name": "42"
-					}, {
-						"key_name": "43"
-					}, {
-						"key_name": "44"
-					}, {
-						"key_name": "48"
-					}]
-				}
+				// {
+				// 	title: '颜色',
+				// 	list: [{
+				// 		"key_name": "粉色"
+				// 	}, {
+				// 		"key_name": "红色"
+				// 	}, {
+				// 		"key_name": "蓝色"
+				// 	}, {
+				// 		"key_name": "黄色"
+				// 	}]
+				// },
+				// {
+				// 	title: '尺码',
+				// 	list: [{
+				// 		"key_name": "22"
+				// 	}, {
+				// 		"key_name": "32"
+				// 	}, {
+				// 		"key_name": "41"
+				// 	}, {
+				// 		"key_name": "42"
+				// 	}, {
+				// 		"key_name": "43"
+				// 	}, {
+				// 		"key_name": "44"
+				// 	}, {
+				// 		"key_name": "48"
+				// 	}]
+				// }
 			],
 			selectSpecList: {},
 			couriers: [
@@ -357,7 +357,8 @@ export default {
 			btn: 0,//0:加入购物车  1:立即购买
 			is_time: 0,
 			navbar:[{name:"商品介绍"},{name:"规则参数"},{name:"常见问题"}],
-			currentTab:0
+			currentTab:0,
+			util: ''
 		};
 	},
 	components:{
@@ -365,6 +366,7 @@ export default {
 		commonShare
 	},
 	onLoad(option) {
+		this.util = util;
 		this.url = this.$http.url;
 		if(option.cid != undefined){
 			this.goodsData.id = option.cid;
@@ -386,7 +388,14 @@ export default {
 			// 		attr_list: res.goods.goods_attr_list[i].attr_value.trim().split(/\s+/)
 			// 	})
 			// }
-			this.goods_spec_list = res.spec_goods_price;
+			// this.goods_spec_list = res.spec_goods_price;
+			// console.log(res.spec_goods_price);
+			// for(let i in res.spec_goods_price){
+				this.goods_spec_list.push({
+					title: '规格',
+					list: res.spec_goods_price
+				})
+			// }
 			this.couriers = res.shippingList;
 			let store_id = this.couriers[0].store_id;
 			let shipping_code = this.couriers[0].shipping_code;
@@ -408,18 +417,18 @@ export default {
 		let sign1 = this.$sign.getSign(params1,this.AppSecret);
 		params1.sign = sign1;
 		this.$http.getGoodsComment(params1).then((data)=>{
-			// this.comment = data.data.result;
-			for(let i in data.data.result){
-				let res = data.data.result;
-				console.log(parseInt(res[i].goods_rank));
-				this.comment.push({
-					add_time: util.formatDate(res[i].add_time),
-					content: res[i].content,
-					goods_rank: parseInt(res[i].goods_rank),
-					img: this.$http.url+res[i].img,
-					reply_num: res[i].reply_num
-				})
-			}
+			this.comment = data.data.result;
+			// for(let i in data.data.result){
+			// 	let res = data.data.result;
+			// 	console.log(parseInt(res[i].goods_rank));
+			// 	this.comment.push({
+			// 		add_time: util.formatDate(res[i].add_time),
+			// 		content: res[i].content,
+			// 		goods_rank: parseInt(res[i].goods_rank),
+			// 		img: this.$http.url+res[i].img,
+			// 		reply_num: res[i].reply_num
+			// 	})
+			// }
 		})
 		
 		// #ifdef MP
@@ -576,7 +585,7 @@ export default {
 				this.$set(this.subIndex, index, -1); //去掉选中颜色
 			}
 			this.checkItem(index);
-			console.log(this.selectArr);
+			console.log(this.selectArr[0].key);
 		},
 		checkItem(clickIndex) {
 			var option = this.goods_spec_list;
@@ -673,14 +682,14 @@ export default {
 				params = {
 					goods_id: this.goodsData.goods_id,
 					goods_num: this.number,
-					goods_spec: this.selectSpec,
+					goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
 					unique_id: uni.getStorageSync('unique_id')
 				}
 			}else{
 				params = {
 					goods_id: this.goodsData.goods_id,
 					goods_num: this.number,
-					goods_spec: this.selectSpec,
+					goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
 					token: uni.getStorageSync('token')
 				}
 			}

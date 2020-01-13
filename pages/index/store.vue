@@ -86,7 +86,8 @@
 						price: '105'
 					}
 				],
-				loadingType: 'more'
+				loadingType: 'more',
+				page: 0
 			}
 		},
 		components:{
@@ -107,6 +108,24 @@
 					url: '/pages/index/detail?cid='+id
 				})
 			}
+		},
+		onReachBottom() {
+			// this.page++;
+			// let params = {
+			// 	token: uni.getStorageSync('token'),
+			// 	article_id: this.id,
+			// 	page: this.page,
+			// 	limit: 10
+			// };
+			// let sign = this.$sign.getSign(params,this.AppSecret);
+			// params.sign = sign;
+			// this.$http.getCommentList(params).then((data)=>{
+				// if(data.data.result.length == 0){
+				// 	this.loadingType = 'noMore';
+				// 	return;
+				// }
+			// 	this.commentsList = this.commentsList.concat(data.data.result);
+			// })
 		}
 	}
 </script>

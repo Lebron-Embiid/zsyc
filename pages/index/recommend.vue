@@ -39,7 +39,7 @@
 				<image class="list_icon" src="/static/icon/list.png" mode="widthFix"></image>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" class="offline_scroll">
+		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="offline_scroll">
 			<view class="offline_box" :class="[changeList == 1?'list':'']">
 				<view class="offline_item" @tap="toDetail(item.goods_id)" v-for="(item,index) in recommendList" :key="index">
 					<image :src="url+item.original_img" mode="widthFix"></image>
@@ -73,6 +73,9 @@
 				sort_three: 0,
 				sort_type: null,
 				changeList: 0,
+				page: 0,
+				type: 'goods_id',
+				sortType: 'desc',
 				url: ''
 			}
 		},
@@ -84,6 +87,7 @@
 			navbarTap(e,id){
 				console.log(e)
 				this.currentTab = e;
+				this.page = 0;
 				this.id = id;
 				let params = {
 					id: this.id,
@@ -105,6 +109,8 @@
 				this.sort_two = 0;
 				this.sort_three = 0;
 				this.sort_type = null;
+				this.type = 'goods_id';
+				this.sortType = 'desc';
 				if(this.sort_one == 0){
 					this.sort_one = 1;
 					let params = {
@@ -125,6 +131,8 @@
 				this.sort_one = 0;
 				this.sort_three = 0;
 				this.sort_type = null;
+				this.type = 'sales_sum';
+				this.sortType = 'desc';
 				if(this.sort_two == 0){
 					this.sort_two = 1;
 					let params = {
@@ -147,6 +155,8 @@
 				this.sort_type = null;
 				if(this.sort_three == 0){
 					this.sort_three = 1;
+					this.type = 'is_new';
+					this.sortType = 'desc';
 					let params = {
 						id: this.id,
 						sort: 'is_new',
@@ -167,6 +177,8 @@
 				this.sort_three = 0;
 				if(this.sort_type == null){
 					this.sort_type = 0;
+					this.type = 'shop_price';
+					this.sortType = 'asc';
 					let params = {
 						id: this.id,
 						sort: 'shop_price',
@@ -175,10 +187,16 @@
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
 					this.$http.getGoodsList(params).then((data)=>{
+						if(data.data.result.goods_list.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else if(this.sort_type == 0){
 					this.sort_type = 1;
+					this.type = 'shop_price';
+					this.sortType = 'desc';
 					let params = {
 						id: this.id,
 						sort: 'shop_price',
@@ -187,10 +205,16 @@
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
 					this.$http.getGoodsList(params).then((data)=>{
+						if(data.data.result.goods_list.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
 						this.recommendList = data.data.result.goods_list;
 					})
 				}else{
 					this.sort_type = 0;
+					this.type = 'shop_price';
+					this.sortType = 'asc';
 					let params = {
 						id: this.id,
 						sort: 'shop_price',
@@ -199,6 +223,10 @@
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
 					this.$http.getGoodsList(params).then((data)=>{
+						if(data.data.result.goods_list.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
 						this.recommendList = data.data.result.goods_list;
 					})
 				}
@@ -209,6 +237,26 @@
 				}else{
 					this.changeList = 0;
 				}
+			},
+			loadMore(){
+				this.page++;
+				console.log(this.type,this.sortType);
+				let params = {
+					id: this.id,
+					sort: this.type,
+					sort_asc: this.sortType,
+					page: this.page,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getGoodsList(params).then((data)=>{
+					if(data.data.result.length == 0){
+						this.loadingType = 'noMore';
+						return;
+					}
+					this.recommendList = this.recommendList.concat(data.data.result.goods_list);
+				})
 			}
 		},
 		onLoad(opt) {

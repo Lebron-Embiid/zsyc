@@ -3,12 +3,12 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar left-icon="back" title="优惠活动"></uni-nav-bar>
 		<view class="activity_box">
-			<view class="activity_item" :class="[item.is_over==1?'over':'']" v-for="(item,index) in activityList" :key="index">
-				<text class="act_time">{{item.time}}</text>
+			<view class="activity_item" @tap="toDetail(item.id)" :class="[item.is_over==1?'over':'']" v-for="(item,index) in activityList" :key="index">
+				<text class="act_time">{{util.formatTime(item.add_time)}}</text>
 				<view class="act_box">
 					<view class="act_title">{{item.title}}</view>
 					<view class="img_box">
-						<image :src="item.img" mode="widthFix"></image>
+						<image :src="url+item.thumb" mode="widthFix"></image>
 					</view>
 					<view class="act_desc">{{item.desc}}</view>
 				</view>
@@ -19,6 +19,7 @@
 
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import util from "@/common/util.js"
 	export default{
 		data(){
 			return{
@@ -36,11 +37,33 @@
 						img: '/static/img/online_banner.jpg',
 						desc: '活动内容的描述：描述内容请控制在两行以内，超过两行的部分请用...'
 					}
-				]
+				],
+				url: ''
 			}
 		},
 		components:{
 			uniNavBar
+		},
+		onLoad(opt) {
+			this.url = this.$http.url;
+			this.util = util;
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: 0,
+				limit: 10
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getDiscountArticle(params).then((data)=>{
+				this.activityList = data.data.result;
+			})
+		},
+		methods:{
+			toDetail(id){
+				uni.navigateTo({
+					url: '/pages/person/notice_detail?type=act&id='+id
+				})
+			}
 		}
 	}
 </script>

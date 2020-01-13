@@ -142,9 +142,9 @@
 							mobile: that.till.mobile,
 							scene: 7
 						}).then((data)=>{
-							// that.$api.msg(data.data.msg);
+							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
-								that.code = data.data.msg;
+								// that.code = data.data.msg;
 								that.second = 60;
 								timer = setInterval(function(){
 									that.second--;

@@ -34,7 +34,9 @@
 						value: 'wx',
 						checked: false
 					}
-				]
+				],
+				order_id: '',
+				pay_radio: ''
 			}
 		},
 		components:{

@@ -35,6 +35,7 @@
 		data(){
 			return{
 				withdrawList: [],
+				id: '',
 				status: '',
 				util: ''
 			}
@@ -57,12 +58,27 @@
 					}else{
 						this.status = 1;
 					}
+					if(this.withdrawList[i].status == 1){
+						this.id = this.withdrawList[i].id;
+					}
 				}
 			})
 		},
 		methods:{
 			submit(){
-				
+				let params = {
+					token: uni.getStorageSync('token'),
+					id: this.id
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.withdrawalsConfirm(params).then((data)=>{
+					if(data.data.status == 1){
+						this.$api.msg(data.data.result);
+					}else{
+						this.$api.msg(data.data.msg);
+					}
+				})
 			},
 			toCustomer(){
 				uni.navigateTo({

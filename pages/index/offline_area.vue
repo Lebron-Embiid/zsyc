@@ -42,7 +42,7 @@
 				<image class="list_icon" src="/static/icon/list.png" mode="widthFix"></image>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" class="offline_scroll">
+		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="offline_scroll">
 			<view class="offline_box" :class="[changeList == 1?'list':'']">
 				<view class="offline_item" @tap="toStore(index)" v-for="(item,index) in offlineList" :key="index">
 					<image :src="item.src" mode="widthFix"></image>
@@ -102,7 +102,8 @@
 				city_txt: '深圳',
 				area_txt: '龙华',
 				address_txt: '民治',
-				changeList: 0
+				changeList: 0,
+				page: 0
 			}
 		},
 		components:{
@@ -133,6 +134,24 @@
 				uni.navigateTo({
 					url: '/pages/index/store?id='+idx
 				})
+			},
+			loadMore() {
+				this.page++;
+				// let params = {
+				// 	token: uni.getStorageSync('token'),
+				// 	article_id: this.id,
+				// 	page: this.page,
+				// 	limit: 10
+				// };
+				// let sign = this.$sign.getSign(params,this.AppSecret);
+				// params.sign = sign;
+				// this.$http.getCommentList(params).then((data)=>{
+				// if(data.data.result.length == 0){
+				// 	this.loadingType = 'noMore';
+				// 	return;
+				// }
+				// 	this.commentsList = this.commentsList.concat(data.data.result);
+				// })
 			}
 		},
 		onLoad() {

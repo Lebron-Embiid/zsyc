@@ -193,6 +193,10 @@
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
 					this.$http.userCountOrderList(params).then((data)=>{
+						if(data.data.result.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
 						this.orderList = this.orderList.concat(data.data.result);
 					})
 				}else{
@@ -205,6 +209,10 @@
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
 					this.$http.userCountOrderList(params).then((data)=>{
+						if(data.data.result.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
 						this.mySales = this.mySales.concat(data.data.result);
 					})
 				}

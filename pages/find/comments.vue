@@ -156,6 +156,10 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getCommentList(params).then((data)=>{
+				if(data.data.result.length == 0){
+					this.loadingType = 'noMore';
+					return;
+				}
 				this.commentsList = this.commentsList.concat(data.data.result);
 			})
 		}

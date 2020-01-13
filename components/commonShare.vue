@@ -6,25 +6,25 @@
 				<!-- <view class="h1">分享</view> -->
 				<view class="list">
 					<view class="box">
-						<image src="../../static/share/wx.png"></image>
+						<image src="/static/img/wx.png"></image>
 						<view class="title">
 							微信好友
 						</view>
 					</view>
 					<view class="box">
-						<image src="../../static/share/pyq.png"></image>
+						<image src="/static/img/pyq.png"></image>
 						<view class="title">
 							朋友圈
 						</view>
 					</view>
 					<view class="box">
-						<image src="../../static/share/wb.png"></image>
+						<image src="/static/img/wb.png"></image>
 						<view class="title">
 							新浪微博
 						</view>
 					</view>
 					<view class="box">
-						<image src="../../static/share/qq.png"></image>
+						<image src="/static/img/qq.png"></image>
 						<view class="title">
 							QQ
 						</view>

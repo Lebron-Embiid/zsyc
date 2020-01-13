@@ -24,20 +24,20 @@
 			<view class="income_list_box" v-if="currentTab == 0">
 				<view class="income_list_item" v-for="(item,index) in rechargeList" :key="index">
 					<view class="item_left">
-						<view class="ili_title">{{item.title}}</view>
-						<view class="ili_time">{{util.formatDate1(item.reg_time)}}</view>
+						<view class="ili_title">{{item.nickname}}</view>
+						<view class="ili_time">{{util.formatDate1(item.ctime)}}</view>
 					</view>
-					<view class="item_center">{{item.type}}</view>
-					<view class="item_right">{{item.price}}</view>
+					<view class="item_center">{{item.status_name}}</view>
+					<view class="item_right">{{item.account}}</view>
 				</view>
 			</view>
 			<view class="income_list_box" v-if="currentTab == 1">
 				<view class="income_list_item" v-for="(item,index) in withdrawList" :key="index">
 					<view class="item_left">
-						<view class="ili_title">{{item.title}}</view>
+						<view class="ili_title">提现<!-- {{item.title}} --></view>
 						<view class="ili_time">{{util.formatDate1(item.create_time)}}</view>
 					</view>
-					<view class="item_right" style="font-size: 28rpx;">{{item.money}}</view>
+					<view class="item_right" style="font-size: 28rpx;">{{item.money>0?'+':'-'}}{{item.money}}</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -89,7 +89,7 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
-				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+				if(data.data.result.head_pic != null){
 					this.avatar = this.$http.url+data.data.result.head_pic;
 				}else{
 					this.avatar = '/static/avatar/avatar.png';
@@ -106,13 +106,37 @@
 			};
 			let sign1 = this.$sign.getSign(params1,this.AppSecret);
 			params1.sign = sign1;
-			this.$http.withdrawalsList(params1).then((data)=>{
-				this.withdrawList = data.data.result;
+			this.$http.rechargeList(params1).then((data)=>{
+				this.rechargeList = data.data.result;
 			})
 		},
 		methods:{
 			navbarTap(e){
 				this.currentTab = e;
+				this.page = 0;
+				if(this.currentTab == 0){
+					let params1 = {
+						token: uni.getStorageSync('token'),
+						page: 0,
+						limit: 10
+					};
+					let sign1 = this.$sign.getSign(params1,this.AppSecret);
+					params1.sign = sign1;
+					this.$http.rechargeList(params1).then((data)=>{
+						this.rechargeList = data.data.result;
+					})
+				}else{
+					let params1 = {
+						token: uni.getStorageSync('token'),
+						page: 0,
+						limit: 10
+					};
+					let sign1 = this.$sign.getSign(params1,this.AppSecret);
+					params1.sign = sign1;
+					this.$http.withdrawalsList(params1).then((data)=>{
+						this.withdrawList = data.data.result;
+					})
+				}
 				// let params = {
 				// 	cid: id,
 				// 	page: 0,
@@ -137,6 +161,12 @@
 				params.sign = sign;
 				this.$http.withdrawalsList(params).then((data)=>{
 					this.list = data.data.result;
+					if(this.list.length == 0){
+						uni.navigateTo({
+							url: '/pages/person/withdraw'
+						})
+						return;
+					}
 					let is_with = false;
 					for(let i in this.list){
 						console.log(this.list[i].status);
@@ -250,12 +280,16 @@
 					}
 				}
 				.item_center{
+					width: 30%;
+					text-align: center;
 					color: #333;
 					font-size: 28rpx;
 				}
 				.item_right{
+					width: 30%;
 					color: #333;
 					font-size: 36rpx;
+					text-align: right;
 				}
 			}
 		}

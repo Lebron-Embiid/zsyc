@@ -34,7 +34,8 @@
 					// 	title: '1、如何获得套餐资格？如何使用？',
 					// 	content: '您可以通过个人中心点击购买资格即可。'
 					// }
-				]
+				],
+				page:0
 			}
 		},
 		components:{
@@ -44,7 +45,9 @@
 		},
 		onLoad(opt) {
 			let params = {
-				token: uni.getStorageSync('token')
+				token: uni.getStorageSync('token'),
+				page: 0,
+				limit: 15
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
@@ -65,6 +68,32 @@
 			toClick(e){
 				this.helpList[e].is_click = !this.helpList[e].is_click;
 			}
+		},
+		onReachBottom() {
+			this.page++;
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: this.page,
+				limit: 15
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.helpList(params).then((data)=>{
+				if(data.data.result.length == 0){
+					this.loadingType = 'noMore';
+					return;
+				}
+				let res = data.data.result;
+				for(let i in res){
+					this.helpList.push({
+						is_click: 0,
+						id: res[i].id,
+						time: res[i].add_time,
+						title: res[i].title,
+						content: res[i].content
+					})
+				}
+			})
 		}
 	}
 </script>

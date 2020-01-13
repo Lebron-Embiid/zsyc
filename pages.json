@@ -424,6 +424,15 @@
 			}
 		},
 		{
+			"path": "pages/person/notice_detail",
+			"style": {
+				"navigationBarTitleText": "通知详情",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/person/chat",
 			"style": {
 				"navigationBarTitleText": "在线客服",
@@ -676,6 +685,15 @@
 			"path": "pages/person/withdraw_apply",
 			"style": {
 				"navigationBarTitleText": "提现申请",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/person/third_pay",
+			"style": {
+				"navigationBarTitleText": "第三方支付",
 				"app-plus": {
 					"titleNView": false
 				}

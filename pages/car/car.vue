@@ -15,7 +15,7 @@
 					<!-- checkbox -->
 					<view class="checkbox-box" @tap="selected(index)">
 						<view class="checkbox">
-							<view :class="[row.selected==1?'on':'']"></view>
+							<view :class="[row.selected?'on':'']"></view>
 						</view>
 					</view>
 					<!-- 商品信息 -->
@@ -49,11 +49,11 @@
 		<view class="footer" :style="{bottom:footerbottom}">
 			<view class="checkbox-box" @tap="allSelect">
 				<view class="checkbox">
-					<view :class="[isAllselected==false?'':'on']"></view>
+					<view :class="[isAllselected?'on':'']"></view>
 				</view>
 				<view class="text">全选</view>
 			</view>
-			<view class="delBtn" @tap="deleteList" v-if="selectedList.length>0">删除</view>
+			<view class="delBtn" @tap="deleteList">删除</view>
 			<view class="settlement">
 				<view class="sum">合计:<view class="money">￥{{sumPrice}}</view></view>
 				<view class="btn" @tap="toConfirmation">结算<!-- ({{selectedList.length}}) --></view>
@@ -152,16 +152,14 @@
 							num: arr[i].goods_num,
 							pic: arr[i].pic,
 							price: arr[i].goods_price,
-							selected: arr[i].selected
+							selected: false
 						})
-						if(arr[i].selected == 1){
-							this.selectedList.push(arr[i].selected)
-						}
+						this.selectedList.push(arr[i].selected)
 					}
 					// console.log(goodsList,this.selectedList);
-					if(this.selectedList.length == goodsList.length){
-						this.isAllselected = true;
-					}
+					// if(this.selectedList.length == goodsList.length){
+					// 	this.isAllselected = true;
+					// }
 					this.goodsList = goodsList;
 					this.sum();
 				})
@@ -416,14 +414,24 @@
 			selected(index){
 				console.log(index);
 				for(let x in this.goodsList){
-					this.numList[index] = this.goodsList[x].num;
+					// this.numList[index] = this.goodsList[x].num;
 				}
-				console.log(this.goodsList[index].selected);
-				this.goodsList[index].selected = !this.goodsList[index].selected;
+				this.goodsList[index].selected = this.goodsList[index].selected?false:true;
 				let i = this.selectedList.indexOf(this.goodsList[index].gid);
 				i>-1?this.selectedList.splice(i, 1):this.selectedList.push(this.goodsList[index].gid);
-				this.isAllselected = this.selectedList.length == this.goodsList.length;
-				// if(this.selectedList.length == this.goodsList.length && this){
+				// this.isAllselected = this.selectedList.length == this.goodsList.length;
+				console.log(this.selectedList,this.goodsList);
+				let flag = true;
+				for(let x in this.goodsList){
+					if(this.goodsList[x].selected == false){
+						flag = false;
+						this.isAllselected = false;
+					}
+				}
+				if(flag == true){
+					this.isAllselected = true;
+				}
+				// if(this.selectedList.length == this.goodsList.length){
 				// 	this.isAllselected = true;
 				// }else{
 				// 	this.isAllselected = false;

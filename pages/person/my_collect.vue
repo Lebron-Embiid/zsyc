@@ -7,12 +7,12 @@
 		</view>
 		<scroll-view scroll-y="true" class="collect_scroll" @scrolltolower="loadMoreCollect">
 			<view class="collect_box" v-if="currentTab == 0">
-				<view class="collect_item">
-					<image src="/static/img/collect_img.jpg" mode="widthFix"></image>
+				<view class="collect_item" v-for="(item,index) in collectList" :key="index">
+					<image :src="url+item.original_img" mode="widthFix"></image>
 					<view class="collect_right">
-						<view class="cr_title">安岳柠檬 8粒装</view>
-						<view class="cr_info">金黄饱满 柠香扑鼻</view>
-						<view class="cr_price">￥29</view>
+						<view class="cr_title">{{item.goods_name}}</view>
+						<view class="cr_info">库存：{{item.store_count}}</view>
+						<view class="cr_price">￥{{item.shop_price}}</view>
 					</view>
 				</view>
 			</view>
@@ -72,7 +72,7 @@
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
-			this.$http.getUserCollectStore(params).then((data)=>{
+			this.$http.getUserCollectGoods(params).then((data)=>{
 				this.collectList = data.data.result;
 			})
 		},
@@ -83,6 +83,7 @@
 			navbarTap(e){
 				console.log(e)
 				this.currentTab = e;
+				this.page = 0;
 				let params = {
 					token: uni.getStorageSync('token'),
 					page: 0,
@@ -91,7 +92,7 @@
 				let sign = this.$sign.getSign(params,this.AppSecret);
 				params.sign = sign;
 				if(e == 0){
-					this.$http.getUserCollectStore(params).then((data)=>{
+					this.$http.getUserCollectGoods(params).then((data)=>{
 						this.collectList = data.data.result;
 					})
 				}else if(e == 1){
@@ -105,7 +106,54 @@
 				}
 			},
 			loadMoreCollect(){
-				
+				this.page++;
+				let params = {
+					token: uni.getStorageSync('token'),
+					page: this.page,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				if(this.currentTab == 0){
+					this.$http.getUserCollectStore(params).then((data)=>{
+						if(data.data.result.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
+						this.collectList = this.collectList.concat(data.data.result);
+					})
+				}else if(this.currentTab == 1){
+					this.$http.getUserCollectGoods(params).then((data)=>{
+						if(data.data.result.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
+						this.collectList = this.collectList.concat(data.data.result);
+					})
+				}else{
+					this.$http.getUserCollectArticle(params).then((data)=>{
+						if(data.data.result.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
+						this.collectList = this.collectList.concat(data.data.result);
+					})
+				}
+				// let params = {
+				// 	token: uni.getStorageSync('token'),
+				// 	page: this.page,
+				// 	limit: 10,
+				// 	type: 1
+				// };
+				// let sign = this.$sign.getSign(params,this.AppSecret);
+				// params.sign = sign;
+				// this.$http.userCountOrderList(params).then((data)=>{
+					// if(data.data.result.length == 0){
+					// 	this.loadingType = 'noMore';
+					// 	return;
+					// }
+				// 	this.mySales = this.mySales.concat(data.data.result);
+				// })
 			}
 		}
 	}

@@ -54,7 +54,7 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getUserInfo(params).then((data)=>{
-				if(data.data.result.head_pic != '/public/image/toux-icon.png'){
+				if(data.data.result.head_pic != null){
 					this.avatar = this.$http.url+data.data.result.head_pic;
 				}else{
 					this.avatar = '/static/avatar/avatar.png';

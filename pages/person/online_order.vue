@@ -4,7 +4,7 @@
 		<scroll-view scroll-x="true" class="list_nav">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
 		</scroll-view>
-		<scroll-view scroll-y="true" class="my_order_box">
+		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="my_order_box">
 			<view class="my_order_item" v-for="(item,index) in orderList" :key="index">
 				<view class="moi_top">
 					订单号：{{item.order_sn}}
@@ -55,6 +55,7 @@
 					// }
 				],
 				length: 0,
+				page: 0,
 				loadingType: 'more'
 			}
 		},
@@ -113,6 +114,24 @@
 				uni.navigateTo({
 					url: '/pages/person/logistics?id='+id
 				})
+			},
+			loadMore(){
+				this.page++;
+				// let params = {
+				// 	token: uni.getStorageSync('token'),
+				// 	page: this.page,
+				// 	limit: 10,
+				// 	type: 1
+				// };
+				// let sign = this.$sign.getSign(params,this.AppSecret);
+				// params.sign = sign;
+				// this.$http.userCountOrderList(params).then((data)=>{
+				// 	if(data.data.result.length == 0){
+				// 		this.loadingType = 'noMore';
+				// 		return;
+				// 	}
+				// 	this.mySales = this.mySales.concat(data.data.result);
+				// })
 			}
 		}
 	}

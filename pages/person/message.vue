@@ -53,6 +53,9 @@
 		},
 		components:{
 			uniNavBar
+		},
+		onLoad(opt) {
+			
 		}
 	}
 </script>

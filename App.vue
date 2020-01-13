@@ -1,8 +1,11 @@
 <script>
+	var wgtVer = null;
+	var wgtUrl = null;
 	export default {
 		globalData:{
 			is_login: false,
-			app_logo: '/static/logo.png'
+			app_logo: '/static/logo.png',
+			and_ios: ''
 		},
 		onLaunch: function() {
 			console.log('App Launch')
@@ -16,9 +19,65 @@
 			}
 			uni.setStorageSync('unique_id',uni_code.map(item => item.code).join(''));
 			console.log(uni.getStorageSync('unique_id'));
+			
+			let that = this;
+			switch(uni.getSystemInfoSync().platform){
+				case 'android':
+					console.log('运行Android上')
+					that.$options.globalData.and_ios = 0;
+					break;
+				case 'ios':
+					console.log('运行iOS上')
+					that.$options.globalData.and_ios = 1;
+					break;
+				default:
+					console.log('运行在开发者工具上');
+					break;
+			}
 		},
 		onShow: function() {
 			console.log('App Show')
+			let that = this;
+			// #ifdef APP-PLUS
+			// plus.runtime.getProperty(plus.runtime.appid,function(inf){  
+			// 	wgtVer = inf.version;  
+			// 	console.log("当前应用版本："+wgtVer);
+			// 	that.$http.updateVersion({
+			// 		version: wgtVer,
+			// 		type: that.$options.globalData.and_ios
+			// 	}).then((data)=>{
+			// 		// console.log(data.data);
+			// 		var res = data.data.message.data;
+			// 		if(res.is_update == 1){
+			// 			// if(res.version != wgtVer){
+			// 			uni.showModal({
+			// 				title: res.name,
+			// 				content: res.memo,
+			// 				confirmText:"升级APP",
+			// 				showCancel: false,
+			// 				success:function(){
+			// 					console.log(uni.getSystemInfoSync().platform);
+			// 					// console.log(that.$http.url+res.apk);
+			// 					// plus.runtime.openURL(res.downLink);
+			// 					switch(uni.getSystemInfoSync().platform){
+			// 						case 'android':
+			// 							// console.log('运行Android上')
+			// 							plus.runtime.openURL(res.downLink);
+			// 							break;
+			// 						case 'ios':
+			// 							// console.log('运行iOS上')
+			// 							plus.runtime.install(res.ios_downLink);
+			// 							break;
+			// 						default:
+			// 							// console.log('运行在开发者工具上')
+			// 							break;
+			// 					}
+			// 				}
+			// 			})
+			// 		}
+			// 	})
+			// });
+			// #endif
 		},
 		onHide: function() {
 			console.log('App Hide')

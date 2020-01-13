@@ -50,11 +50,11 @@
 				<!-- <view class="income_title">本月</view> -->
 				<view class="income_list_item" v-for="(item,index) in incomeList" :key="index">
 					<view class="item_left">
-						<view class="ili_title">分享{{item.level_name}} {{item.mobile}}</view>
+						<view class="ili_title">分享{{item.from_level_name}} {{item.from_user_name}}</view>
 						<view class="ili_time">{{util.formatDate1(item.reg_time)}}</view>
 					</view>
 					<view class="item_center">分享</view>
-					<view class="item_right">+9000</view>
+					<view class="item_right">{{item.money}}</view>
 				</view>
 			</view>
 			<view class="income_list_box" v-if="currentTab == 1">

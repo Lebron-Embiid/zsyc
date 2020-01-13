@@ -124,7 +124,7 @@ export const getIndexList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -247,7 +247,7 @@ export const carList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -294,7 +294,7 @@ export const carConfirm = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -327,7 +327,7 @@ export const submitConfirm = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -360,7 +360,7 @@ export const getOrderList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -530,7 +530,7 @@ export const getOrderDetail = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -607,7 +607,7 @@ export const returnGoodsList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -669,7 +669,7 @@ export const getUserInfo = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -746,7 +746,7 @@ export const getUserCollectStore = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -778,7 +778,7 @@ export const getUserCollectGoods = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -871,7 +871,7 @@ export const articleCollect = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -918,7 +918,7 @@ export const articleComment = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -950,7 +950,7 @@ export const getCommentList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1013,7 +1013,7 @@ export const uploadFiles = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1091,7 +1091,7 @@ export const paymentList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1138,7 +1138,7 @@ export const setUserCount = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1170,7 +1170,7 @@ export const getParentCount = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1203,7 +1203,7 @@ export const getUserCountlist = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1265,7 +1265,7 @@ export const userCountOrderList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1297,7 +1297,7 @@ export const userCountOrderInfo = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1434,7 +1434,7 @@ export const vipLevel = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1511,7 +1511,7 @@ export const shareCode = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1543,7 +1543,7 @@ export const getReward = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1575,7 +1575,7 @@ export const getLevel = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1623,7 +1623,7 @@ export const rewardName = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1656,7 +1656,7 @@ export const rewardListData = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1810,7 +1810,7 @@ export const getAccountList = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1843,7 +1843,7 @@ export const withdrawApply = (data) => {
 		}
 	}
 	http.interceptor.response = (response) => {
-		if(response.data.status == '-102' || response.data.status == '-100'){
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
 			uni.showToast({
 				title: '登录超时,请重新登录!',
 				icon: 'none',
@@ -1951,6 +1951,145 @@ export const recharge = (data) => {
 	}
     return http.request({
         url: 'Api/User/recharge',
+        method: 'POST',
+        data
+    })
+}
+// 充值订单第三方支付 
+export const getPayThird = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Payment/getPay',
+        method: 'GET',
+        data
+    })
+}
+// 充值列表 
+export const rechargeList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/User/rechargeList',
+        method: 'POST',
+        data
+    })
+}
+// 消息通知列表 
+export const getNoticesList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'Api/Notices/listData',
+        method: 'POST',
+        data
+    })
+}
+// 消息通知详情 
+export const getNoticesInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/Notices/info',
+        method: 'POST',
+        data
+    })
+}
+
+// 优惠活动文章列表 
+export const getDiscountArticle = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/DiscountArticle/listData',
+        method: 'POST',
+        data
+    })
+}
+// 优惠活动文章详情 
+export const getArticleInfo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'Api/DiscountArticle/info',
+        method: 'POST',
+        data
+    })
+}
+export const getCombo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/combo',
         method: 'POST',
         data
     })
@@ -2095,5 +2234,12 @@ export default {
 	withdrawalsInfo,
 	withdrawalsConfirm,
 	onlinePay,
-	recharge
+	recharge,
+	getPayThird,
+	rechargeList,
+	getNoticesList,
+	getNoticesInfo,
+	getDiscountArticle,
+	getArticleInfo,
+	getCombo
 }
