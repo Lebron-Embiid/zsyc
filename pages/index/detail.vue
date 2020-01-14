@@ -90,7 +90,7 @@
 				</view>
 				<view class="content layer_goods_content">
 					<view class="spec_item" v-for="(item,index) in goods_spec_list" :key="index">
-						<view class="title">{{item.title}}</view>
+						<view class="title" v-if="item.list != null">{{item.title}}</view>
 						<view class="sp">
 							<view v-for="(list,idx) in item.list" :class="[list.isShow?'on':'',subIndex[index] == idx?'on':'']" @tap="setSelectSpec(list,index,$event,idx)" :key="idx">{{list.key_name}}</view>
 						</view>
@@ -236,12 +236,22 @@
 				</view>
 			</view>
 		</view>
+		<uni-popup class="uni-popup" :animation="false" :maskClick="false" ref="detail" type="center">
+			<view class="meal_content">
+				<text>你还没有选择套餐卷，请前往选购</text>
+				<view>
+					<button type="primary" @tap="back">返回</button>
+					<button type="primary" class="ok" @tap="toMeal">确定</button>
+				</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 import uParse from '@/components/u-parse/u-parse.vue'
 import commonShare from "@/components/commonShare.vue"
+import uniPopup from "@/components/uni-popup/uni-popup.vue"
 import util from '@/common/util.js'
 export default {
 	data() {
@@ -358,12 +368,16 @@ export default {
 			is_time: 0,
 			navbar:[{name:"商品介绍"},{name:"规则参数"},{name:"常见问题"}],
 			currentTab:0,
-			util: ''
+			util: '',
+			idx: '',
+			m_type: '',
+			us_id: ''
 		};
 	},
 	components:{
 		uParse,
-		commonShare
+		commonShare,
+		uniPopup
 	},
 	onLoad(option) {
 		this.util = util;
@@ -372,15 +386,26 @@ export default {
 			this.goodsData.id = option.cid;
 			// console.log(this.goods_id);
 		}
+		if(option.us_id != undefined){
+			this.m_type = option.type;
+			this.idx = option.idx;
+			this.us_id = option.us_id;
+			console.log(option);
+		}
 		console.log(option.cid+'---------------'+this.goodsData.id);
 		
-		let params = {id: option.cid};
+		let params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id};
 		let sign = this.$sign.getSign(params,this.AppSecret);
 		params.sign = sign;
 		// 获取商品信息
 		this.$http.getGoodsInfo(params).then((data)=>{
 			// console.log(data.data);
+			if(data.data.status == 0){
+				this.$refs.detail.open();
+				return;
+			}
 			let res = data.data.result;
+			
 			this.goodsData = res.goods;
 			// for(let i in res.goods.goods_attr_list){
 			// 	this.goods_attr_list.push({
@@ -442,7 +467,20 @@ export default {
 	// },
 	onShow(){
 		this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
-
+		
+		let params = {token: uni.getStorageSync('token'),id: this.goodsData.id};
+		let sign = this.$sign.getSign(params,this.AppSecret);
+		params.sign = sign;
+		// 获取商品信息
+		this.$http.getGoodsInfo(params).then((data)=>{
+			if(data.data.result.is_collect == 1){
+				this.isKeep = true;
+			}else{
+				this.isKeep = false;
+			}
+			console.log(this.isKeep);
+		})
+		
 		this.checkItem(-1);
 	},
 	onPageScroll(e) {
@@ -512,10 +550,10 @@ export default {
 		keep(){
 			this.isKeep = this.isKeep?false:true;
 			let is_type = '';
-			if(this.isKeep == true){
-				is_type = 0;
-			}else{
+			if(this.isKeep == false){
 				is_type = 1;
+			}else{
+				is_type = 0;
 			}
 			console.log(is_type);
 			let params = {
@@ -526,7 +564,7 @@ export default {
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.collectGoods(params).then((data)=>{
-				
+				this.$api.msg(data.data.msg);
 			})
 		},
 		// 加入购物车
@@ -649,6 +687,11 @@ export default {
 		back() {
 			uni.navigateBack();
 		},
+		toMeal(){
+			uni.navigateTo({
+				url: '/pages/meal/meal?current='+this.idx+'&type='+this.m_type
+			})
+		},
 		//服务弹窗
 		showService() {
 			console.log('show');
@@ -683,14 +726,16 @@ export default {
 					goods_id: this.goodsData.goods_id,
 					goods_num: this.number,
 					goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
-					unique_id: uni.getStorageSync('unique_id')
+					unique_id: uni.getStorageSync('unique_id'),
+					us_id: this.us_id
 				}
 			}else{
 				params = {
 					goods_id: this.goodsData.goods_id,
 					goods_num: this.number,
 					goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
-					token: uni.getStorageSync('token')
+					token: uni.getStorageSync('token'),
+					us_id: this.us_id
 				}
 			}
 			let sign = this.$sign.getSign(params,this.AppSecret);
@@ -763,6 +808,44 @@ export default {
 		}
 		&.on {
 			background: #fff;
+		}
+	}
+}
+
+.meal_content{
+	// width: 100%;
+	// height: 100%;
+	// position: fixed;
+	// left: 0;
+	// top: 0;
+	// z-index: 50;
+	background: #fff;
+	text-align: center;
+	color: #333;
+	font-size: 32rpx;
+	padding-top: 50%;
+	box-sizing: border-box;
+	padding: 50rpx;
+	border-radius: 10rpx;
+	view{
+		display: flex;
+		justify-content: space-around;
+		align-items: flex-end;
+		margin-top: 40rpx;
+		button{
+			margin: 0;
+			width: 30%;
+			height: 70rpx;
+			line-height: 70rpx;
+			color: #fff;
+			font-size: 28rpx;
+			background: #999;
+			&.ok{
+				background: #f60;
+			}
+			&:after{
+				border: 0;
+			}
 		}
 	}
 }

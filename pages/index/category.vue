@@ -23,19 +23,18 @@
 						{{category.name}}
 					</view>
 				</view>
-				
             </scroll-view>
 			<!-- 右侧子导航 -->
 			<scroll-view  scroll-y="true" class="right" >
 			    <view class="category" v-for="(category,index) in categoryNavs" :key="category.id" v-show="index==showCategoryIndex" >
 					<view class="banner">
-						<image :src="category.image"></image>
+						<image :src="url+category.image"></image>
 					</view>
 					<view class="list_box" v-for="(item,idx) in categoryList" :key="idx">
 						<view class="list_title">{{item.mobile_name}}</view>
 						<view class="list">
 							<view class="box" v-for="(box,i) in item.sub_category" :key="i" @tap="toCategory(box.id,item.id,index)">
-								<image :src="box.image"></image>
+								<image :src="url+box.image"></image>
 								<view class="text">{{box.mobile_name}}</view>
 							</view>
 						</view>

@@ -98,7 +98,7 @@
 			</view>
 			<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
 		</scroll-view>
-		<fixed-list></fixed-list>
+		<fixed-list :list="fixedList" @selectMeal="toLink"></fixed-list>
 	</view>
 </template>
 
@@ -112,6 +112,7 @@
 		data(){
 			return{
 				swiperList: [],
+				fixedList: [],
 				navs: [
 					{
 						icon: '/static/icon/nav_icon1.png',
@@ -175,6 +176,16 @@
 		},
 		onLoad() {
 			this.url = this.$http.url;
+			let params1 = {
+				token: uni.getStorageSync('token')
+			};
+			let sign1 = this.$sign.getSign(params1,this.AppSecret);
+			params1.sign = sign1;
+			this.$http.getCombo(params1).then((data)=>{
+				this.fixedList = data.data.result.result;
+				console.log(this.fixedList);
+			})
+			
 			let params = {};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
@@ -209,6 +220,11 @@
 				    }
 				})
 				// #endif
+			},
+			toLink(){
+				uni.navigateTo({
+					url: '/pages/meal/meal'
+				})
 			},
 			clickNav(idx){
 				if(idx == 0){

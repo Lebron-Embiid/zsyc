@@ -5,25 +5,25 @@
 			<view class="layer" @tap.stop="discard">
 				<!-- <view class="h1">分享</view> -->
 				<view class="list">
-					<view class="box">
+					<view class="box" @tap="shareWechat">
 						<image src="/static/img/wx.png"></image>
 						<view class="title">
 							微信好友
 						</view>
 					</view>
-					<view class="box">
+					<view class="box" @tap="shareSence">
 						<image src="/static/img/pyq.png"></image>
 						<view class="title">
 							朋友圈
 						</view>
 					</view>
-					<view class="box">
+					<view class="box" @tap="shareWeibo">
 						<image src="/static/img/wb.png"></image>
 						<view class="title">
 							新浪微博
 						</view>
 					</view>
-					<view class="box">
+					<view class="box" @tap="shareQQ">
 						<image src="/static/img/qq.png"></image>
 						<view class="title">
 							QQ
@@ -55,6 +55,68 @@
 		methods:{
 			hide(e){
 				this.$emit('hide',e);
+			},
+			shareWechat(){
+				uni.share({
+					provider: "weixin",
+					scene: "WXSceneSession",
+					type: 0,
+					href: "http://uniapp.dcloud.io/",
+					title: "uni-app分享",
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					success: function (res) {
+						console.log("success:" + JSON.stringify(res));
+					},
+					fail: function (err) {
+						console.log("fail:" + JSON.stringify(err));
+					}
+				});
+			},
+			shareSence(){
+				uni.share({
+					provider: "weixin",
+					scene: "WXSenceTimeline",
+					type: 0,
+					href: "http://uniapp.dcloud.io/",
+					title: "uni-app分享",
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					success: function (res) {
+						console.log("success:" + JSON.stringify(res));
+					},
+					fail: function (err) {
+						console.log("fail:" + JSON.stringify(err));
+					}
+				});
+			},
+			shareWeibo(){
+				uni.share({
+					provider: "sinaweibo",
+					type: 0,
+					href: "http://uniapp.dcloud.io/",
+					title: "uni-app分享",
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					success: function (res) {
+						console.log("success:" + JSON.stringify(res));
+					},
+					fail: function (err) {
+						console.log("fail:" + JSON.stringify(err));
+					}
+				});
+			},
+			shareQQ(){
+				uni.share({
+					provider: "qq",
+					type: 0,
+					href: "http://uniapp.dcloud.io/",
+					title: "uni-app分享",
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					success: function (res) {
+						console.log("success:" + JSON.stringify(res));
+					},
+					fail: function (err) {
+						console.log("fail:" + JSON.stringify(err));
+					}
+				});
 			},
 			discard(){
 				

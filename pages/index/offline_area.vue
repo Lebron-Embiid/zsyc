@@ -44,10 +44,10 @@
 		</view>
 		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="offline_scroll">
 			<view class="offline_box" :class="[changeList == 1?'list':'']">
-				<view class="offline_item" @tap="toStore(index)" v-for="(item,index) in offlineList" :key="index">
-					<image :src="item.src" mode="widthFix"></image>
+				<view class="offline_item" @tap="toStore(item.store_id)" v-for="(item,index) in offlineList" :key="index">
+					<image :src="url+item.store_logo" mode="widthFix"></image>
 					<view class="off_box">
-						<view class="off_title">{{item.title}}</view>
+						<view class="off_title">{{item.store_name}}</view>
 						<view class="off_coupon">{{item.coupon}}</view>
 					</view>
 				</view>
@@ -68,31 +68,11 @@
 				down_icon_on: '/static/icon/down1.png',
 				down_icon: '/static/icon/down.png',
 				offlineList: [
-					{
-						src: '/static/img/rec_img3.png',
-						title: '波司登官方旗舰店',
-						coupon: '满1000减290'
-					},{
-						src: '/static/img/rec_img2.png',
-						title: '波司登官方旗舰店',
-						coupon: '满1000减290'
-					},{
-						src: '/static/img/rec_img3.png',
-						title: '波司登官方旗舰店',
-						coupon: '满1000减290'
-					},{
-						src: '/static/img/rec_img2.png',
-						title: '波司登官方旗舰店',
-						coupon: '满1000减290'
-					},{
-						src: '/static/img/rec_img3.png',
-						title: '波司登官方旗舰店',
-						coupon: '满1000减290'
-					},{
-						src: '/static/img/rec_img2.png',
-						title: '波司登官方旗舰店',
-						coupon: '满1000减290'
-					}
+					// {
+					// 	src: '/static/img/rec_img3.png',
+					// 	title: '波司登官方旗舰店',
+					// 	coupon: '满1000减290'
+					// }
 				],
 				provinces: ['广东'],
 				citys: ['深圳'],
@@ -103,7 +83,8 @@
 				area_txt: '龙华',
 				address_txt: '民治',
 				changeList: 0,
-				page: 0
+				page: 0,
+				url: ''
 			}
 		},
 		components:{
@@ -115,7 +96,7 @@
 				this.province_txt = this.provinces[e.detail.value];
 			},
 			bindCityChange(e){
-				this.city_txt = this.citys[e.detail.value];				
+				this.city_txt = this.citys[e.detail.value];
 			},
 			bindAreaChange(e){
 				this.area_txt = this.areas[e.detail.value];
@@ -130,32 +111,41 @@
 					this.changeList = 0;
 				}
 			},
-			toStore(idx){
+			toStore(id){
 				uni.navigateTo({
-					url: '/pages/index/store?id='+idx
+					url: '/pages/index/store?id='+id
 				})
 			},
 			loadMore() {
 				this.page++;
-				// let params = {
-				// 	token: uni.getStorageSync('token'),
-				// 	article_id: this.id,
-				// 	page: this.page,
-				// 	limit: 10
-				// };
-				// let sign = this.$sign.getSign(params,this.AppSecret);
-				// params.sign = sign;
-				// this.$http.getCommentList(params).then((data)=>{
-				// if(data.data.result.length == 0){
-				// 	this.loadingType = 'noMore';
-				// 	return;
-				// }
-				// 	this.commentsList = this.commentsList.concat(data.data.result);
-				// })
+				let params = {
+					token: uni.getStorageSync('token'),
+					page: this.page,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getStreet(params).then((data)=>{
+					if(data.data.result.length == 0){
+						this.loadingType = 'noMore';
+						return;
+					}
+					this.offlineList = this.offlineList.concat(data.data.result);
+				})
 			}
 		},
 		onLoad() {
-			
+			this.url = this.$http.url;
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: 0,
+				limit: 10
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getStreet(params).then((data)=>{
+				this.offlineList = data.data.result;
+			})
 		},
 		onShow() {
 			let that = this;
@@ -250,7 +240,7 @@
 			image{
 				display: block;
 				width: 100%;
-				// height: 260rpx !important;
+				height: 260rpx !important;
 			}
 			.off_title{
 				color: #333;

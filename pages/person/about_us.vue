@@ -8,22 +8,22 @@
 				<image src="/static/about_code.png" mode="widthFix"></image>
 			</view>
 		</view>
-		<navigator url="" class="setting_box line">
+		<view class="setting_box line">
 			<view class="set_left">特别声明</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
-		</navigator>
+		</view>
 		<navigator url="/pages/person/help_center" class="setting_box line">
 			<view class="set_left">使用帮助</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</navigator>
-		<navigator url="" class="setting_box line">
+		<view class="setting_box line">
 			<view class="set_left">给我评分</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
-		</navigator>
-		<navigator url="" class="setting_box line">
+		</view>
+		<view class="setting_box line">
 			<view class="set_left">隐私政策</view>
 			<view class="set_right"><image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image></view>
-		</navigator>
+		</view>
 		
 		<view class="about_bottom">
 			<view>Copyright@2020-2030</view>

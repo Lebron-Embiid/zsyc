@@ -15,8 +15,8 @@
 						<view class="mc_info">{{item.setmeal_remark}}</view>
 					</view>
 					<view class="meal_right">
-						<button type="primary" v-if="currentTab==0" size="mini">立即选购</button>
-						<button type="primary" v-if="currentTab==1" size="mini">立即使用</button>
+						<button type="primary" @tap="toSelectBuy(item.setmeal_id)" v-if="currentTab==0" size="mini">立即选购</button>
+						<button type="primary" @tap="toUseMeal(item.setmeal_id,item.us_id)" v-if="currentTab==1" size="mini">立即使用</button>
 					</view>
 				</view>
 				<view class="meal_bottom" :class="[item.is_show == true?'':'active']" @tap="changeTxt(index)">
@@ -35,6 +35,8 @@
 			return{
 				navbar:[{name:"购买套餐"},{name:"未使用"},{name:"已使用"}],
 				currentTab:0,
+				type: '',
+				current: '',
 				mealList: [
 					// {
 					// 	price: 2000,
@@ -50,12 +52,17 @@
 			uniNavBar
 		},
 		onLoad(opt) {
+			if(opt.type != undefined){
+				console.log(opt);
+				this.type = opt.type;
+				this.current = opt.current;
+			}
+			
 			let params = {
 				token: uni.getStorageSync('token')
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
-			console.log(uni.getStorageSync('token'));
 			this.$http.getCombo(params).then((data)=>{
 				// this.mealList = data.data.result.result;
 				for(let i in data.data.result.result){
@@ -84,7 +91,6 @@
 					};
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
-					console.log(uni.getStorageSync('token'));
 					this.$http.getCombo(params).then((data)=>{
 						this.mealList = [];
 						for(let i in data.data.result.result){
@@ -106,7 +112,6 @@
 					};
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
-					console.log(uni.getStorageSync('token'));
 					this.$http.getCombo(params).then((data)=>{
 						this.mealList = [];
 						for(let i in data.data.result.result){
@@ -117,7 +122,8 @@
 								setmeal_id: res.setmeal_id,
 								setmeal_name: res.setmeal_name,
 								setmeal_price: res.setmeal_price,
-								setmeal_remark: res.setmeal_remark
+								setmeal_remark: res.setmeal_remark,
+								us_id: res.us_id
 							})
 						}
 					})
@@ -128,7 +134,6 @@
 					};
 					let sign = this.$sign.getSign(params,this.AppSecret);
 					params.sign = sign;
-					console.log(uni.getStorageSync('token'));
 					this.$http.getCombo(params).then((data)=>{
 						this.mealList = [];
 						for(let i in data.data.result.result){
@@ -151,6 +156,28 @@
 					this.mealList[idx].is_show = true;
 				}else{
 					this.mealList[idx].is_show = false;
+				}
+			},
+			toSelectBuy(id){
+				let params = {
+					token: uni.getStorageSync('token'),
+					setmeal_id: id
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.urchase_once(params).then((data)=>{
+					this.$api.msg(data.data.result.msg);
+				})
+			},
+			toUseMeal(setmeal_id,us_id){
+				if(this.type == 'on'){
+					uni.navigateTo({
+						url: '/pages/index/online_area?current='+this.current+'&setmeal_id='+setmeal_id+'&us_id='+us_id
+					})
+				}else{
+					uni.navigateTo({
+						url: '/pages/index/store?current='+this.current+'&setmeal_id='+setmeal_id+'&us_id='+us_id
+					})
 				}
 			},
 			loadMore(){

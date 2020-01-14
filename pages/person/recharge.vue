@@ -74,13 +74,28 @@
 								this.$http.getPayThird(params1).then((data1)=>{
 									this.$api.msg(data1.data.msg);
 									let url = this.$http.url+data1.data.result;
+									if(data1.data.status == 1){
+										this.recharge_num = '';
+										// #ifdef APP-PLUS
+										if(uni.getSystemInfoSync().platform == 'android'){
+											plus.runtime.openURL(url);
+										}
+										if(uni.getSystemInfoSync().platform == 'ios'){
+											plus.runtime.install(url);
+										}
+										// #endif
+										//#ifdef H5
+										window.location.href = url;
+										//#endif
+									}
 									// this.content = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">	<meta http-equiv="X-UA-Compatible" content="ie=edge"><title></title></head><body>'+data1.data.result.code_str+'</body></html>';
 									// this.content = data1.data.result.code_str;
-									setTimeout(()=>{
-										uni.navigateTo({
-											url: '/pages/person/third_pay?url='+url
-										})
-									},1500)
+									
+									// setTimeout(()=>{
+									// 	uni.navigateTo({
+									// 		url: '/pages/person/third_pay?url='+url
+									// 	})
+									// },1500)
 								})
 							}
 						})

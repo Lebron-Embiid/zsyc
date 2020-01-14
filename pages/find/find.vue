@@ -5,19 +5,20 @@
 		    <view class="top_view"></view>  
 		</view>  
 		<!-- #endif --> 
+		<view class="page_bg"></view>
 		<view class="find_search_box">
 			<view class="search_box">
 				<image class="icon" src="/static/icon/search.png" mode="widthFix"></image>
-				<input type="text" v-model="keywords" placeholder="请输入关键词进行搜索" />
+				<input type="text" @input="doSearch" v-model="keywords" placeholder="请输入关键词进行搜索" />
 				<image @tap="clearInput" v-if="keywords != ''" class="clear" src="/static/icon/clear.svg" mode="widthFix"></image>
 			</view>
 		</view>
-		<view class="list_nav">
+		<view class="list_nav" v-if="keywords==''">
 			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @tap="navbarTap(index,item.cat_id)">{{item.cat_name}}</view>
 		</view>
 		<scroll-view scroll-y="true" class="scroll_box">
 			<view class="find_content_box" @tap="toDetail(item.article_id)" v-for="(item,index) in findList" :key='index'>
-				<view class="find_content_item" v-if="item.type == 1">
+				<!-- <view class="find_content_item">
 					<view class="find_title">{{item.title}}</view>
 					<view class="find_desc">{{item.description}}</view>
 					<image class="pic" :src="url+item.thumb" mode="widthFix"></image>
@@ -25,8 +26,8 @@
 						<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.click}}</view>
 						<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.collect}}</view>
 					</view>
-				</view>
-				<view class="find_content_item1" v-else>
+				</view> -->
+				<view class="find_content_item1">
 					<view class="fci_left">
 						<view class="find_title">{{item.title}}</view>
 						<view class="find_desc">{{item.description}}</view>
@@ -39,6 +40,9 @@
 						<image :src="url+item.thumb" mode="widthFix"></image>
 					</view>
 				</view>
+			</view>
+			<view class="no-keyword" v-if="hava_goods == true && keywords != ''">
+				没有搜到相关商品
 			</view>
 		</scroll-view>
 	</view>
@@ -61,7 +65,8 @@
 					// }
 				],
 				page: 0,
-				url: ''
+				url: '',
+				hava_goods: null
 			}
 		},
 		onLoad(opt) {
@@ -87,6 +92,45 @@
 			
 		},
 		methods:{
+			doSearch(e){
+				this.keywords = e.detail.value;
+				if(this.keywords == ''){
+					let params = {};
+					let sign = this.$sign.getSign(params,this.AppSecret);
+					params.sign = sign;
+					this.$http.articleClass(params).then((data)=>{
+						this.navbar = data.data.result;
+						let params1 = {
+							cid: this.navbar[this.currentTab].cat_id,
+							page: 0,
+							limit: 10
+						};
+						let sign1 = this.$sign.getSign(params1,this.AppSecret);
+						params1.sign = sign1;
+						this.$http.articleList(params1).then((data)=>{
+							this.findList = data.data.result;
+						})
+					})
+					return;
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					name: this.keywords,
+					page: 0,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.searchArticle(params).then((data)=>{
+					this.findList = data.data.result;
+					if(this.findList.length == 0){
+						this.hava_goods = true;
+					}else{
+						this.hava_goods = false;
+					}
+					console.log(this.hava_goods);
+				})
+			},
 			navbarTap(e,id){
 				console.log(e,id)
 				this.currentTab = e;
@@ -99,10 +143,27 @@
 				params.sign = sign;
 				this.$http.articleList(params).then((data)=>{
 					this.findList = data.data.result;
+					console.log(this.findList);
 				})
 			},
 			clearInput(){
 				this.keywords = '';
+				let params = {};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.articleClass(params).then((data)=>{
+					this.navbar = data.data.result;
+					let params1 = {
+						cid: this.navbar[this.currentTab].cat_id,
+						page: 0,
+						limit: 10
+					};
+					let sign1 = this.$sign.getSign(params1,this.AppSecret);
+					params1.sign = sign1;
+					this.$http.articleList(params1).then((data)=>{
+						this.findList = data.data.result;
+					})
+				})
 			},
 			toDetail(id){
 				uni.navigateTo({
@@ -115,6 +176,9 @@
 
 <style scoped lang="scss">
 	.find{
+		background: #eee;
+	}
+	.no-keyword{
 		background: #eee;
 	}
 	.find_search_box{

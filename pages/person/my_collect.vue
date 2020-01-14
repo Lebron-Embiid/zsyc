@@ -7,7 +7,7 @@
 		</view>
 		<scroll-view scroll-y="true" class="collect_scroll" @scrolltolower="loadMoreCollect">
 			<view class="collect_box" v-if="currentTab == 0">
-				<view class="collect_item" v-for="(item,index) in collectList" :key="index">
+				<view class="collect_item" v-for="(item,index) in collectList" :key="index" @tap="toGoodsDetail(item.goods_id)">
 					<image :src="url+item.original_img" mode="widthFix"></image>
 					<view class="collect_right">
 						<view class="cr_title">{{item.goods_name}}</view>
@@ -16,8 +16,8 @@
 					</view>
 				</view>
 			</view>
-			<view class="find_content_box" v-if="currentTab == 1" @tap="toDetail(item.article_id)" v-for="(item,index) in collectList" :key='index'>
-				<view class="find_content_item" v-if="item.type == 1">
+			<view class="find_content_box" v-if="currentTab == 1" @tap="toActicleDetail(item.article_id)" v-for="(item,index) in collectList" :key='index'>
+				<!-- <view class="find_content_item">
 					<view class="find_title">{{item.title}}</view>
 					<view class="find_desc">{{item.description}}</view>
 					<image class="pic" :src="url+item.thumb" mode="widthFix"></image>
@@ -25,8 +25,8 @@
 						<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.look}}</view>
 						<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.like}}</view>
 					</view>
-				</view>
-				<view class="find_content_item1" v-else>
+				</view> -->
+				<view class="find_content_item1">
 					<view class="fci_left">
 						<view class="find_title">{{item.title}}</view>
 						<view class="find_desc">{{item.description}}</view>
@@ -51,7 +51,8 @@
 	export default{
 		data(){
 			return{
-				navbar: [{name:"商品"},{name:"攻略"}],
+				// {name:"店铺"},
+				navbar: [{name:"商品"},{name:"文章"}],
 				currentTab: 0,
 				page: 0,
 				collectList: [],
@@ -77,8 +78,15 @@
 			})
 		},
 		methods:{
-			toDetail(id){
-				
+			toGoodsDetail(id){
+				uni.navigateTo({
+					url: '/pages/index/detail?cid='+id
+				})
+			},
+			toActicleDetail(id){
+				uni.navigateTo({
+					url: '/pages/find/detail?id='+id
+				})
 			},
 			navbarTap(e){
 				console.log(e)
@@ -96,11 +104,11 @@
 						this.collectList = data.data.result;
 					})
 				}else if(e == 1){
-					this.$http.getUserCollectGoods(params).then((data)=>{
+					this.$http.getUserCollectArticle(params).then((data)=>{
 						this.collectList = data.data.result;
 					})
 				}else{
-					this.$http.getUserCollectArticle(params).then((data)=>{
+					this.$http.getUserCollectStore(params).then((data)=>{
 						this.collectList = data.data.result;
 					})
 				}
@@ -115,14 +123,6 @@
 				let sign = this.$sign.getSign(params,this.AppSecret);
 				params.sign = sign;
 				if(this.currentTab == 0){
-					this.$http.getUserCollectStore(params).then((data)=>{
-						if(data.data.result.length == 0){
-							this.loadingType = 'noMore';
-							return;
-						}
-						this.collectList = this.collectList.concat(data.data.result);
-					})
-				}else if(this.currentTab == 1){
 					this.$http.getUserCollectGoods(params).then((data)=>{
 						if(data.data.result.length == 0){
 							this.loadingType = 'noMore';
@@ -130,8 +130,16 @@
 						}
 						this.collectList = this.collectList.concat(data.data.result);
 					})
-				}else{
+				}else if(this.currentTab == 1){
 					this.$http.getUserCollectArticle(params).then((data)=>{
+						if(data.data.result.length == 0){
+							this.loadingType = 'noMore';
+							return;
+						}
+						this.collectList = this.collectList.concat(data.data.result);
+					})
+				}else{
+					this.$http.getUserCollectStore(params).then((data)=>{
 						if(data.data.result.length == 0){
 							this.loadingType = 'noMore';
 							return;

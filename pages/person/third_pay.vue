@@ -19,9 +19,16 @@
 		onLoad(opt) {
 			let url = opt.url;
 			console.log(url);
-			setTimeout(()=>{
-				this.url = url;
-			},5000)
+			this.url = url;
+						
+			// #ifdef APP-PLUS
+			if(uni.getSystemInfoSync().platform == 'android'){
+				plus.runtime.openURL(this.url);
+			}
+			if(uni.getSystemInfoSync().platform == 'ios'){
+				plus.runtime.install(this.url);
+			}
+			// #endif
 			
 			// console.log(this.url);
 			// if(opt.order_id != undefined){

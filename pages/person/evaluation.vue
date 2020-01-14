@@ -12,7 +12,7 @@
 			</view>
 			<view class="rate_box">
 				<view>评分</view>
-				<uni-rate size="23" value="0" color="#ccc" margin="5" activeColor="#ff2a3a" @change="changeRate"></uni-rate>
+				<uni-rate size="23" :value="rate_val" color="#ccc" margin="5" activeColor="#ff2a3a" @change="changeRate"></uni-rate>
 				<text>{{rate_txt}}</text>
 			</view>
 			<view class="textarea_box">
@@ -44,7 +44,9 @@
 				rate_txt: '',
 				message: '',
 				num: 0,
-				photoList: []
+				rate_val: 0,
+				photoList: [],
+				photoList1: []
 			}
 		},
 		components:{
@@ -70,23 +72,31 @@
 			submitEval(){
 				let params = {
 					token: uni.getStorageSync('token'),
-					img_file: '',
+					img_file: JSON.stringify(this.photoList1),
 					order_id: this.id,
 					goods_id: '',
 					store_packge_hidden: '',
 					store_speed_hidden: '',
 					store_sever_hidden: '',
 					anonymous: '',
-					remark: ''
+					remark: this.message
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);
 				params.sign = sign;
 				this.$http.orderCommentAdd(params).then((data)=>{
-					
+					this.$api.msg(data.data.msg);
+					if(data.data.status == 1){
+						this.message = '';
+						this.photoList = [];
+						this.photoList1 = [];
+						this.rate_val = 0;
+						this.num = 0;
+					}
 				})
 			},
 			changeRate(e){
 				console.log(e.value);
+				this.rate_val = e.value;
 				if(e.value == 1){
 					this.rate_txt = '非常差';
 				}else if(e.value == 2){
@@ -139,7 +149,9 @@
 											return;
 										}
 										var url = that.$http.url + data.result;
+										var url1 = data.result;
 										that.photoList.push(url);
+										that.photoList1.push(url1);
 									}else{
 										that.$api.msg(data.msg);
 									}
@@ -164,6 +176,7 @@
 					success: (res) => {
 						if(res.confirm){
 							that.photoList.splice(e, 1);
+							that.photoList1.splice(e, 1);
 						}
 					}
 				})

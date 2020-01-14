@@ -19,7 +19,7 @@
 					<view>余额：￥{{parseInt(personInfo.user_money)}}</view>
 					<view>额度：v 150000</view>
 					<view>套餐资格：{{personInfo.user_count}}</view>
-					<view>已购套餐：2</view>
+					<view>已购套餐：{{personInfo.us_count}}</view>
 				</view>
 			</view>
 			<view class="pt_right">

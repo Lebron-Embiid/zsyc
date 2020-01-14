@@ -2080,6 +2080,7 @@ export const getArticleInfo = (data) => {
         data
     })
 }
+// 我的套餐
 export const getCombo = (data) => {
 	http.interceptor.request = (config) => {
 		config.header = {
@@ -2088,8 +2089,182 @@ export const getCombo = (data) => {
 			'timestamp': new Date().getTime()
 		}
 	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
     return http.request({
         url: 'api/User/combo',
+        method: 'POST',
+        data
+    })
+}
+// 立即选购套餐
+export const urchase_once = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/urchase_once',
+        method: 'POST',
+        data
+    })
+}
+
+// 获取线上发货专区
+export const setThezone = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'api/Index/setThezone',
+        method: 'POST',
+        data
+    })
+}
+// 获取线下提货专区
+export const getStreet = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'api/Store/street',
+        method: 'POST',
+        data
+    })
+}
+// 获取店铺商品列表
+export const getStoreGoods = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/Store/storeGoods',
+        method: 'POST',
+        data
+    })
+}
+// 店铺信息
+export const getStoreAbout = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'api/Store/about',
+        method: 'POST',
+        data
+    })
+}
+// 商品搜索
+export const searchGoods = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/Goods/search',
+        method: 'POST',
+        data
+    })
+}
+// 文章搜索
+export const searchArticle = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/Article/search',
         method: 'POST',
         data
     })
@@ -2241,5 +2416,12 @@ export default {
 	getNoticesInfo,
 	getDiscountArticle,
 	getArticleInfo,
-	getCombo
+	getCombo,
+	urchase_once,
+	setThezone,
+	getStreet,
+	getStoreGoods,
+	getStoreAbout,
+	searchGoods,
+	searchArticle
 }

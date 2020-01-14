@@ -5,11 +5,11 @@
 			<view>引导</view>
 		</view>
 		<view class="fixed_right_box" :class="[isShow==true?'active':'']">
-			<view class="fixed_right_item active" @tap="toLink">
-				<view>{{name.substr(0, 2)}}</view>
-				<view>{{name.substr(2, 3)}}</view>
+			<view class="fixed_right_item" :class="[index<2?'yellow':'']" v-for="(item,index) in list" :key="index" @tap="toLink(index)">
+				<view>{{item.setmeal_name.substr(0, 2)}}</view>
+				<view>{{item.setmeal_name.substr(2, 3)}}</view>
 			</view>
-			<view class="fixed_right_item yellow">
+			<!-- <view class="fixed_right_item yellow">
 				<view>女士</view>
 				<view>毛衣</view>
 			</view>
@@ -24,7 +24,7 @@
 			<view class="fixed_right_item">
 				<view>女士</view>
 				<view>外套</view>
-			</view>
+			</view> -->
 			<view class="fixed_right_item last" @tap="closeShow">
 				<image src="/static/icon/close.png" mode="widthFix"></image>
 			</view>
@@ -38,10 +38,19 @@
 		data(){
 			return{
 				isShow: false,
-				name: '女士大衣'
+				name: '女士大衣',
+				fixedList: []
 			}
 		},
-		onLoad() {
+		props:{
+			list:{
+				type: Array,
+				default: () => {
+					return [];
+				}
+			}
+		},
+		created() {
 			
 		},
 		methods:{
@@ -51,10 +60,8 @@
 			closeShow(){
 				this.isShow = false;
 			},
-			toLink(){
-				uni.navigateTo({
-					url: '/pages/meal/meal'
-				})
+			toLink(index){
+				this.$emit('selectMeal',index)
 			}
 		}
 	}
@@ -108,7 +115,11 @@
 			background: #b3b3b3;
 			margin-bottom: 10rpx;
 			border: 2px solid transparent;
+			// &:nth-child(n+5){
+			// 	display: none;
+			// }
 			&.last{
+				display: flex;
 				height: auto;
 				padding: 0;
 			}

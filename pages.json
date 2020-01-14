@@ -112,8 +112,14 @@
 			"path": "pages/car/car",
 			"style": {
 				"navigationBarTitleText": "购物车",
+				"enablePullDownRefresh": true,
 				"app-plus": {
-					"titleNView": false
+					"titleNView": false,
+					"pullToRefresh": {
+						"support": true,
+						"color": "#ff0036",
+						"style": "circle"
+					}
 				}
 			}
 		},

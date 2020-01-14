@@ -118,6 +118,8 @@
 		height: 100rpx;
 	}
 	
+	.no-keyword{text-align: center;color: #999;font-size: 28rpx;margin-top: 50rpx;background: #fff;}
+	
 	.not_have{
 		width: 100%;
 		text-align: center;

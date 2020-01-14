@@ -48,12 +48,12 @@
 		<!-- 脚部菜单 -->
 		<view class="footer" :style="{bottom:footerbottom}">
 			<view class="checkbox-box" @tap="allSelect">
-				<view class="checkbox">
+				<view class="checkbox" v-if="goodsList.length!=0">
 					<view :class="[isAllselected?'on':'']"></view>
 				</view>
-				<view class="text">全选</view>
+				<view class="text" v-if="goodsList.length!=0">全选</view>
 			</view>
-			<view class="delBtn" @tap="deleteList">删除</view>
+			<view class="delBtn" v-if="goodsList.length!=0" @tap="deleteList">删除</view>
 			<view class="settlement">
 				<view class="sum">合计:<view class="money">￥{{sumPrice}}</view></view>
 				<view class="btn" @tap="toConfirmation">结算<!-- ({{selectedList.length}}) --></view>
@@ -122,6 +122,10 @@
 			// this.selectedList = [];
 			// this.isAllselected = false;
 		},
+		onPullDownRefresh() {
+			this.getCarInit();
+			uni.stopPullDownRefresh();
+		},
 		methods: {
 			getCarInit(){
 				let params = {};
@@ -156,6 +160,7 @@
 						})
 						this.selectedList.push(arr[i].selected)
 					}
+					this.isAllselected = false;
 					// console.log(goodsList,this.selectedList);
 					// if(this.selectedList.length == goodsList.length){
 					// 	this.isAllselected = true;
