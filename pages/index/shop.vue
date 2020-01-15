@@ -164,7 +164,7 @@
 				is_discount: 0,
 				loadingType: 'more',
 				url: '',
-				page: 0
+				page: 1
 			}
 		},
 		components:{

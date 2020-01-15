@@ -83,7 +83,7 @@
 				area_txt: '龙华',
 				address_txt: '民治',
 				changeList: 0,
-				page: 0,
+				page: 1,
 				url: ''
 			}
 		},
@@ -138,7 +138,7 @@
 			this.url = this.$http.url;
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);

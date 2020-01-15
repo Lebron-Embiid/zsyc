@@ -70,7 +70,7 @@
 				is_apply: 0,	//0:暂无申请  1:申请中
 				apply_name: '',
 				util: '',
-				page: 0
+				page: 1
 			}
 		},
 		components:{

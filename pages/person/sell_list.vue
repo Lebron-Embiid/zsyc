@@ -57,7 +57,7 @@
 		onShow() {
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10,
 				is_seller: 0
 			};
@@ -71,7 +71,7 @@
 			toMySell(){
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 0,
+					page: 1,
 					limit: 10,
 					is_seller: 1
 				};
@@ -118,7 +118,7 @@
 			uni.startPullDownRefresh();
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10,
 				is_seller: 0
 			};

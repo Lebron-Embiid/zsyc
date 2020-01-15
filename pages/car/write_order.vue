@@ -21,25 +21,33 @@
 				<image src="/static/icon/arrow.png" mode="widthFix"></image>
 			</view>
 		</view>
-		<view class="order_meal" @tap="selectMeal">
+		<view class="order_meal" v-if="combo.length!=0" @tap="selectMeal">
 			套餐
 			<view>1套 <image src="/static/icon/arrow.png" mode="widthFix"></image></view>
 		</view>
 		<view class="order_info_box">
 			<view class="order_info_item">
-				商品金额 <text>￥600.00</text>
+				余额支付 <input type="number" placeholder="请输入使用余额" v-model="user_money" />
 			</view>
+			<view class="oii_till line">您的可用余额 ¥ <text>{{over_money}}</text><button type="default" @tap="moneyCount" size="mini">使用</button></view>
 			<view class="order_info_item">
+				积分支付 <input type="number" placeholder="请输入使用积分" v-model="pay_points" />
+			</view>
+			<view class="oii_till line">1 积分抵 1元，您的可用积分 {{over_points}} 分<button type="default" @tap="pointCount" size="mini">使用</button></view>
+			<view class="order_info_item">
+				商品金额 <text>￥{{total_price}}</text>
+			</view>
+			<!--<view class="order_info_item">
 				名额优惠 <text>-￥300.00</text>
 			</view>
 			<view class="order_info_item">
 				名额消费 <text>v 600</text>
-			</view>
-			<view class="order_info_item">
+			</view> -->
+			<view class="order_info_item" v-if="combo.length!=0">
 				套餐使用 <text>无</text>
 			</view>
 			<view class="order_info_item">
-				运费 <text>+￥0.00</text>
+				运费 <text>+￥{{post_fee}}</text>
 			</view>
 			<view class="textarea_box">
 				<textarea v-model="message" @input="changeNum" placeholder="买家留言，45字以内" maxlength="45" />
@@ -109,13 +117,13 @@
 				phone: '',
 				recinfo: {},
 				goodsList: [
-					{
-						src: '/static/img/order_img2.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					}
+					// {
+					// 	src: '/static/img/order_img2.png',
+					// 	title: '精装女士大衣',
+					// 	info: '普罗旺斯 优雅精致',
+					// 	price: '118',
+					// 	num: 1
+					// }
 				],
 				mealList: [
 					{
@@ -144,11 +152,18 @@
 						checked: false
 					}
 				],
+				user_money: '',
+				pay_points: '',
+				over_money: '',
+				over_points: '',
 				message: '',
 				num: 0,
 				has_address: false,
 				shipping_code: {},
-				pay_price: ''
+				combo: [],
+				pay_price: '',
+				total_price: '',
+				post_fee: ''
 			}
 		},
 		computed:{
@@ -165,16 +180,28 @@
 				this.shipping_code = JSON.parse(JSON.stringify(opt.shipCode));
 				console.log(this.shipping_code);
 			}
-			
 		},
 		onShow() {
 			let params = {token: uni.getStorageSync('token')};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.carConfirm(params).then((data)=>{
+				if(data.data.status < 1){
+					this.$api.msg(data.data.msg);
+					setTimeout(()=>{
+						uni.navigateBack({
+							delta: 1
+						})
+					},1500)
+					return;
+				}
 				this.recinfo = data.data.result.addressList;
 				this.goodsList = data.data.result.cartList;
+				this.total_price = data.data.result.totalPrice.total_fee;
 				this.pay_price = data.data.result.totalPrice.total_fee;
+				this.over_money = data.data.result.user_info.user_money;
+				this.over_points = data.data.result.user_info.pay_points;
+				this.combo = data.data.result.combo;
 				if(this.recinfo == null){
 					this.has_address = false;
 				}else{
@@ -184,19 +211,19 @@
 					let tel1 = tel.substr(0,3) + "****" + tel.substr(7);
 					this.phone = tel1;
 					
-					console.log(this.shipping_code);
+					// console.log(this.shipping_code);
 					let params1 = {
 						token: uni.getStorageSync('token'),
 						address_id: this.recinfo.address_id,
-						shipping_code: this.shipping_code,
 						user_money: 0,
 						pay_points: 0
 					};
 					let sign1 = this.$sign.getSign(params1,this.AppSecret);
 					params1.sign = sign1;
 					
-					this.$http.submitConfirm(params1).then((data)=>{
-						
+					this.$http.submitConfirm(params1).then((data1)=>{
+						this.post_fee = data1.data.result.postFee;
+						this.pay_price = data1.data.result.payables;
 					})
 				}
 				
@@ -249,6 +276,32 @@
 			changeNum(e){
 				this.num = e.detail.value.length;
 			},
+			moneyCount(){
+				let params = {
+					token: uni.getStorageSync('token'),
+					address_id: this.recinfo.address_id,
+					user_money: this.user_money?this.user_money:0
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.submitConfirm(params).then((data)=>{
+					this.pay_price = data.data.result.payables;
+					this.$api.msg(data.data.msg);
+				})
+			},
+			pointCount(){
+				let params = {
+					token: uni.getStorageSync('token'),
+					address_id: this.recinfo.address_id,
+					pay_points: this.pay_points?this.pay_points:0,
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.submitConfirm(params).then((data)=>{
+					this.pay_price = data.data.result.payables;
+					this.$api.msg(data.data.msg);
+				})
+			},
 			toPay(){
 				if(this.recinfo == null){
 					this.$api.msg('请选择地址');
@@ -261,10 +314,10 @@
 						let params = {
 							token: uni.getStorageSync('token'),
 							address_id: this.recinfo.address_id,
-							shipping_code: this.shipping_code,
-							user_money: 0,
-							pay_points: 0,
-							user_note: JSON.stringify({"7":"留言"}),
+							// shipping_code: JSON.stringify(this.shipping_code),
+							user_money: this.user_money?this.user_money:0,
+							pay_points: this.pay_points?this.pay_points:0,
+							user_note: this.message,
 							act: 'submit_order'
 						};
 						let sign = this.$sign.getSign(params,this.AppSecret);
@@ -273,8 +326,8 @@
 							this.$api.msg(data.data.msg);
 							if(data.data.status == 1){
 								setTimeout(()=>{
-									uni.navigateTo({
-										url: '/pages/car/pay'
+									uni.redirectTo({
+										url: '/pages/person/detail?id='+data.data.result.id
 									})
 								},1500)
 							}
@@ -304,6 +357,19 @@
 	.meal_list .meal_item .meal_top .meal_right{
 		display: flex;
 		justify-content: flex-end;
+	}
+	.goods_pop_item{
+		.gp_center{
+			.gp_title{
+				overflow : hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 4;
+				-webkit-box-orient: vertical;
+				word-wrap: break-word;
+				word-break: break-all;
+			}
+		}
 	}
 	.order_address{
 		padding: 30rpx;
@@ -403,6 +469,28 @@
 	.order_info_box{
 		background: #fff;
 		margin-bottom: 120rpx;
+		.oii_till{
+			color: #999;
+			font-size: 28rpx;
+			border-top: 1px solid #eee;
+			padding: 15rpx 30rpx;
+			box-sizing: border-box;
+			text-align: right;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			button{
+				margin: 0 0 0 20rpx;
+				border: 1rpx solid #ccc;
+				box-sizing: border-box;
+				&:after{
+					border: 0;
+				}
+			}
+			&.line{
+				border-bottom: 1px solid #eee;
+			}
+		}
 		.order_info_item{
 			display: flex;
 			justify-content: space-between;
@@ -411,6 +499,9 @@
 			box-sizing: border-box;
 			color: #333;
 			font-size: 32rpx;
+			input{
+				text-align: right;
+			}
 		}
 	}
 	.goods_popup_box{

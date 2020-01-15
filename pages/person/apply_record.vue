@@ -17,7 +17,7 @@
 	export default{
 		data(){
 			return{
-				page: 0,
+				page: 1,
 				applyList: [
 					{
 						

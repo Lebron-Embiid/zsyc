@@ -55,7 +55,7 @@
 				],
 				say_content: '',
 				loadingType: 'more',
-				page: 0,
+				page: 1,
 				url: ''
 			}
 		},
@@ -74,7 +74,7 @@
 			let params = {
 				token: uni.getStorageSync('token'),
 				article_id: this.id,
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
@@ -133,7 +133,7 @@
 						let params1 = {
 							token: uni.getStorageSync('token'),
 							article_id: this.id,
-							page: 0,
+							page: 1,
 							limit: 10
 						};
 						let sign1 = this.$sign.getSign(params1,this.AppSecret);

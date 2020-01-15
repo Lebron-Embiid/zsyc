@@ -100,7 +100,7 @@
 				sort_three: 0,
 				sort_four: 0,
 				sort_five: 0,
-				page: 0,
+				page: 1,
 				util: '',
 				incomeList: [],
 				teamList: []
@@ -143,7 +143,7 @@
 			
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10,
 				type: opt.type
 			};
@@ -161,7 +161,7 @@
 				this.sort_four = 0;
 				this.sort_five = 0;
 				this.currentTab = e;
-				this.page = 0;
+				this.page = 1;
 				this.level_txt = '级别';
 				this.year_txt = '年份';
 				this.month_txt = '月份';
@@ -169,7 +169,7 @@
 				if(this.currentTab == 0){
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: this.type
 					};
@@ -181,7 +181,7 @@
 				}else{
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10
 					};
 					let sign = this.$sign.getSign(params,this.AppSecret);
@@ -203,7 +203,7 @@
 				if(this.currentTab == 0){
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: this.type,
 						rank: this.cur_level
@@ -211,7 +211,7 @@
 					if(this.year_txt != '年份'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type,
 							rank: this.cur_level,
@@ -222,7 +222,7 @@
 					if(this.month_txt != '月份'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type,
 							rank: this.cur_level,
@@ -233,7 +233,7 @@
 					if(this.day_txt != '日期'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type,
 							rank: this.cur_level,
@@ -249,14 +249,14 @@
 				}else{
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						rank: this.cur_level
 					};
 					if(this.year_txt != '年份'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'y',
@@ -266,7 +266,7 @@
 					if(this.month_txt != '月份'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'm',
@@ -276,7 +276,7 @@
 					if(this.day_txt != '日期'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'd',
@@ -300,7 +300,7 @@
 				if(this.currentTab == 0){
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: this.type,
 						sort: 'y',
@@ -309,7 +309,7 @@
 					if(this.cur_level != ''){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							type: this.type,
@@ -320,7 +320,7 @@
 					if(this.month_txt != '月份'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type,
 							rank: this.cur_level,
@@ -331,7 +331,7 @@
 					if(this.day_txt != '日期'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type,
 							rank: this.cur_level,
@@ -347,7 +347,7 @@
 				}else{
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						sort: 'y',
 						date: this.year_txt
@@ -355,7 +355,7 @@
 					if(this.cur_level != ''){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'y',
@@ -365,7 +365,7 @@
 					if(this.month_txt != '月份'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'm',
@@ -375,7 +375,7 @@
 					if(this.day_txt != '日期'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'd',
@@ -409,7 +409,7 @@
 				if(this.currentTab == 0){
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: this.type,
 						sort: 'm',
@@ -418,7 +418,7 @@
 					if(this.cur_level != ''){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							type: this.type,
@@ -429,7 +429,7 @@
 					if(this.day_txt != '日期'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type,
 							rank: this.cur_level,
@@ -445,7 +445,7 @@
 				}else{
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						sort: 'm',
 						date: this.year_txt+'-'+this.cur_month
@@ -453,7 +453,7 @@
 					if(this.cur_level != ''){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'm',
@@ -463,7 +463,7 @@
 					if(this.day_txt != '日期'){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'd',
@@ -501,7 +501,7 @@
 				if(this.currentTab == 0){
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: this.type,
 						sort: 'd',
@@ -510,7 +510,7 @@
 					if(this.cur_level != ''){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							type: this.type,
@@ -526,7 +526,7 @@
 				}else{
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						sort: 'd',
 						date: this.year_txt+'-'+this.cur_month+'-'+this.cur_day
@@ -534,7 +534,7 @@
 					if(this.cur_level != ''){
 						params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							rank: this.cur_level,
 							sort: 'd',
@@ -563,7 +563,7 @@
 					if(this.currentTab == 0){
 						let params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10,
 							type: this.type
 						};
@@ -575,7 +575,7 @@
 					}else{
 						let params = {
 							token: uni.getStorageSync('token'),
-							page: 0,
+							page: 1,
 							limit: 10
 						};
 						let sign = this.$sign.getSign(params,this.AppSecret);

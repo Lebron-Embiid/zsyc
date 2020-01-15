@@ -10,7 +10,7 @@
 				<view class="msg_content">
 					<view class="msg_box">
 						<view class="msg_title">优惠活动</view>
-						<view class="msg_info">双十一全场5折起</view>
+						<view class="msg_info">{{act_title}}</view>
 					</view>
 					<image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image>
 				</view>
@@ -22,7 +22,7 @@
 				<view class="msg_content">
 					<view class="msg_box">
 						<view class="msg_title">通知消息</view>
-						<view class="msg_info">【有奖调研】你参加了吗？</view>
+						<view class="msg_info">{{notice_title}}</view>
 					</view>
 					<image class="arrow" src="/static/icon/arrow.png" mode="widthFix"></image>
 				</view>
@@ -48,18 +48,41 @@
 	export default{
 		data(){
 			return{
-				
+				act_title: '',
+				notice_title: ''
 			}
 		},
 		components:{
 			uniNavBar
 		},
 		onLoad(opt) {
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: 1,
+				limit: 1
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getDiscountArticle(params).then((data)=>{
+				this.act_title = data.data.result[0].title;
+			})
 			
+			let params1 = {
+				token: uni.getStorageSync('token'),
+				page: 1,
+				limit: 1
+			};
+			let sign1 = this.$sign.getSign(params1,this.AppSecret);
+			params1.sign = sign1;
+			this.$http.getNoticesList(params1).then((data)=>{
+				this.notice_title = data.data.result[0].title;
+			})
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	
+	.message_box{
+		padding: 10rpx 0;
+	}
 </style>

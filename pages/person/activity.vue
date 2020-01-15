@@ -13,43 +13,34 @@
 					<view class="act_desc">{{item.desc}}</view>
 				</view>
 			</view>
+			<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
 		</view>
 	</view>
 </template>
 
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import uniloadMore from "@/components/uni-load-more/uni-load-more.vue"
 	import util from "@/common/util.js"
 	export default{
 		data(){
 			return{
-				activityList: [
-					{
-						time: '09.13 09:00',
-						is_over: 0,
-						title: '活动标题请不要超过一行',
-						img: '/static/img/online_banner.jpg',
-						desc: '活动内容的描述：描述内容请控制在两行以内，超过两行的部分请用...'
-					},{
-						time: '09.13 09:00',
-						is_over: 1,
-						title: '活动标题请不要超过一行',
-						img: '/static/img/online_banner.jpg',
-						desc: '活动内容的描述：描述内容请控制在两行以内，超过两行的部分请用...'
-					}
-				],
-				url: ''
+				activityList: [],
+				loadingType: 'more',
+				url: '',
+				page: 1
 			}
 		},
 		components:{
-			uniNavBar
+			uniNavBar,
+			uniloadMore
 		},
 		onLoad(opt) {
 			this.url = this.$http.url;
 			this.util = util;
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
@@ -64,6 +55,23 @@
 					url: '/pages/person/notice_detail?type=act&id='+id
 				})
 			}
+		},
+		onReachBottom() {
+			this.page++;
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: this.page,
+				limit: 10
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.getDiscountArticle(params).then((data)=>{
+				if(data.data.result.length == 0){
+					this.loadingType = 'noMore';
+					return;
+				}
+				this.activityList = this.activityList.concat(data.data.result);
+			})
 		}
 	}
 </script>

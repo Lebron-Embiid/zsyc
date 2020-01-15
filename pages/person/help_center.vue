@@ -35,7 +35,7 @@
 					// 	content: '您可以通过个人中心点击购买资格即可。'
 					// }
 				],
-				page:0
+				page:1
 			}
 		},
 		components:{
@@ -46,7 +46,7 @@
 		onLoad(opt) {
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 15
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);

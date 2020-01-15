@@ -55,7 +55,7 @@
 				loadingType: 'more',
 				type: 'sale',
 				level: '',
-				page: 0,
+				page: 1,
 				orderList: [
 					// {
 					// 	name: '大东',
@@ -87,7 +87,7 @@
 			if(this.currentTab == 0){
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 0,
+					page: 1,
 					limit: 10,
 					type: 0
 				};
@@ -99,7 +99,7 @@
 			}else{
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 0,
+					page: 1,
 					limit: 10,
 					type: 1
 				};
@@ -121,11 +121,11 @@
 		methods:{
 			navbarTap(e){
 				this.currentTab = e;
-				this.page = 0;
+				this.page = 1;
 				if(e == 0){
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: 0
 					};
@@ -137,7 +137,7 @@
 				}else{
 					let params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						type: 1
 					};

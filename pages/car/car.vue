@@ -7,7 +7,7 @@
 			<view class="tis" v-if="goodsList.length==0">购物车是空的哦~</view>
             <view class="row" v-for="(row,index) in goodsList" :key="index" >
 				<!-- 删除按钮 -->
-				<view class="menu" @tap.stop="deleteGoods(row.gid)">
+				<view class="menu" @tap.stop="deleteGoods(row.id)">
 					<view class="icon shanchu"></view>
 				</view>
 				<!-- 商品 -->
@@ -53,7 +53,7 @@
 				</view>
 				<view class="text" v-if="goodsList.length!=0">全选</view>
 			</view>
-			<view class="delBtn" v-if="goodsList.length!=0" @tap="deleteList">删除</view>
+			<view class="delBtn" v-if="goodsList.length!=0,selectedList.length!=0" @tap="deleteList">删除</view>
 			<view class="settlement">
 				<view class="sum">合计:<view class="money">￥{{sumPrice}}</view></view>
 				<view class="btn" @tap="toConfirmation">结算<!-- ({{selectedList.length}}) --></view>
@@ -119,7 +119,7 @@
 		onShow() {
 			this.getCarInit();
 			
-			// this.selectedList = [];
+			this.selectedList = [];
 			// this.isAllselected = false;
 		},
 		onPullDownRefresh() {
@@ -151,6 +151,7 @@
 					this.goods = arr;
 					for(var i=0;i<arr.length;i++){
 						goodsList.push({
+							id: arr[i].id,
 							gid: arr[i].goods_id,
 							name: arr[i].goods_name,
 							num: arr[i].goods_num,
@@ -158,7 +159,7 @@
 							price: arr[i].goods_price,
 							selected: false
 						})
-						this.selectedList.push(arr[i].selected)
+						this.selectedList = [];
 					}
 					this.isAllselected = false;
 					// console.log(goodsList,this.selectedList);
@@ -314,95 +315,31 @@
 			deleteList(){
 				let that = this;
 				let len = that.selectedList.length;
+				// console.log(this.selectedList.split(','));
 				let is_all = '';
 				uni.showModal({
 					title: '删除提示',
 					content: '确定删除选中的商品？',
 					success: (res)=>{
 						if (res.confirm) {
-							let params = {};
-							if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
-								params = {
-									unique_id: uni.getStorageSync('unique_id')
-								}
-							}else{
-								params = {
-									token: uni.getStorageSync('token')
-								}
-							}
-							let sign1 = this.$sign.getSign(params,this.AppSecret);
-							params.sign = sign1;
-							
 							let del_parm = {};
 							if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
 								del_parm = {
-									// ids: JSON.stringify(ids),
-									is_all: 1,
+									ids: JSON.stringify(that.selectedList),
 									unique_id: uni.getStorageSync('unique_id')
 								}
 							}else{
 								del_parm = {
-									// ids: JSON.stringify(ids),
-									is_all: 1,
+									ids: JSON.stringify(that.selectedList),
 									token: uni.getStorageSync('token')
 								}
 							}
-							let sign = this.$sign.getSign(del_parm,this.AppSecret);
-							del_parm.sign = sign;
-							if(that.isAllselected == true){
-								is_all = 1;
-								that.$http.delCar(del_parm).then((data)=>{
-									that.$api.msg(data.data.msg);
-									that.$http.carList(params).then((data)=>{
-										let goodsList = [];
-										let res = data.data.list;
-										let arr = [];
-										for(let i in res){
-											arr.push(res[i])
-										}
-										console.log(arr);
-										for(var i=0;i<arr.length;i++){
-											goodsList.push({
-												gid: arr[i].gid,
-												name: arr[i].name,
-												num: arr[i].num,
-												pic: arr[i].pic,
-												price: arr[i].price,
-												selected: false
-											})
-										}
-										that.goodsList = goodsList;
-										that.sum();
-									})
-								})
-							}else{
-								is_all = 0;
-								that.$http.delCar(del_parm).then((data)=>{
-									that.$api.msg(data.data.message);
-									that.$http.carList(params).then((data)=>{
-										let goodsList = [];
-										let res = data.data.list;
-										let arr = [];
-										for(let i in res){
-											arr.push(res[i])
-										}
-										console.log(arr);
-										for(var i=0;i<arr.length;i++){
-											goodsList.push({
-												gid: arr[i].gid,
-												name: arr[i].name,
-												num: arr[i].num,
-												pic: arr[i].pic,
-												price: arr[i].price,
-												selected: false
-											})
-										}
-										that.goodsList = goodsList;
-										that.sum();
-									})
-								})
-							}
-							console.log(that.selectedList);
+							let sign1 = this.$sign.getSign(del_parm,this.AppSecret);
+							del_parm.sign = sign1;
+							that.$http.delCar(del_parm).then((data)=>{
+								that.$api.msg(data.data.msg);
+								that.getCarInit();
+							})
 							
 							// while (this.selectedList.length>0)
 							// {
@@ -422,8 +359,9 @@
 					// this.numList[index] = this.goodsList[x].num;
 				}
 				this.goodsList[index].selected = this.goodsList[index].selected?false:true;
-				let i = this.selectedList.indexOf(this.goodsList[index].gid);
-				i>-1?this.selectedList.splice(i, 1):this.selectedList.push(this.goodsList[index].gid);
+				let i = this.selectedList.indexOf(this.goodsList[index].id);
+				i>-1?this.selectedList.splice(i, 1):this.selectedList.push(this.goodsList[index].id);
+				
 				// this.isAllselected = this.selectedList.length == this.goodsList.length;
 				console.log(this.selectedList,this.goodsList);
 				let flag = true;
@@ -436,6 +374,34 @@
 				if(flag == true){
 					this.isAllselected = true;
 				}
+				
+				
+				
+				let arr = [];
+				for(let x in this.selectedList){
+					arr.push({
+						cartID: this.selectedList[x],
+						selected: this.goodsList[index].selected?1:0
+					})
+				}
+				let params = {};
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						unique_id: uni.getStorageSync('unique_id'),
+						cart_form_data: JSON.stringify(arr)
+					}
+				}else{
+					params = {
+						token: uni.getStorageSync('token'),
+						cart_form_data: JSON.stringify(arr)
+					}
+				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				console.log(index);
+				this.$http.carList(params).then((data)=>{
+					
+				})
 				// if(this.selectedList.length == this.goodsList.length){
 				// 	this.isAllselected = true;
 				// }else{
@@ -449,10 +415,38 @@
 				let arr = [];
 				for(let i=0;i<len;i++){
 					this.goodsList[i].selected = this.isAllselected? false : true;
-					arr.push(this.goodsList[i].gid);
+					arr.push(this.goodsList[i].id);
 				}
-				this.selectedList = this.isAllselected?[]:arr;
 				this.isAllselected = !this.isAllselected;
+				this.selectedList = this.isAllselected?arr:[];
+				
+				let allArr = [];
+				for(let x in this.selectedList){
+					allArr.push({
+						cartID: this.selectedList[x],
+						selected: 1
+					})
+				}
+				
+				let params = {};
+				
+				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
+					params = {
+						unique_id: uni.getStorageSync('unique_id'),
+						cart_form_data: JSON.stringify(allArr)
+					}
+				}else{
+					params = {
+						token: uni.getStorageSync('token'),
+						cart_form_data: JSON.stringify(allArr)
+					}
+				}
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.carList(params).then((data)=>{
+					
+				})
+				console.log(this.selectedList);
 				this.sum();
 			},
 			// 减少数量
@@ -463,17 +457,22 @@
 				}
 				this.goodsList[index].num--;
 				let params = {};
+				
+				let arr = [];
+				arr.push({
+					cartID: this.goodsList[index].id,
+					goodsNum: this.goodsList[index].num
+				})
+				
 				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
 					params = {
 						unique_id: uni.getStorageSync('unique_id'),
-						cartID: this.goodsList[index].gid,
-						goodsNum: this.goodsList[index].num
+						cart_form_data: JSON.stringify(arr)
 					}
 				}else{
 					params = {
 						token: uni.getStorageSync('token'),
-						cartID: this.goodsList[index].gid,
-						goodsNum: this.goodsList[index].num
+						cart_form_data: JSON.stringify(arr)
 					}
 				}
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -488,17 +487,22 @@
 			add(index){
 				this.goodsList[index].num++;
 				let params = {};
+				
+				let arr = [];
+				arr.push({
+					cartID: this.goodsList[index].id,
+					goodsNum: this.goodsList[index].num
+				})
+				
 				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
 					params = {
 						unique_id: uni.getStorageSync('unique_id'),
-						cartID: this.goodsList[index].gid,
-						goodsNum: this.goodsList[index].num
+						cart_form_data: JSON.stringify(arr)
 					}
 				}else{
 					params = {
 						token: uni.getStorageSync('token'),
-						cartID: this.goodsList[index].gid,
-						goodsNum: this.goodsList[index].num
+						cart_form_data: JSON.stringify(arr)
 					}
 				}
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -511,17 +515,22 @@
 			},
 			sumBlur(index){
 				let params = {};
+				
+				let arr = [];
+				arr.push({
+					cartID: this.goodsList[index].id,
+					goodsNum: this.goodsList[index].num
+				})
+				
 				if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
 					params = {
 						unique_id: uni.getStorageSync('unique_id'),
-						cartID: this.goodsList[index].gid,
-						goodsNum: this.goodsList[index].num
+						cart_form_data: JSON.stringify(arr)
 					}
 				}else{
 					params = {
 						token: uni.getStorageSync('token'),
-						cartID: this.goodsList[index].gid,
-						goodsNum: this.goodsList[index].num
+						cart_form_data: JSON.stringify(arr)
 					}
 				}
 				let sign = this.$sign.getSign(params,this.AppSecret);

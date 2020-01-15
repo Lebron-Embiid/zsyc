@@ -3,9 +3,9 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar leftIcon="back" title="订单详情"></uni-nav-bar>
 		<view class="wait_pay_box">
-			<block v-if="is_type == 1">
+			<block v-if="is_type == 'WAITPAY' || orderInfo.order_status_code == 'WAITPAY'">
 				<view class="txt">等待付款</view>
-				<view class="count_box">
+				<!-- <view class="count_box">
 					剩
 					<uni-countdown
 						class="countdown"
@@ -20,12 +20,13 @@
 						:second="0" :reset="false">
 					</uni-countdown>
 					自动关闭
-				</view>
+				</view> -->
 			</block>
-			<block v-if="is_type == 2"><view class="txt">等待发货</view></block>
-			<block v-if="is_type == 3"><view class="txt">等待收货</view></block>
-			<block v-if="is_type == 4"><view class="txt">交易完成</view></block>
-			<block v-if="is_type == 5"><view class="txt">已取消</view></block>
+			<block v-if="is_type == 'WAITSEND' || orderInfo.order_status_code == 'WAITSEND'"><view class="txt">等待发货</view></block>
+			<block v-if="is_type == 'WAITRECEIVE' || orderInfo.order_status_code == 'WAITRECEIVE'"><view class="txt">等待收货</view></block>
+			<block v-if="is_type == 'WAITCCOMMENT' || orderInfo.order_status_code == 'WAITCCOMMENT'"><view class="txt">等待评价</view></block>
+			<block v-if="is_type == 'FINISH' || orderInfo.order_status_code == 'FINISH'"><view class="txt">交易完成</view></block>
+			<block v-if="is_type == 'CANCEL' || orderInfo.order_status_code == 'CANCEL'"><view class="txt">已取消</view></block>
 			<block v-if="is_type == 6 || is_type == 7">
 				<view class="txt">提货码</view>
 				<view class="count_box copy">PG1358964578fHGD</view>
@@ -49,7 +50,7 @@
 		</view>
 		<view class="goods_box">
 			<view class="goods_pop_item" v-for="(item,index) in orderInfo.goods_list" :key="index">
-				<image :src="item.original_img" mode="widthFix"></image>
+				<image :src="url+item.original_img" mode="widthFix"></image>
 				<view class="gp_center">
 					<view class="gp_title">{{item.goods_name}}</view>
 					<view class="gp_info">{{item.spec_key_name}}</view>
@@ -61,29 +62,29 @@
 		<view class="order_info_box">
 			<view class="oib_item"><text>订单编号：</text>{{orderInfo.order_sn}}</view>
 			<view class="oib_item border"><text>下单时间：</text>{{orderInfo.add_time}}</view>
-			<view class="oib_item"><text>支付方式：</text>微信支付</view>
-			<view class="oib_item"><text>商品合计：</text>1</view>
-			<view class="oib_item"><text>干洗费：</text>30</view>
-			<view class="oib_item"><text>优惠券：</text>0</view>
-			<view class="oib_item border"><text>运费：</text>+￥10.00</view>
-			<view class="oib_bottom_pay"><text>实付款：</text>￥40.00</view>
+			<!-- <view class="oib_item"><text>支付方式：</text>微信支付</view> -->
+			<view class="oib_item"><text>商品合计：</text>{{orderInfo.goods_list.length}}</view>
+			<!-- <view class="oib_item"><text>干洗费：</text>30</view> -->
+			<!-- <view class="oib_item"><text>优惠券：</text>0</view> -->
+			<view class="oib_item border"><text>运费：</text>+￥{{orderInfo.shipping_price}}</view>
+			<view class="oib_bottom_pay"><text>实付款：</text>￥{{orderInfo.total_amount}}</view>
 		</view>
-		<view class="service_time_box">
+		<!-- <view class="service_time_box">
 			<view class="service_time">服务时间：<text>9:00-24:00</text></view>
 			<view class="service_btn">
 				<button type="default"><image src="/static/icon/kefu.png" mode="widthFix"></image>在线客服</button>
 				<button type="default"><image src="/static/icon/dianhua.svg" mode="widthFix"></image>电话客服</button>
 			</view>
-		</view>
+		</view> -->
 		<view class="fixed_order_bottom">
 			<!-- istype: WAITPAY：待付款  WAITSEND：待发货  WAITRECEIVE：待收货  WAITCCOMMENT：待评价  5：已取消 -->
 			<button v-if="is_type == 'WAITRECEIVE'" type="default" size="mini">查看物流</button>
-			<button v-if="is_type == 'WAITPAY' || is_type == 'WAITSEND' || is_type == 5" type="default" size="mini">取消订单</button>
-			<button v-if="is_type == 'WAITSEND' || is_type == 'WAITRECEIVE' || is_type == 'WAITCCOMMENT'" type="default" size="mini">再次购买</button>
-			<button v-if="is_type == 'WAITCCOMMENT'" type="default" size="mini">退换货</button>
-			<button v-if="is_type == 'WAITRECEIVE'" type="primary" size="mini" class="red">确认收货</button>
-			<button @tap="toEvaluation" v-if="is_type == 'WAITCCOMMENT'" type="primary" size="mini" class="red">评价有礼</button>
-			<button v-if="is_type == 'WAITPAY'" type="primary" size="mini" class="red">付款</button>
+			<button @tap="cancelOrder" v-if="is_type == 'WAITPAY' || is_type == 'WAITSEND'" type="default" size="mini">取消订单</button>
+			<button @tap="buyAgain" v-if="is_type == 'WAITSEND' || is_type == 'CANCEL' || orderInfo.order_status_code == 'CANCEL' || orderInfo.order_status_code == 'WAITSEND' || is_type == 'WAITCCOMMENT'" type="default" size="mini">再次购买</button>
+			<button v-if="is_type == 'WAITRECEIVE'" type="default" size="mini">退换货</button>
+			<button @tap="toConfirm" v-if="is_type == 'WAITRECEIVE'" type="primary" size="mini" class="red">确认收货</button>
+			<button @tap="toEvaluation" v-if="is_type == 'WAITCCOMMENT'" type="primary" size="mini" class="red">去评价</button>
+			<button v-if="is_type == 'WAITPAY' || orderInfo.order_status_code == 'WAITPAY'" type="primary" size="mini" class="red">付款</button>
 			<button v-if="is_type == 6 || is_type == 7" type="primary" size="mini" class="red">生成提货码</button>
 		</view>
 	</view>
@@ -101,26 +102,15 @@
 				log: '离开【太原中心】，下一站【广州中心】',
 				orderInfo: {},
 				goodsList: [
-					{
-						src: '/static/img/order_img2.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
-						src: '/static/img/order_img3.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					},{
-						src: '/static/img/order_img1.png',
-						title: '精装女士大衣',
-						info: '普罗旺斯 优雅精致',
-						price: '118',
-						num: 1
-					}
-				]
+					// {
+					// 	src: '/static/img/order_img2.png',
+					// 	title: '精装女士大衣',
+					// 	info: '普罗旺斯 优雅精致',
+					// 	price: '118',
+					// 	num: 1
+					// }
+				],
+				url: ''
 			}
 		},
 		components:{
@@ -129,6 +119,7 @@
 		},
 		onLoad(opt) {
 			console.log(opt);
+			this.url = this.$http.url;
 			if(opt.id != undefined){
 				this.id = opt.id;
 				this.is_type = opt.is_type;
@@ -150,12 +141,60 @@
 		methods:{
 			toLogistics(){
 				uni.navigateTo({
-					url: '/pages/person/logistics'
+					url: '/pages/person/logistics?id='+this.id
 				})
 			},
 			toEvaluation(){
 				uni.navigateTo({
-					url: '/pages/person/evaluation'
+					url: '/pages/person/evaluation?id='+this.id
+				})
+			},
+			buyAgain(){
+				uni.switchTab({
+					url: '/pages/index/shop'
+				})
+			},
+			toConfirm(){
+				let params = {
+					token: uni.getStorageSync('token'),
+					order_id: this.id
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.orderConfirm(params).then((data)=>{
+					this.$api.msg(data.data.msg);
+				})
+			},
+			cancelOrder(){
+				uni.showModal({
+					title: "提示",
+					content: "确定取消该订单？",
+					success: (res) => {
+						if(res.confirm){
+							let params = {
+								token: uni.getStorageSync('token'),
+								order_id: this.id
+							};
+							let sign = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign;
+							this.$http.cancelOrder(params).then((data)=>{
+								this.$api.msg(data.data.msg);
+								if(data.data.status == 1){
+									this.is_type = '';
+									let params1 = {
+										id: this.id,
+										token: uni.getStorageSync('token')
+									};
+									let sign1 = this.$sign.getSign(params1,this.AppSecret);
+									params1.sign = sign1;
+									this.$http.getOrderDetail(params1).then((data)=>{
+										this.orderInfo = data.data.result;
+										this.orderInfo.add_time = util.formatTime(this.orderInfo.add_time);
+									})
+								}
+							})
+						}
+					}
 				})
 			}
 		}

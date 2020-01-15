@@ -133,7 +133,7 @@
 						price: 24,
 						is_type: 9,
 						is_eval: 1,
-						page: 0
+						page: 1
 					}
 				],
 				loadingType: 'more'
@@ -144,8 +144,8 @@
 			uniLoadMore
 		},
 		onLoad(opt) {
-			if(opt.id != undefined){
-				this.currentTab = opt.id;
+			if(opt.idx != undefined){
+				this.currentTab = opt.idx;
 			}
 		},
 		methods:{

@@ -73,7 +73,7 @@
 				],
 				util: '',
 				list: [],
-				page: 0
+				page: 1
 			}
 		},
 		components:{
@@ -101,7 +101,7 @@
 			
 			let params1 = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign1 = this.$sign.getSign(params1,this.AppSecret);
@@ -113,11 +113,11 @@
 		methods:{
 			navbarTap(e){
 				this.currentTab = e;
-				this.page = 0;
+				this.page = 1;
 				if(this.currentTab == 0){
 					let params1 = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10
 					};
 					let sign1 = this.$sign.getSign(params1,this.AppSecret);
@@ -128,7 +128,7 @@
 				}else{
 					let params1 = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10
 					};
 					let sign1 = this.$sign.getSign(params1,this.AppSecret);

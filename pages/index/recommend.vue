@@ -73,7 +73,7 @@
 				sort_three: 0,
 				sort_type: null,
 				changeList: 0,
-				page: 0,
+				page: 1,
 				type: 'goods_id',
 				sortType: 'desc',
 				url: ''
@@ -87,7 +87,7 @@
 			navbarTap(e,id){
 				console.log(e)
 				this.currentTab = e;
-				this.page = 0;
+				this.page = 1;
 				this.id = id;
 				let params = {
 					id: this.id,

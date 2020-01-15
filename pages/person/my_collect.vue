@@ -54,7 +54,7 @@
 				// {name:"店铺"},
 				navbar: [{name:"商品"},{name:"文章"}],
 				currentTab: 0,
-				page: 0,
+				page: 1,
 				collectList: [],
 				url: '',
 				loadingType: 'more'
@@ -68,7 +68,7 @@
 			this.url = this.$http.url;
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);
@@ -91,10 +91,10 @@
 			navbarTap(e){
 				console.log(e)
 				this.currentTab = e;
-				this.page = 0;
+				this.page = 1;
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 0,
+					page: 1,
 					limit: 10
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -147,21 +147,6 @@
 						this.collectList = this.collectList.concat(data.data.result);
 					})
 				}
-				// let params = {
-				// 	token: uni.getStorageSync('token'),
-				// 	page: this.page,
-				// 	limit: 10,
-				// 	type: 1
-				// };
-				// let sign = this.$sign.getSign(params,this.AppSecret);
-				// params.sign = sign;
-				// this.$http.userCountOrderList(params).then((data)=>{
-					// if(data.data.result.length == 0){
-					// 	this.loadingType = 'noMore';
-					// 	return;
-					// }
-				// 	this.mySales = this.mySales.concat(data.data.result);
-				// })
 			}
 		}
 	}

@@ -55,7 +55,7 @@
 					// }
 				],
 				length: 0,
-				page: 0,
+				page: 1,
 				loadingType: 'more'
 			}
 		},
@@ -64,8 +64,8 @@
 			uniLoadMore
 		},
 		onLoad(opt) {
-			if(opt.id != undefined){
-				this.currentTab = opt.id;
+			if(opt.idx != undefined){
+				this.currentTab = opt.idx;
 			}
 			// let params = {token: uni.getStorageSync('token')};
 			// let sign = this.$sign.getSign(params,this.AppSecret);

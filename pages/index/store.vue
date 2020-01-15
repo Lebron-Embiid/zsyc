@@ -86,7 +86,7 @@
 					// }
 				],
 				loadingType: 'more',
-				page: 0,
+				page: 1,
 				url: '',
 				setmeal_id: '',
 				us_id: ''
@@ -140,8 +140,7 @@
 						token: uni.getStorageSync('token'),
 						page: 0,
 						limit: 10,
-						setmeal_id: this.setmeal_id,
-						us_cat_id: this.us_id
+						setmeal_id: this.setmeal_id
 					}
 				}
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -185,6 +184,8 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						store_id: this.id,
+						page: 0,
+						limit: 10,
 						type: 1
 					};
 					let sign = this.$sign.getSign(params,this.AppSecret);
@@ -204,6 +205,8 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						store_id: this.id,
+						page: 0,
+						limit: 10,
 						type: 2
 					};
 					let sign = this.$sign.getSign(params,this.AppSecret);
@@ -270,22 +273,42 @@
 			}
 		},
 		onReachBottom() {
-			// this.page++;
-			// let params = {
-			// 	token: uni.getStorageSync('token'),
-			// 	article_id: this.id,
-			// 	page: this.page,
-			// 	limit: 10
-			// };
-			// let sign = this.$sign.getSign(params,this.AppSecret);
-			// params.sign = sign;
-			// this.$http.getCommentList(params).then((data)=>{
-				// if(data.data.result.length == 0){
-				// 	this.loadingType = 'noMore';
-				// 	return;
-				// }
-			// 	this.commentsList = this.commentsList.concat(data.data.result);
-			// })
+			this.page++;
+			if(this.currentTab == 0){
+				let params = {
+					token: uni.getStorageSync('token'),
+					store_id: this.id,
+					page: this.page,
+					limit: 10,
+					type: 1
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getStoreGoods(params).then((data)=>{
+					if(data.data.result.dataList.length == 0){
+						this.loadingType = 'noMore';
+						return;
+					}
+					this.contentList = this.contentList.concat(data.data.result.dataList);
+				})
+			}else{
+				let params = {
+					token: uni.getStorageSync('token'),
+					store_id: this.id,
+					page: this.page,
+					limit: 10,
+					type: 2
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getStoreGoods(params).then((data)=>{
+					if(data.data.result.dataList.length == 0){
+						this.loadingType = 'noMore';
+						return;
+					}
+					this.discountList = this.discountList.concat(data.data.result.dataList);
+				})
+			}
 		}
 	}
 </script>

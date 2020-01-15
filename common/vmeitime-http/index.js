@@ -2269,6 +2269,53 @@ export const searchArticle = (data) => {
         data
     })
 }
+// 套餐提交订单
+export const cartCombo = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/Cart/cartCombo',
+        method: 'POST',
+        data
+    })
+}
+// 评论订单
+export const userComment = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'api/User/comment',
+        method: 'POST',
+        data
+    })
+}
 
 // if(data.data.status == 40001){
 // 	this.$api.msg('请登录');
@@ -2423,5 +2470,7 @@ export default {
 	getStoreGoods,
 	getStoreAbout,
 	searchGoods,
-	searchArticle
+	searchArticle,
+	cartCombo,
+	userComment
 }

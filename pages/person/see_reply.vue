@@ -25,7 +25,7 @@
 		data(){
 			return{
 				order_id: '',
-				page: 0,
+				page: 1,
 				c_type: '',	//投诉类型   0:买家  1:卖家
 				replyList:[
 					// {
@@ -52,7 +52,7 @@
 			let params = {
 				token: uni.getStorageSync('token'),
 				order_id: this.order_id,
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);

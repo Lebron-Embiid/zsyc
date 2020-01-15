@@ -222,7 +222,7 @@
 				let params = {
 					token: uni.getStorageSync('token'),
 					q: this.keyword,
-					page: 0,
+					page: 1,
 					limit: 10
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);

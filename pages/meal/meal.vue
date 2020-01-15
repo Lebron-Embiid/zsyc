@@ -35,7 +35,7 @@
 			return{
 				navbar:[{name:"购买套餐"},{name:"未使用"},{name:"已使用"}],
 				currentTab:0,
-				type: '',
+				type: 'on',
 				current: '',
 				mealList: [
 					// {

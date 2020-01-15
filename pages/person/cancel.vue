@@ -34,6 +34,7 @@
 		onLoad(opt) {
 			if(opt.id != undefined){
 				this.id = opt.id;
+				console.log(this.id);
 			}
 			// let params = {};
 			// let sign = this.$sign.getSign(params,this.AppSecret);
@@ -56,6 +57,13 @@
 				params.sign = sign;
 				this.$http.cancelOrder(params).then((data)=>{
 					this.$api.msg(data.data.msg);
+					if(data.data.status == 1){
+						setTimeout(()=>{
+							uni.navigateBack({
+								delta: 1
+							})
+						},1500)
+					}
 				})
 			},
 			bindPickerChange(e) {

@@ -28,7 +28,7 @@
 				</view>
 			</view>
 		</view>
-		<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
+		<!-- <uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more> -->
 		<fixed-list :list="fixedList" @selectMeal="changeMeal"></fixed-list>
 	</view>
 </template>
@@ -82,7 +82,7 @@
 					// }
 				],
 				loadingType: 'more',
-				page: 0,
+				page: 1,
 				url: ''
 			}
 		},
@@ -121,8 +121,7 @@
 						token: uni.getStorageSync('token'),
 						page: 0,
 						limit: 10,
-						setmeal_id: this.setmeal_id,
-						us_cat_id: this.us_id
+						setmeal_id: this.setmeal_id
 					}
 				}
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -145,7 +144,7 @@
 				console.log(index);
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 0,
+					page: 1,
 					limit: 10,
 					setmeal_id: this.onlineList[this.current].setmeal_id,
 					us_cat_id: this.fixedList[index].setmeal_id
@@ -168,7 +167,7 @@
 				this.current = idx;
 				let params = {
 					token: uni.getStorageSync('token'),
-					page: 0,
+					page: 1,
 					limit: 10,
 					setmeal_id: id
 				};

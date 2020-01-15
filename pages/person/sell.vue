@@ -111,7 +111,7 @@
 				num: 1,
 				over_num: '',
 				total_price: '',
-				page: 0
+				page: 1
 			}
 		},
 		components:{
@@ -142,7 +142,7 @@
 			let params = {
 				token: uni.getStorageSync('token'),
 				sort_name: 'add_time',
-				page: 0,
+				page: 1,
 				limit: 10,
 				is_seller: 0
 			};
@@ -215,7 +215,7 @@
 				this.total_price = parseInt(this.price)*this.num;
 			},
 			changeSortOne(){
-				this.page = 0;
+				this.page = 1;
 				this.sort_two = 0;
 				this.sort_three = 0;
 				this.sort_type = null;
@@ -225,7 +225,7 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						sort_name: 'add_time',
-						page: 0,
+						page: 1,
 						limit: 10,
 						is_seller: 0
 					};
@@ -239,7 +239,7 @@
 				}
 			},
 			changeSortTwo(){
-				this.page = 0;
+				this.page = 1;
 				this.sort_one = 0;
 				this.sort_three = 0;
 				this.sort_type = null;
@@ -249,7 +249,7 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						sort_name: 'sell_count',
-						page: 0,
+						page: 1,
 						limit: 10,
 						is_seller: 0
 					};
@@ -263,7 +263,7 @@
 				}
 			},
 			changeSortThree(){
-				this.page = 0;
+				this.page = 1;
 				this.sort_two = 0;
 				this.sort_one = 0;
 				this.sort_type = null;
@@ -273,7 +273,7 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						sort_name: 'num',
-						page: 0,
+						page: 1,
 						limit: 10,
 						is_seller: 0
 					};
@@ -287,7 +287,7 @@
 				}
 			},
 			changeSort(){
-				this.page = 0;
+				this.page = 1;
 				this.sort_one = 0;
 				this.sort_two = 0;
 				this.sort_three = 0;
@@ -297,7 +297,7 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						sort_name: 'price',
-						page: 0,
+						page: 1,
 						limit: 10,
 						is_seller: 0,
 						sort: 'asc'
@@ -313,7 +313,7 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						sort_name: 'price',
-						page: 0,
+						page: 1,
 						limit: 10,
 						is_seller: 0,
 						sort: 'desc'
@@ -329,7 +329,7 @@
 					let params = {
 						token: uni.getStorageSync('token'),
 						sort_name: 'price',
-						page: 0,
+						page: 1,
 						limit: 10,
 						is_seller: 0,
 						sort: 'asc'

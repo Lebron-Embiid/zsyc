@@ -93,27 +93,27 @@
 					{
 						icon: '/static/icon/order_icon1.png',
 						title: '待付款',
-						url: '/pages/person/order?id=1',
+						url: '/pages/person/order?idx=1',
 						num: 1
 					},{
 						icon: '/static/icon/order_icon2.png',
 						title: '待发货',
-						url: '/pages/person/order?id=2',
+						url: '/pages/person/order?idx=2',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon3.png',
 						title: '待收货',
-						url: '/pages/person/order?id=3',
+						url: '/pages/person/order?idx=3',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon4.png',
 						title: '待评价',
-						url: '/pages/person/order?id=4',
+						url: '/pages/person/order?idx=4',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon6.png',
 						title: '已完成',
-						url: '/pages/person/order?id=5',
+						url: '/pages/person/order?idx=5',
 						num: 0
 					}
 				],
@@ -121,27 +121,27 @@
 					{
 						icon: '/static/icon/order_icon1.png',
 						title: '待付款',
-						url: '/pages/person/online_order?id=1',
+						url: '/pages/person/online_order?idx=1',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon2.png',
 						title: '待发货',
-						url: '/pages/person/online_order?id=2',
+						url: '/pages/person/online_order?idx=2',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon3.png',
 						title: '待收货',
-						url: '/pages/person/online_order?id=3',
+						url: '/pages/person/online_order?idx=3',
 						num: 2
 					},{
 						icon: '/static/icon/order_icon4.png',
 						title: '已完成',
-						url: '/pages/person/online_order?id=4',
+						url: '/pages/person/online_order?idx=4',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon5.png',
 						title: '换货',
-						url: '/pages/person/online_order?id=2',
+						url: '/pages/person/online_order?idx=2',
 						num: 0
 					}
 				],
@@ -149,22 +149,22 @@
 					{
 						icon: '/static/icon/order_icon1.png',
 						title: '待付款',
-						url: '/pages/person/offline_order?id=1',
+						url: '/pages/person/offline_order?idx=1',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon2.png',
 						title: '待提货',
-						url: '/pages/person/offline_order?id=2',
+						url: '/pages/person/offline_order?idx=2',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon4.png',
 						title: '已完成',
-						url: '/pages/person/offline_order?id=4',
+						url: '/pages/person/offline_order?idx=4',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon5.png',
 						title: '换货',
-						url: '/pages/person/offline_order?id=3',
+						url: '/pages/person/offline_order?idx=3',
 						num: 0
 					}
 				],
@@ -257,7 +257,7 @@
 			},
 			toOrder(){
 				uni.navigateTo({
-					url: '/pages/person/order'
+					url: '/pages/person/order?idx=0'
 				})
 			},
 			toMealOrder(){

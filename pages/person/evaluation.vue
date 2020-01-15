@@ -3,11 +3,11 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar leftIcon="back" title="用户评价"></uni-nav-bar>
 		<view class="evaluation_box">
-			<view class="eval_goods">
-				<image src="/static/img/order_img1.png" mode="widthFix"></image>
+			<view class="eval_goods" v-for="(item,index) in goodsInfo" :key="index">
+				<image :src="url+item.original_img" mode="widthFix"></image>
 				<view class="eval_right">
-					<view class="eval_title">普罗旺斯桃红葡萄酒</view>
-					<view class="eval_info">普罗旺斯产区 优雅精致</view>
+					<view class="eval_title">{{item.goods_name}}</view>
+					<view class="eval_info">{{item.spec_key_name}}</view>
 				</view>
 			</view>
 			<view class="rate_box">
@@ -41,12 +41,14 @@
 		data(){
 			return{
 				id: '',
+				goodsInfo: {},
 				rate_txt: '',
 				message: '',
 				num: 0,
 				rate_val: 0,
 				photoList: [],
-				photoList1: []
+				photoList1: [],
+				url: ''
 			}
 		},
 		components:{
@@ -54,6 +56,7 @@
 			uniRate
 		},
 		onLoad(opt) {
+			this.url = this.$http.url;
 			if(opt.id != undefined){
 				this.id = opt.id;
 			}
@@ -65,32 +68,40 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getOrderDetail(params).then((data)=>{
-				
+				this.goodsInfo = data.data.result.goods_list;
 			})
 		},
 		methods:{
 			submitEval(){
+				let gids = [];
+				// for(let i in this.goodsInfo){
+				// 	gids.push(this.goodsInfo[i].goods_id);
+				// }
+				console.log(gids);
 				let params = {
 					token: uni.getStorageSync('token'),
 					img_file: JSON.stringify(this.photoList1),
 					order_id: this.id,
-					goods_id: '',
+					goods_id: this.goodsInfo[0].goods_id,
 					store_packge_hidden: '',
-					store_speed_hidden: '',
+					store_speed_hidden: this.rate_val,
 					store_sever_hidden: '',
-					anonymous: '',
+					anonymous: 0,
 					remark: this.message
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);
 				params.sign = sign;
 				this.$http.orderCommentAdd(params).then((data)=>{
-					this.$api.msg(data.data.msg);
 					if(data.data.status == 1){
+						this.$api.msg(data.data.result);
 						this.message = '';
 						this.photoList = [];
 						this.photoList1 = [];
-						this.rate_val = 0;
+						// this.rate_val = 0;
+						// this.rate_txt = '';
 						this.num = 0;
+					}else{
+						this.$api.msg(data.data.msg);
 					}
 				})
 			},
@@ -188,12 +199,17 @@
 <style scoped lang="scss">
 	.evaluation_box{
 		background: #fafafa;
-		padding: 30rpx;
+		padding: 10rpx 30rpx 30rpx;
 		box-sizing: border-box;
 		.eval_goods{
 			display: flex;
 			justify-content: flex-start;
 			align-items: center;
+			padding: 30rpx 0;
+			border-bottom: 1px solid #eee;
+			&:last-of-type{
+				margin-bottom: 0;
+			}
 			image{
 				display: block;
 				width: 150rpx;

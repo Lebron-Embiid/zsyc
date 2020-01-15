@@ -191,7 +191,7 @@
 					}
 				],
 				loadingType: 'more',
-				page: 0
+				page: 1
 			}
 		},
 		components:{

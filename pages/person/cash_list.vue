@@ -48,7 +48,8 @@
 		data() {
 			return {
 				isSelect:false,
-				accountList:[]
+				accountList:[],
+				page: 1
 			};
 		},
 		components:{
@@ -57,7 +58,7 @@
 		onShow() {
 			let params = {
 				token: uni.getStorageSync('token'),
-				page: 0,
+				page: 1,
 				limit: 10
 			};
 			let sign = this.$sign.getSign(params,this.AppSecret);

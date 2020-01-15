@@ -130,7 +130,7 @@
 					:key="idx"
 				></view>
 			</view>
-			<view class="layer_words_box" v-if="is_time == 0">
+			<view class="layer_words_box" v-if="us_id != ''">
 				<text class="lwb_title">女士套餐</text>
 				<text>衬衫</text>
 				<button type="primary" size="mini" @tap="changeTime">前往折扣区单购</button>
@@ -167,7 +167,7 @@
 				<view class="arrow"><view class="icon xiangyou"></view></view>
 			</view>
 			 <!-- @tap="showService" -->
-			<picker @change="bindCouriersChange" :value="couriersCurrent" range-key="name" :range="couriers">
+			<picker v-if="couriers.length != 0" @change="bindCouriersChange" :value="couriersCurrent" range-key="name" :range="couriers">
 				<view class="row">
 					<!-- <view class="text">服务</view> -->
 					<view class="content">
@@ -326,29 +326,7 @@ export default {
 				// }
 			],
 			selectSpecList: {},
-			couriers: [
-				{
-					label: '顺丰',
-					from: '上海',
-					to: '深圳/罗湖区',
-					price: '8.00'
-				},{
-					label: '申通',
-					from: '上海',
-					to: '深圳/罗湖区',
-					price: '8.00'
-				},{
-					label: '中通',
-					from: '上海',
-					to: '深圳/罗湖区',
-					price: '8.00'
-				},{
-					label: '顺丰',
-					from: '上海',
-					to: '深圳/罗湖区',
-					price: '8.00'
-				}
-			],
+			couriers: [],
 			couriersCurrent: 0,
 			couriersTxt: '请选择快递方式',
 			selectCourierVal: {},
@@ -394,7 +372,12 @@ export default {
 		}
 		console.log(option.cid+'---------------'+this.goodsData.id);
 		
-		let params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id};
+		let params = {};
+		if(this.us_id == ''){
+			params = {token: uni.getStorageSync('token'),id: option.cid};
+		}else{
+			params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id};
+		}
 		let sign = this.$sign.getSign(params,this.AppSecret);
 		params.sign = sign;
 		// 获取商品信息
@@ -421,15 +404,19 @@ export default {
 					list: res.spec_goods_price
 				})
 			// }
-			this.couriers = res.shippingList;
-			let store_id = this.couriers[0].store_id;
-			let shipping_code = this.couriers[0].shipping_code;
-			this.couriersTxt = this.couriers[0].name;
-			this.selectCourierVal = {
-				[store_id]: shipping_code
+			this.couriers = res.shippingList?res.shippingList:[];
+			console.log(this.couriers);
+			if(this.couriers.length != 0){
+				let store_id = this.couriers[0].store_id;
+				let shipping_code = this.couriers[0].shipping_code;
+				this.couriersTxt = this.couriers[0].name;
+				this.selectCourierVal = {
+					[store_id]: shipping_code
+				}
+				console.log(this.selectCourierVal)
+				console.log(this.goods_spec_list);
 			}
-			console.log(this.selectCourierVal)
-			console.log(this.goods_spec_list);
+			
 			// this.goodsData.price = res.price;
 			// this.goodsData.old_price = res.old_price;
 			// this.goodsData.stock = res.stock;
@@ -716,26 +703,79 @@ export default {
 		finishSpec(){
 			console.log(this.selectArr);
 			 // || this.selectArr.length != this.goods_spec_list.length
-			if(this.selectArr.length == 0){
-				this.$api.msg('请选择规格');
-				return;
-			}
+			// if(this.selectArr.length == 0){
+			// 	this.$api.msg('请选择规格');
+			// 	return;
+			// }
+			
 			let params = {};
 			if(uni.getStorageSync('token') == '' || uni.getStorageSync('token') == null){
-				params = {
-					goods_id: this.goodsData.goods_id,
-					goods_num: this.number,
-					goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
-					unique_id: uni.getStorageSync('unique_id'),
-					us_id: this.us_id
+				if(this.us_id == ''){
+					if(this.goods_spec_list[0].list == null){
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							unique_id: uni.getStorageSync('unique_id'),
+						}
+					}else{
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
+							unique_id: uni.getStorageSync('unique_id'),
+						}
+					}
+				}else{
+					if(this.goods_spec_list[0].list == null){
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							unique_id: uni.getStorageSync('unique_id'),
+							us_id: this.us_id
+						}
+					}else{
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
+							unique_id: uni.getStorageSync('unique_id'),
+							us_id: this.us_id
+						}
+					}
 				}
 			}else{
-				params = {
-					goods_id: this.goodsData.goods_id,
-					goods_num: this.number,
-					goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
-					token: uni.getStorageSync('token'),
-					us_id: this.us_id
+				if(this.us_id == ''){
+					if(this.goods_spec_list[0].list == null){
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							token: uni.getStorageSync('token')
+						}
+					}else{
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
+							token: uni.getStorageSync('token')
+						}
+					}
+				}else{
+					if(this.goods_spec_list[0].list == null){
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							token: uni.getStorageSync('token'),
+							us_id: this.us_id
+						}
+					}else{
+						params = {
+							goods_id: this.goodsData.goods_id,
+							goods_num: this.number,
+							goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
+							token: uni.getStorageSync('token'),
+							us_id: this.us_id
+						}
+					}
 				}
 			}
 			let sign = this.$sign.getSign(params,this.AppSecret);
@@ -754,11 +794,14 @@ export default {
 			}else{
 				this.$http.addCar(params).then((data)=>{
 					if(data.data.status == 1){
-						uni.switchTab({
-							url: '/pages/car/car'
-						})
-						this.specClass = 'hide';
-						this.specClass = 'none';
+						this.$api.msg('正在前往购物车结算');
+						setTimeout(()=>{
+							uni.switchTab({
+								url: '/pages/car/car'
+							})
+							this.specClass = 'hide';
+							this.specClass = 'none';
+						},1500)
 					}else{
 						this.$api.msg(data.data.msg);
 					}

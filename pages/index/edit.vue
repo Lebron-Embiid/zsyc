@@ -222,7 +222,7 @@
 			}
 		},
 		onLoad(e) {
-			let params = {};
+			let params = {token:uni.getStorageSync('token')};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			
