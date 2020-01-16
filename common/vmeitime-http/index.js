@@ -2317,6 +2317,192 @@ export const userComment = (data) => {
     })
 }
 
+// 线上订单
+export const onlineOrderList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'api/User/setmeal_online_order_list',
+        method: 'POST',
+        data
+    })
+}
+// 线上订单状态
+export const orderStatus = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/orderStatus',
+        method: 'POST',
+        data
+    })
+}
+// 线下订单
+export const offlineOrderList = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+	http.interceptor.response = (response) => {
+		if(response.data.status == '-102' || response.data.status == '-101' || response.data.status == '-100'){
+			uni.showToast({
+				title: '登录超时,请重新登录!',
+				icon: 'none',
+				duration: 1500,
+				mask: true
+			});
+			uni.removeStorageSync('token');
+			setTimeout(function(){
+				uni.reLaunch({
+					url: '/pages/login/login'
+				})
+			},1500)
+			return;
+		}
+	}
+    return http.request({
+        url: 'api/User/setmeal_offline_order_list',
+        method: 'POST',
+        data
+    })
+}
+// 线下订单状态
+export const underOrderStatus = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/underOrderStatus',
+        method: 'POST',
+        data
+    })
+}
+// 绑定新手机
+export const bindMobile = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/bindMobile',
+        method: 'POST',
+        data
+    })
+}
+// 身份认证
+export const userAuth = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/userAuth',
+        method: 'POST',
+        data
+    })
+}
+
+// 获取订单消息提醒
+export const getOrderCount = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/getOrderCount',
+        method: 'POST',
+        data
+    })
+}
+// 用户注册协议
+export const getAgreement = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/Article/agreement',
+        method: 'POST',
+        data
+    })
+}
+
+// 意见反馈类型
+export const feedBackType = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/feedBackType',
+        method: 'POST',
+        data
+    })
+}
+// 意见反馈提交
+export const feedBack = (data) => {
+	http.interceptor.request = (config) => {
+		config.header = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			'token': uni.getStorageSync('token'),
+			'timestamp': new Date().getTime()
+		}
+	}
+    return http.request({
+        url: 'api/User/feedBack',
+        method: 'POST',
+        data
+    })
+}
 // if(data.data.status == 40001){
 // 	this.$api.msg('请登录');
 // 	setTimeout(function(){
@@ -2472,5 +2658,15 @@ export default {
 	searchGoods,
 	searchArticle,
 	cartCombo,
-	userComment
+	userComment,
+	onlineOrderList,
+	orderStatus,
+	offlineOrderList,
+	underOrderStatus,
+	bindMobile,
+	userAuth,
+	getOrderCount,
+	getAgreement,
+	feedBackType,
+	feedBack
 }

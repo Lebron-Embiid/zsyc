@@ -46,6 +46,15 @@
 			}
 		},
 		{
+			"path": "pages/login/agreement",
+			"style": {
+				"navigationBarTitleText": "用户协议",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
 			"path": "pages/index/shop",
 			"style": {
 				"navigationBarTitleText": "商城首页",

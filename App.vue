@@ -861,4 +861,38 @@
 			}
 		}
 	}
+	
+	.pay_fix_content{
+		background: #fff;
+		padding: 100rpx;
+		box-sizing: border-box;
+		border-radius: 10rpx;
+		color: #333;
+		font-size: 32rpx;
+		label{
+			margin: 50rpx 0;
+			display: block;
+			width: 100%;
+			font-size: 32rpx;
+			radio{
+				display: inline-block;
+				vertical-align: middle;
+				transform: scale(.8);
+				margin-bottom: 5rpx;
+			}
+		}
+		button{
+			color: #fff;
+			font-size: 32rpx;
+			background-color: #f60;
+			display: block;
+			margin: 0 auto;
+			width: 280rpx;
+			height: 80rpx;
+			line-height: 80rpx;
+			&:after{
+				border: 0;
+			}
+		}
+	}
 </style>

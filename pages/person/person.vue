@@ -17,7 +17,7 @@
 				<view class="pl_bottom">
 					<!-- <view>昵称：</view> -->
 					<view>余额：￥{{parseInt(personInfo.user_money)}}</view>
-					<view>额度：v 150000</view>
+					<view>额度：v 0</view>
 					<view>套餐资格：{{personInfo.user_count}}</view>
 					<view>已购套餐：{{personInfo.us_count}}</view>
 				</view>
@@ -216,6 +216,24 @@
 			params1.sign = sign1;
 			this.$http.getParentCount(params1).then((data)=>{
 				this.recInfo = data.data.result;
+			})
+			
+			let params2 = {
+				token: uni.getStorageSync('token')
+			};
+			let sign2 = this.$sign.getSign(params2,this.AppSecret);
+			params2.sign = sign2;
+			this.$http.getOrderCount(params2).then((data)=>{
+				this.orderNavs[0].num = data.data.result.wai_pay_count;
+				this.orderNavs[1].num = data.data.result.online_wai_send_count;
+				this.orderNavs[2].num = data.data.result.online_wai_receive_count;
+				this.orderNavs[3].num = data.data.result.online_wai_comment_count;
+				this.mealNavs[0].num = data.data.result.wai_pay_count;
+				this.mealNavs[1].num = data.data.result.wai_send_count;
+				this.mealNavs[2].num = data.data.result.wai_receive_count;
+				this.mealNavs2[0].num = data.data.result.underline_wai_pay_count;
+				this.mealNavs2[1].num = data.data.result.underline_wai_send_count;
+				this.mealNavs2[2].num = data.data.result.underline_wai_comment_count;
 			})
 			
 			let params = {

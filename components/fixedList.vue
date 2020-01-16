@@ -5,7 +5,7 @@
 			<view>引导</view>
 		</view>
 		<view class="fixed_right_box" :class="[isShow==true?'active':'']">
-			<view class="fixed_right_item" :class="[index<2?'yellow':'']" v-for="(item,index) in list" :key="index" @tap="toLink(index)">
+			<view class="fixed_right_item" :class="[item.is_add==1?'yellow':'']" v-for="(item,index) in list" :key="index" @tap="toLink(index)">
 				<view>{{item.setmeal_name.substr(0, 2)}}</view>
 				<view>{{item.setmeal_name.substr(2, 3)}}</view>
 			</view>

@@ -12,19 +12,20 @@
 				</view>
 				<view class="moi_center" @tap="toOrderDetail(item.order_id,item.order_status_code)" v-for="(order,idx) in item.goods_list" :key="idx">
 					<image :src="url+order.original_img" mode="widthFix"></image>
-					<view class="moi_box">
+					<view class="moi_box" :class="[item.order_status_code == 'WAITCCOMMENT'?'width':'']">
 						<view class="moi_title">{{order.goods_name}}</view>
 						<view class="moi_info">{{order.spec_key_name}}</view>
 					</view>
+					<button @tap.stop="toEvaluation(order.order_id,idx)" v-if="item.order_status_code == 'WAITCCOMMENT'" type="primary" size="mini" class="red">评价</button>
 				</view>
 				<view class="moi_all">共{{item.goods_list.length}}件商品 合计：￥{{item.total_amount}}</view>
 				<view class="moi_bottom">
-					<button @tap="toLogistics(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini" class="pad">查看物流</button>
+					<!-- <button @tap="toLogistics(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini" class="pad">查看物流</button> -->
 					<button @tap="cancelOrder(item.order_id)" v-if="item.order_status_code == 'WAITPAY' || item.order_status_code == 'WAITSEND'" type="default" size="mini" class="pad">取消订单</button>
 					<button @tap="buyAgain" v-if="item.order_status_code == 'WAITSEND' || item.order_status_code == 'CANCEL' || item.order_status_code == 'WAITCCOMMENT'" type="default" size="mini" class="pad">再次购买</button>
 					<button v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini">退换货</button>
 					<button @tap="toConfirm(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="primary" size="mini" class="red pad">确认收货</button>
-					<button @tap="toEvaluation(item.order_id)" v-if="item.order_status_code == 'WAITCCOMMENT'" type="primary" size="mini" class="red pad">去评价</button>
+					<!-- <button @tap="toEvaluation(item.order_id)" v-if="item.order_status_code == 'WAITCCOMMENT'" type="primary" size="mini" class="red pad">去评价</button> -->
 					<button @tap="payOrder(item.order_id)" v-if="item.order_status_code == 'WAITPAY'" type="primary" size="mini" class="red">付款</button>
 				</view>
 			</view>
@@ -51,7 +52,7 @@
 	export default{
 		data(){
 			return{
-				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"},{name:"已完成"},{name:"已取消"},{name:"已作废"}],
+				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"},{name:"已完成"},{name:"已取消"}],
 				currentTab:0,
 				order_id: '',
 				orderList: [
@@ -269,9 +270,9 @@
 				// 	url: '/pages/person/cancel?id='+id
 				// })
 			},
-			toEvaluation(id){
+			toEvaluation(id,idx){
 				uni.navigateTo({
-					url: '/pages/person/evaluation?id='+id
+					url: '/pages/person/evaluation?id='+id+'&idx='+idx
 				})
 			},
 			payOrder(id){
@@ -412,39 +413,7 @@
 	.order{
 		background: #eee;
 	}
-	.pay_fix_content{
-		background: #fff;
-		padding: 100rpx;
-		box-sizing: border-box;
-		border-radius: 10rpx;
-		color: #333;
-		font-size: 32rpx;
-		label{
-			margin: 50rpx 0;
-			display: block;
-			width: 100%;
-			font-size: 32rpx;
-			radio{
-				display: inline-block;
-				vertical-align: middle;
-				transform: scale(.8);
-				margin-bottom: 5rpx;
-			}
-		}
-		button{
-			color: #fff;
-			font-size: 32rpx;
-			background-color: #f60;
-			display: block;
-			margin: 0 auto;
-			width: 280rpx;
-			height: 80rpx;
-			line-height: 80rpx;
-			&:after{
-				border: 0;
-			}
-		}
-	}
+	
 	.my_order_box{
 		height: 85vh;
 		.my_order_item{
@@ -479,6 +448,38 @@
 				&:active{
 					background: #fafafa;
 				}
+				button{
+					margin: 0 0 0 20rpx;
+					background: #fff;
+					width: 130rpx;
+					height: 60rpx;
+					padding: 0 !important;
+					line-height: 60rpx;
+					text-align: center;
+					box-sizing: border-box;
+					font-size: 28rpx;
+					border: 1px solid #ccc;
+					color: #333;
+					&.pad{
+						width: auto;
+						padding: 0 30rpx;
+					}
+					&:active{
+						background: #eee;
+					}
+					&.red{
+						color: #fff;
+						font-weight: bold;
+						background: #fd4b71;
+						border-color: #fd4b71;
+						&:active{
+							opacity: .9;
+						}
+					}
+					&:after{
+						border: 0;
+					}
+				}
 				image{
 					display: block;
 					width: 160rpx;
@@ -487,6 +488,9 @@
 				}
 				.moi_box{
 					width: 80%;
+					&.width{
+						width: 60%;
+					}
 					.moi_title{
 						margin-bottom: 30rpx;
 						overflow : hidden;

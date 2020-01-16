@@ -88,7 +88,7 @@
 				<view class="agree_txt">
 					<view v-if="is_agree == false" @tap="changeAgree"><image src="/static/icon/radio.svg" mode="widthFix"></image></view>
 					<view v-else @tap="changeAgree"><image src="/static/icon/radio_on.svg" mode="widthFix"></image></view>
-					已阅读并同意《<text>用户服务协议</text>》
+					已阅读并同意《<text @tap="toAgreement">用户服务协议</text>》
 					<!-- <checkbox-group @change="changeAgree">
 						<label class="checkbox" v-for="item in items" :key="item.value">
 							<checkbox color="#fff" :value="item.value" :checked="item.checked" />
@@ -164,6 +164,11 @@
 			this.logoSrc = getApp().globalData.app_logo;
 		},
 		methods:{
+			toAgreement(){
+				uni.navigateTo({
+					url: '/pages/login/agreement'
+				})
+			},
 			getcode(){
 				this.$Debounce.canDoFunction({
 				    key: "getcode",
@@ -181,9 +186,11 @@
 							mobile: that.phone,
 							scene: 1
 						}).then((data)=>{
-							// that.code = data.data.msg;
-							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
+								if(data.data.is_test == 1){
+									that.code = data.data.msg;
+								}
+								that.$api.msg('验证码已发送');
 								that.second = 60;
 								timer = setInterval(function(){
 									that.second--;
@@ -191,6 +198,8 @@
 										clearInterval(timer)
 									}
 								},1000)
+							}else{
+								that.$api.msg(data.data.msg);
 							}
 						})
 				    }

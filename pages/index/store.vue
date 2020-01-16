@@ -33,7 +33,7 @@
 							<view class="text">库存<text>{{item.store_count}}</text>件</view>
 							<view class="process" :style="{width: item.process+'%'}"></view>
 						</view>
-						<button type="primary" @tap.stop="toDetail(item.goods_id,current)" size="mini">马上抢</button>
+						<button type="primary" @tap.stop="toMealDetail(item.goods_id,current)" size="mini">马上抢</button>
 					</view>
 				</view>
 			</view>
@@ -103,11 +103,13 @@
 			}
 			this.url = this.$http.url;
 			if(opt.us_id != undefined){
+				this.id = opt.store_id;
 				this.setmeal_id = opt.setmeal_id;
 				this.us_id = opt.us_id;
 				this.current = opt.current;
 			}
-			
+		},
+		onShow() {
 			let params2 = {
 				token: uni.getStorageSync('token'),
 				store_id: this.id
@@ -152,7 +154,8 @@
 						let res = data.data.result.cate;
 						this.fixedList.push({
 							setmeal_id: res[i].id,
-							setmeal_name: res[i].name
+							setmeal_name: res[i].name,
+							is_add: res[i].is_add
 						})
 					}
 				})
@@ -171,7 +174,8 @@
 					let res = data.data.result.cate;
 					this.fixedList.push({
 						setmeal_id: res[i].id,
-						setmeal_name: res[i].name
+						setmeal_name: res[i].name,
+						is_add: res[i].is_add
 					})
 				}
 				console.log(this.fixedList);
@@ -197,7 +201,8 @@
 							let res = data.data.result.cate;
 							this.fixedList.push({
 								setmeal_id: res[i].id,
-								setmeal_name: res[i].name
+								setmeal_name: res[i].name,
+								is_add: res[i].is_add
 							})
 						}
 					})
@@ -233,7 +238,8 @@
 						let res = data.data.result.cate;
 						this.fixedList.push({
 							setmeal_id: res[i].id,
-							setmeal_name: res[i].name
+							setmeal_name: res[i].name,
+							is_add: res[i].is_add
 						})
 					}
 				})
@@ -256,19 +262,31 @@
 						let res = data.data.result.cate;
 						this.fixedList.push({
 							setmeal_id: res[i].id,
-							setmeal_name: res[i].name
+							setmeal_name: res[i].name,
+							is_add: res[i].is_add
 						})
 					}
 				})
 			},
-			toMealDetail(){
+			toMeal(){
 				uni.navigateTo({
 					url: '/pages/meal/meal?type=off&current='+this.current
 				})
 			},
-			toDetail(id,idx){
+			toMealDetail(id,idx){
+				if(this.us_id == ''){
+					uni.navigateTo({
+						url: '/pages/index/detail?type=off&cid='+id+'&idx='+idx+'&us_id='+this.us_id+'&store_id='+this.id
+					})
+				}else{
+					uni.navigateTo({
+						url: '/pages/index/detail?type=off&cid='+id+'&idx='+idx+'&us_id='+this.us_id+'&store_id='+this.id
+					})
+				}
+			},
+			toDetail(id){
 				uni.navigateTo({
-					url: '/pages/index/detail?type=off&cid='+id+'&idx='+idx+'&us_id='+this.us_id
+					url: '/pages/index/detail?cid='+id
 				})
 			}
 		},

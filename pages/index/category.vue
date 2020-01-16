@@ -27,9 +27,9 @@
 			<!-- 右侧子导航 -->
 			<scroll-view  scroll-y="true" class="right" >
 			    <view class="category" v-for="(category,index) in categoryNavs" :key="category.id" v-show="index==showCategoryIndex" >
-					<view class="banner">
+					<!-- <view class="banner">
 						<image :src="url+category.image"></image>
-					</view>
+					</view> -->
 					<view class="list_box" v-for="(item,idx) in categoryList" :key="idx">
 						<view class="list_title">{{item.mobile_name}}</view>
 						<view class="list">

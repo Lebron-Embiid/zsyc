@@ -11,9 +11,9 @@
 					<text>{{item.order_status_desc}}</text>
 				</view>
 				<view class="moi_center" @tap="toOrderDetail(item.order_id,item.order_status_code)">
-					<image :src="order.original_img" mode="widthFix" v-for="(order,idx) in item.goods_list" :key="idx"></image>
+					<image :src="url+order.original_img" mode="widthFix" v-for="(order,idx) in item.goods_list" :key="idx"></image>
 				</view>
-				<view class="moi_all">共{{length}}件商品 合计：￥{{item.total_amount}}</view>
+				<view class="moi_all">共{{item.goods_list.length}}件商品 合计：￥{{item.total_amount}}</view>
 				<view class="moi_bottom">
 					<button @tap="toLogistics(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini" class="pad">查看物流</button>
 					<button @tap="cancelOrder(item.order_id)" v-if="item.order_status_code == 'WAITPAY' || item.order_status_code == 'WAITSEND'" type="default" size="mini" class="pad">取消订单</button>
@@ -35,7 +35,7 @@
 	export default{
 		data(){
 			return{
-				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"},{name:"已完成"},{name:"已取消"},{name:"已作废"}],
+				navbar:[{name:"全部"},{name:"待付款"},{name:"待发货"},{name:"待收货"},{name:"待评价"},{name:"已完成"},{name:"已取消"}],
 				currentTab:0,
 				orderList: [
 					// {
@@ -54,8 +54,10 @@
 					// 	is_type: 1
 					// }
 				],
-				length: 0,
+				pay_radio: '',
+				payList: [],
 				page: 1,
+				url: '',
 				loadingType: 'more'
 			}
 		},
@@ -64,18 +66,42 @@
 			uniLoadMore
 		},
 		onLoad(opt) {
+			this.url = this.$http.url;
 			if(opt.idx != undefined){
 				this.currentTab = opt.idx;
 			}
-			// let params = {token: uni.getStorageSync('token')};
-			// let sign = this.$sign.getSign(params,this.AppSecret);
-			// params.sign = sign;
-			// this.$http.getOrderList(params).then((data)=>{
-			// 	this.orderList = data.data.result;
-			// 	this.length = data.data.result.goods_list.length;
-			// })
+			var type = '';
+			if(opt.idx == 0){
+				type = '';
+			}else if(opt.idx == 1){
+				type = 'WAITPAY';
+			}else if(opt.idx == 2){
+				type = 'WAITSEND';
+			}else if(opt.idx == 3){
+				type = 'WAITRECEIVE';
+			}else if(opt.idx == 4){
+				type = 'WAITCCOMMENT';
+			}else if(opt.idx == 5){
+				type = 'FINISH';
+			}else if(opt.idx == 6){
+				type = 'CANCEL';
+			}
+			let params = {
+				token: uni.getStorageSync('token'),
+				type: type,
+				page: 1,
+				limit: 10
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.onlineOrderList(params).then((data)=>{
+				this.orderList = data.data.result;
+			})
 		},
 		methods:{
+			changeCode(e){
+				this.pay_radio = e.detail.value;
+			},
 			clickRightBtn(){
 				uni.redirectTo({
 					url: '/pages/person/offline_order'
@@ -83,6 +109,33 @@
 			},
 			navbarTap(e){
 				this.currentTab = e;
+				var type = '';
+				if(this.currentTab == 0){
+					type = '';
+				}else if(this.currentTab == 1){
+					type = 'WAITPAY';
+				}else if(this.currentTab == 2){
+					type = 'WAITSEND';
+				}else if(this.currentTab == 3){
+					type = 'WAITRECEIVE';
+				}else if(this.currentTab == 4){
+					type = 'WAITCCOMMENT';
+				}else if(this.currentTab == 5){
+					type = 'FINISH';
+				}else if(this.currentTab == 6){
+					type = 'CANCEL';
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					type: type,
+					page: 1,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.onlineOrderList(params).then((data)=>{
+					this.orderList = data.data.result;
+				})
 			},
 			toConfirm(id){
 				let params = {
@@ -93,6 +146,7 @@
 				params.sign = sign;
 				this.$http.orderConfirm(params).then((data)=>{
 					this.$api.msg(data.data.msg);
+					this.getInitOrder();
 				})
 			},
 			toOrderDetail(id,type){
@@ -101,8 +155,23 @@
 				})
 			},
 			cancelOrder(id){
-				uni.navigateTo({
-					url: '/pages/person/cancel?id='+id
+				uni.showModal({
+					title: "提示",
+					content: "确定取消该订单？",
+					success: (res) => {
+						if(res.confirm){
+							let params = {
+								token: uni.getStorageSync('token'),
+								order_id: id
+							};
+							let sign = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign;
+							this.$http.cancelOrder(params).then((data)=>{
+								this.$api.msg(data.data.msg);
+								this.getInitOrder();
+							})
+						}
+					}
 				})
 			},
 			toEvaluation(id){
@@ -110,28 +179,123 @@
 					url: '/pages/person/evaluation?id='+id
 				})
 			},
+			payOrder(id){
+				this.order_id = id;
+				let params = {
+					token: uni.getStorageSync('token'),
+					order_id: id
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.shopOrderPay(params).then((data)=>{
+					this.payList = data.data.result.paymentList;
+					this.$refs.pay.open();
+				})
+			},
+			toBuyOrder(){
+				if(this.pay_radio == ''){
+					this.$api.msg('请选择支付方式');
+					return;
+				}
+				let params1 = {
+					order_id: this.order_id,
+					pay_radio: JSON.parse(JSON.stringify('pay_code='+this.pay_radio))
+				};
+				let sign1 = this.$sign.getSign(params1,this.AppSecret);
+				params1.sign = sign1;
+				this.$http.thirdPay(params1).then((data1)=>{
+					this.$api.msg(data1.data.msg);
+					let url = this.$http.url+data1.data.result;
+					if(data1.data.status == 1){
+						// #ifdef APP-PLUS
+						if(uni.getSystemInfoSync().platform == 'android'){
+							plus.runtime.openURL(url);
+						}
+						if(uni.getSystemInfoSync().platform == 'ios'){
+							plus.runtime.install(url);
+						}
+						// #endif
+						//#ifdef H5
+						window.location.href = url;
+						//#endif
+					}
+				})
+			},
+			buyAgain(){
+				uni.switchTab({
+					url: '/pages/index/shop'
+				})
+			},
 			toLogistics(id){
 				uni.navigateTo({
 					url: '/pages/person/logistics?id='+id
 				})
 			},
+			getInitOrder(){
+				let type = '';
+				switch(this.currentTab){
+					case 0: type = '';
+						break;
+					case 1: type = 'WAITPAY';
+						break;
+					case 2: type = 'WAITSEND';
+						break;
+					case 3: type = 'WAITRECEIVE';
+						break;
+					case 4: type = 'WAITCCOMMENT';
+						break;
+					case 5: type = 'FINISH';
+						break;
+					case 6: type = 'CANCEL';
+						break;
+					case 7: type = 'CANCELLED';
+						break;
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					type: type,
+					page: 1,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.getOrderList(params).then((data)=>{
+					this.orderList = data.data.result;
+				})
+			},
 			loadMore(){
 				this.page++;
-				// let params = {
-				// 	token: uni.getStorageSync('token'),
-				// 	page: this.page,
-				// 	limit: 10,
-				// 	type: 1
-				// };
-				// let sign = this.$sign.getSign(params,this.AppSecret);
-				// params.sign = sign;
-				// this.$http.userCountOrderList(params).then((data)=>{
-				// 	if(data.data.result.length == 0){
-				// 		this.loadingType = 'noMore';
-				// 		return;
-				// 	}
-				// 	this.mySales = this.mySales.concat(data.data.result);
-				// })
+				var type = '';
+				if(this.currentTab == 0){
+					type = '';
+				}else if(this.currentTab == 1){
+					type = 'WAITPAY';
+				}else if(this.currentTab == 2){
+					type = 'WAITSEND';
+				}else if(this.currentTab == 3){
+					type = 'WAITRECEIVE';
+				}else if(this.currentTab == 4){
+					type = 'WAITCCOMMENT';
+				}else if(this.currentTab == 5){
+					type = 'FINISH';
+				}else if(this.currentTab == 6){
+					type = 'CANCEL';
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					type: type,
+					page: this.page,
+					limit: 10
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.onlineOrderList(params).then((data)=>{
+					if(data.data.result.length == 0){
+						this.loadingType = 'noMore';
+						return;
+					}
+					this.orderList = this.orderList.concat(data.data.result);
+				})
 			}
 		}
 	}

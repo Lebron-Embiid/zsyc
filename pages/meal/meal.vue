@@ -37,6 +37,7 @@
 				currentTab:0,
 				type: 'on',
 				current: '',
+				store_id: '',
 				mealList: [
 					// {
 					// 	price: 2000,
@@ -56,6 +57,7 @@
 				console.log(opt);
 				this.type = opt.type;
 				this.current = opt.current;
+				this.store_id = opt.store_id;
 			}
 			
 			let params = {
@@ -171,12 +173,12 @@
 			},
 			toUseMeal(setmeal_id,us_id){
 				if(this.type == 'on'){
-					uni.navigateTo({
+					uni.redirectTo({
 						url: '/pages/index/online_area?current='+this.current+'&setmeal_id='+setmeal_id+'&us_id='+us_id
 					})
 				}else{
-					uni.navigateTo({
-						url: '/pages/index/store?current='+this.current+'&setmeal_id='+setmeal_id+'&us_id='+us_id
+					uni.redirectTo({
+						url: '/pages/index/store?current='+this.current+'&setmeal_id='+setmeal_id+'&us_id='+us_id+'&store_id='+this.store_id
 					})
 				}
 			},

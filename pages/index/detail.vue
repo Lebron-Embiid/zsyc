@@ -349,7 +349,8 @@ export default {
 			util: '',
 			idx: '',
 			m_type: '',
-			us_id: ''
+			us_id: '',
+			store_id:''
 		};
 	},
 	components:{
@@ -365,6 +366,7 @@ export default {
 			// console.log(this.goods_id);
 		}
 		if(option.us_id != undefined){
+			this.store_id = option.store_id;
 			this.m_type = option.type;
 			this.idx = option.idx;
 			this.us_id = option.us_id;
@@ -374,9 +376,9 @@ export default {
 		
 		let params = {};
 		if(this.us_id == ''){
-			params = {token: uni.getStorageSync('token'),id: option.cid};
+			params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id,store_id: this.store_id};
 		}else{
-			params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id};
+			params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id,store_id: this.store_id};
 		}
 		let sign = this.$sign.getSign(params,this.AppSecret);
 		params.sign = sign;
@@ -675,8 +677,8 @@ export default {
 			uni.navigateBack();
 		},
 		toMeal(){
-			uni.navigateTo({
-				url: '/pages/meal/meal?current='+this.idx+'&type='+this.m_type
+			uni.redirectTo({
+				url: '/pages/meal/meal?current='+this.idx+'&type='+this.m_type+'&store_id='+this.store_id
 			})
 		},
 		//服务弹窗
@@ -731,7 +733,8 @@ export default {
 							goods_id: this.goodsData.goods_id,
 							goods_num: this.number,
 							unique_id: uni.getStorageSync('unique_id'),
-							us_id: this.us_id
+							us_id: this.us_id,
+							store_id: this.store_id
 						}
 					}else{
 						params = {
@@ -739,7 +742,8 @@ export default {
 							goods_num: this.number,
 							goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
 							unique_id: uni.getStorageSync('unique_id'),
-							us_id: this.us_id
+							us_id: this.us_id,
+							store_id: this.store_id
 						}
 					}
 				}
@@ -765,7 +769,8 @@ export default {
 							goods_id: this.goodsData.goods_id,
 							goods_num: this.number,
 							token: uni.getStorageSync('token'),
-							us_id: this.us_id
+							us_id: this.us_id,
+							store_id: this.store_id
 						}
 					}else{
 						params = {
@@ -773,7 +778,8 @@ export default {
 							goods_num: this.number,
 							goods_spec: JSON.stringify({'key':this.selectArr[0].key}),
 							token: uni.getStorageSync('token'),
-							us_id: this.us_id
+							us_id: this.us_id,
+							store_id: this.store_id
 						}
 					}
 				}

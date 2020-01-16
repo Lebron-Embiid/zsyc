@@ -30,10 +30,10 @@
 					<view class="fci_left">
 						<view class="find_title">{{item.title}}</view>
 						<view class="find_desc">{{item.description}}</view>
-						<view class="find_bottom">
-							<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.look}}</view>
-							<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.like}}</view>
-						</view>
+						<!-- <view class="find_bottom">
+							<view><image src="/static/icon/eye.svg" mode="widthFix"></image>{{item.click}}</view>
+							<view><image src="/static/icon/star.png" mode="widthFix"></image>{{item.collect}}</view>
+						</view> -->
 					</view>
 					<view class="fci_right">
 						<image :src="url+item.thumb" mode="widthFix"></image>

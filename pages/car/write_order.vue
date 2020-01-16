@@ -87,13 +87,13 @@
 				<scroll-view scroll-y="true" class="goods_pop_scroll meal_list">
 					<view class="meal_item" v-for="(item,index) in mealList" :key="index">
 						<view class="meal_top">
-							<view class="meal_left"><text>{{item.price}}</text>{{item.type}}</view>
+							<view class="meal_left" style="width: 40% !important;"><text>{{parseInt(item.setmeal_price)}}</text>元</view>
 							<view class="meal_center">
-								<view class="mc_title">{{item.title}}</view>
-								<view class="mc_info">{{item.info}}</view>
+								<view class="mc_title">{{item.setmeal_name}}</view>
+								<view class="mc_info">{{item.setmeal_remark}}</view>
 							</view>
 							<view class="meal_right">
-								<radio @tap="selectRadio(index)" color="#fb5860" value="" :checked="item.checked" />
+								<radio @tap="selectRadio(index)" color="#fb5860" :checked="true" />
 							</view>
 						</view>
 						<view class="meal_bottom" :class="[item.is_show == true?'':'active']" @tap="changeTxt(index)">
@@ -111,6 +111,7 @@
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import util from "@/common/util.js"
 	export default{
 		data(){
 			return{
@@ -126,31 +127,15 @@
 					// }
 				],
 				mealList: [
-					{
-						price: '100',
-						type: '元',
-						title: '100元直减券',
-						info: '2018.06.02-2018.06.20',
-						content: '限时购、特价等优惠商品及详情页标注不可用券的商品除外。',
-						is_show: false,
-						checked: false
-					},{
-						price: '8',
-						type: '折',
-						title: '8折券',
-						info: '2018.06.02-2018.06.20',
-						content: '限时购、特价等优惠商品及详情页标注不可用券的商品除外。',
-						is_show: false,
-						checked: false
-					},{
-						price: '80',
-						type: '元',
-						title: '每满300元减80',
-						info: '2018.06.02-2018.06.20',
-						content: '限时购、特价等优惠商品及详情页标注不可用券的商品除外。',
-						is_show: false,
-						checked: false
-					}
+					// {
+					// 	price: '100',
+					// 	type: '元',
+					// 	title: '100元直减券',
+					// 	info: '2018.06.02-2018.06.20',
+					// 	content: '限时购、特价等优惠商品及详情页标注不可用券的商品除外。',
+					// 	is_show: false,
+					// 	checked: false
+					// }
 				],
 				user_money: '',
 				pay_points: '',
@@ -158,6 +143,7 @@
 				over_points: '',
 				message: '',
 				num: 0,
+				store_id: '',
 				has_address: false,
 				shipping_code: {},
 				combo: [],
@@ -195,14 +181,25 @@
 					},1500)
 					return;
 				}
-				this.recinfo = data.data.result.addressList;
+				this.recinfo = data.data.result.addressList!=null?data.data.result.addressList:{};
 				this.goodsList = data.data.result.cartList;
 				this.total_price = data.data.result.totalPrice.total_fee;
 				this.pay_price = data.data.result.totalPrice.total_fee;
 				this.over_money = data.data.result.user_info.user_money;
 				this.over_points = data.data.result.user_info.pay_points;
+				this.mealList.push({
+					us_id: data.data.result.combo.us_id,
+					setmeal_id:data.data.result.combo.setmeal_id,
+					setmeal_price: data.data.result.combo.setmeal_price,
+					setmeal_name: data.data.result.combo.setmeal_name,
+					setmeal_remark: data.data.result.combo.setmeal_remark,
+					content: '限时购、特价等优惠商品及详情页标注不可用券的商品除外。',
+					is_show: false,
+					checked: false
+				});
 				this.combo = data.data.result.combo;
-				if(this.recinfo == null){
+				this.store_id = data.data.result.store_id;
+				if(this.recinfo == {}){
 					this.has_address = false;
 				}else{
 					this.has_address = true;
@@ -311,27 +308,52 @@
 					key: "submitConfirm",
 					time: 1500,
 					success:()=>{
-						let params = {
-							token: uni.getStorageSync('token'),
-							address_id: this.recinfo.address_id,
-							// shipping_code: JSON.stringify(this.shipping_code),
-							user_money: this.user_money?this.user_money:0,
-							pay_points: this.pay_points?this.pay_points:0,
-							user_note: this.message,
-							act: 'submit_order'
-						};
-						let sign = this.$sign.getSign(params,this.AppSecret);
-						params.sign = sign;
-						this.$http.submitConfirm(params).then((data)=>{
-							this.$api.msg(data.data.msg);
-							if(data.data.status == 1){
-								setTimeout(()=>{
-									uni.redirectTo({
-										url: '/pages/person/detail?id='+data.data.result.id
-									})
-								},1500)
-							}
-						})
+						if(this.combo.length == 0){
+							let params = {
+								token: uni.getStorageSync('token'),
+								address_id: this.recinfo.address_id,
+								// shipping_code: JSON.stringify(this.shipping_code),
+								user_money: this.user_money?this.user_money:0,
+								pay_points: this.pay_points?this.pay_points:0,
+								user_note: this.message,
+								act: 'submit_order'
+							};
+							let sign = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign;
+							this.$http.submitConfirm(params).then((data)=>{
+								this.$api.msg(data.data.msg);
+								if(data.data.status == 1){
+									setTimeout(()=>{
+										uni.redirectTo({
+											url: '/pages/person/detail?id='+data.data.result.id
+										})
+									},1500)
+								}
+							})
+						}else{
+							let params = {
+								token: uni.getStorageSync('token'),
+								address_id: this.recinfo.address_id,
+								us_id: this.combo.us_id,
+								store_id: this.store_id,
+								user_money: this.user_money?this.user_money:0,
+								pay_points: this.pay_points?this.pay_points:0,
+								user_note: this.message,
+								act: 'submit_order'
+							};
+							let sign = this.$sign.getSign(params,this.AppSecret);
+							params.sign = sign;
+							this.$http.cartCombo(params).then((data)=>{
+								this.$api.msg(data.data.msg);
+								if(data.data.status == 1){
+									setTimeout(()=>{
+										uni.redirectTo({
+											url: '/pages/person/detail?id='+data.data.order_id+'&code='+data.data.result
+										})
+									},1500)
+								}
+							})
+						}
 					}
 				})
 			}

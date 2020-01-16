@@ -24,21 +24,54 @@
 		data(){
 			return{
 				feed_type: '请选择反馈类型',
+				type: '',
 				phone: '',
 				feed_content: '',
-				feedback_arr: ['产品相关','订单支付','账户额度','优惠活动','产品建议','其他'],
+				feedback_arr: [],
 				length: 0
 			}
 		},
 		components:{
 			uniNavBar
 		},
+		onLoad(opt) {
+			let params = {
+				token: uni.getStorageSync('token')
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.feedBackType(params).then((data)=>{
+				this.feedback_arr = data.data.result;
+			})
+		},
 		methods:{
 			submit(){
-				
+				if(this.type == ''){
+					this.$api.msg('请选择反馈类型');
+					return;
+				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					type: this.type,
+					mobile: this.phone,
+					content: this.feed_content
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.feedBack(params).then((data)=>{
+					this.$api.msg(data.data.msg);
+					if(data.data.status == 1){
+						this.feed_type = '请选择反馈类型';
+						this.type = '';
+						this.phone = '';
+						this.feed_content = '';
+					}
+				})
 			},
 			selectFeedback(e){
 				this.feed_type = this.feedback_arr[e.detail.value];
+				this.type = e.detail.value;
+				console.log(this.type);
 			},
 			valNum(e){
 				this.length = e.detail.value.length;

@@ -61,19 +61,30 @@
 		},
 		methods:{
 			next(){
-				if(this.is_type == 0){
-					uni.redirectTo({
-						url: '/pages/person/bind_phone'
-					})
-				}else if(this.is_type == 1){
-					uni.redirectTo({
-						url: '/pages/person/changePassword?type=login'
-					})
-				}else{
-					uni.redirectTo({
-						url: '/pages/person/changePassword?type=pay'
-					})
-				}
+				let params = {
+					token: uni.getStorageSync('token'),
+					code: this.code
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.userAuth(params).then((data)=>{
+					this.$api.msg(data.data.msg);
+					if(data.data.status == 1){
+						if(this.is_type == 0){
+							uni.redirectTo({
+								url: '/pages/person/bind_phone'
+							})
+						}else if(this.is_type == 1){
+							uni.redirectTo({
+								url: '/pages/person/changePassword?type=login'
+							})
+						}else{
+							uni.redirectTo({
+								url: '/pages/person/changePassword?type=pay'
+							})
+						}
+					}
+				})
 			},
 			getcode(){
 				this.$Debounce.canDoFunction({
@@ -90,11 +101,13 @@
 						}
 						that.$http.sendValidateCode({
 							mobile: that.phone,
-							scene: 2
+							scene: 9
 						}).then((data)=>{
-							console.log(data);
-							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
+								if(data.data.is_test == 1){
+									that.code = data.data.msg;
+								}
+								that.$api.msg('验证码已发送');
 								that.second = 60;
 								timer = setInterval(function(){
 									that.second--;
@@ -102,6 +115,8 @@
 										clearInterval(timer)
 									}
 								},1000)
+							}else{
+								that.$api.msg(data.data.msg);
 							}
 						})
 				    }

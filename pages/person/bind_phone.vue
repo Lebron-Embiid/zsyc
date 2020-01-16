@@ -43,9 +43,22 @@
 		},
 		methods:{
 			submit(){
-				this.$api.msg('新手机号绑定成功！');
-				this.phone = '';
-				this.code = '';
+				let params = {
+					token: uni.getStorageSync('token'),
+					mobile: this.phone,
+					code: this.code
+				};
+				let sign = this.$sign.getSign(params,this.AppSecret);
+				params.sign = sign;
+				this.$http.bindMobile(params).then((data)=>{
+					if(data.data.status == 1){
+						this.$api.msg(data.data.result);
+						this.phone = '';
+						this.code = '';
+					}else{
+						this.$api.msg(data.data.msg);
+					}
+				})
 			},
 			getcode(){
 				this.$Debounce.canDoFunction({
@@ -64,9 +77,11 @@
 							mobile: that.phone,
 							scene: 2
 						}).then((data)=>{
-							console.log(data);
-							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
+								if(data.data.is_test == 1){
+									that.code = data.data.msg;
+								}
+								that.$api.msg('验证码已发送');
 								that.second = 60;
 								timer = setInterval(function(){
 									that.second--;
@@ -74,6 +89,8 @@
 										clearInterval(timer)
 									}
 								},1000)
+							}else{
+								that.$api.msg(data.data.msg);
 							}
 						})
 				    }

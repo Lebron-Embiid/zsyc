@@ -144,14 +144,21 @@
 						}).then((data)=>{
 							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
-								// that.code = data.data.msg;
-								that.second = 60;
-								timer = setInterval(function(){
-									that.second--;
-									if(that.second==0){
-										clearInterval(timer)
+								if(data.data.status == 1){
+									if(data.data.is_test == 1){
+										that.code = data.data.msg;
 									}
-								},1000)
+									that.$api.msg('验证码已发送');
+									that.second = 60;
+									timer = setInterval(function(){
+										that.second--;
+										if(that.second==0){
+											clearInterval(timer)
+										}
+									},1000)
+								}else{
+									that.$api.msg(data.data.msg);
+								}
 							}
 						})
 				    }

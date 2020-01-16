@@ -71,14 +71,16 @@
 		},
 		onLoad(opt) {
 			this.url = this.$http.url;
+		},
+		onShow() {
 			let params = {};
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.articleClass(params).then((data)=>{
 				this.navbar = data.data.result;
 				let params1 = {
-					cid: this.navbar[0].cat_id,
-					page: 0,
+					cid: this.navbar[this.currentTab].cat_id,
+					page: 1,
 					limit: 10
 				};
 				let sign1 = this.$sign.getSign(params1,this.AppSecret);
@@ -87,9 +89,6 @@
 					this.findList = data.data.result;
 				})
 			})
-		},
-		onShow() {
-			
 		},
 		methods:{
 			doSearch(e){
@@ -102,7 +101,7 @@
 						this.navbar = data.data.result;
 						let params1 = {
 							cid: this.navbar[this.currentTab].cat_id,
-							page: 0,
+							page: 1,
 							limit: 10
 						};
 						let sign1 = this.$sign.getSign(params1,this.AppSecret);
@@ -116,7 +115,7 @@
 				let params = {
 					token: uni.getStorageSync('token'),
 					name: this.keywords,
-					page: 0,
+					page: 1,
 					limit: 10
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -136,7 +135,7 @@
 				this.currentTab = e;
 				let params = {
 					cid: id,
-					page: 0,
+					page: 1,
 					limit: 10
 				};
 				let sign = this.$sign.getSign(params,this.AppSecret);
@@ -155,7 +154,7 @@
 					this.navbar = data.data.result;
 					let params1 = {
 						cid: this.navbar[this.currentTab].cat_id,
-						page: 0,
+						page: 1,
 						limit: 10
 					};
 					let sign1 = this.$sign.getSign(params1,this.AppSecret);

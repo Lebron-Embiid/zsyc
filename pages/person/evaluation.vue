@@ -3,11 +3,11 @@
 		<view class="page_bg"></view>
 		<uni-nav-bar leftIcon="back" title="用户评价"></uni-nav-bar>
 		<view class="evaluation_box">
-			<view class="eval_goods" v-for="(item,index) in goodsInfo" :key="index">
-				<image :src="url+item.original_img" mode="widthFix"></image>
+			<view class="eval_goods">
+				<image :src="url+goodsInfo.original_img" mode="widthFix"></image>
 				<view class="eval_right">
-					<view class="eval_title">{{item.goods_name}}</view>
-					<view class="eval_info">{{item.spec_key_name}}</view>
+					<view class="eval_title">{{goodsInfo.goods_name}}</view>
+					<view class="eval_info">{{goodsInfo.spec_key_name}}</view>
 				</view>
 			</view>
 			<view class="rate_box">
@@ -41,6 +41,7 @@
 		data(){
 			return{
 				id: '',
+				idx: '',
 				goodsInfo: {},
 				rate_txt: '',
 				message: '',
@@ -59,6 +60,7 @@
 			this.url = this.$http.url;
 			if(opt.id != undefined){
 				this.id = opt.id;
+				this.idx = opt.idx;
 			}
 			
 			let params = {
@@ -68,7 +70,7 @@
 			let sign = this.$sign.getSign(params,this.AppSecret);
 			params.sign = sign;
 			this.$http.getOrderDetail(params).then((data)=>{
-				this.goodsInfo = data.data.result.goods_list;
+				this.goodsInfo = data.data.result.goods_list[this.idx];
 			})
 		},
 		methods:{
@@ -82,7 +84,7 @@
 					token: uni.getStorageSync('token'),
 					img_file: JSON.stringify(this.photoList1),
 					order_id: this.id,
-					goods_id: this.goodsInfo[0].goods_id,
+					goods_id: this.goodsInfo.goods_id,
 					store_packge_hidden: '',
 					store_speed_hidden: this.rate_val,
 					store_sever_hidden: '',

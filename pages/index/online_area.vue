@@ -28,7 +28,7 @@
 				</view>
 			</view>
 		</view>
-		<!-- <uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more> -->
+		<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>
 		<fixed-list :list="fixedList" @selectMeal="changeMeal"></fixed-list>
 	</view>
 </template>
@@ -62,6 +62,7 @@
 				setmeal_id: '',
 				us_id: '',
 				current: 0,
+				index: 0,
 				contentList: [
 					// {
 					// 	id: 1,
@@ -99,7 +100,8 @@
 				this.current = opt.current;
 				console.log(opt);
 			}
-			
+		},
+		onShow() {
 			let params1 = {
 				token: uni.getStorageSync('token')
 			};
@@ -112,14 +114,14 @@
 				if(this.us_id == ''){
 					params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						setmeal_id: this.onlineList[this.current].setmeal_id
 					}
 				}else{
 					params = {
 						token: uni.getStorageSync('token'),
-						page: 0,
+						page: 1,
 						limit: 10,
 						setmeal_id: this.setmeal_id
 					}
@@ -133,7 +135,8 @@
 						let res = data.data.result.cate;
 						this.fixedList.push({
 							setmeal_id: res[i].id,
-							setmeal_name: res[i].name
+							setmeal_name: res[i].name,
+							is_add: res[i].is_add
 						})
 					}
 				})
@@ -142,6 +145,7 @@
 		methods:{
 			changeMeal(index){
 				console.log(index);
+				this.index = index;
 				let params = {
 					token: uni.getStorageSync('token'),
 					page: 1,
@@ -158,7 +162,8 @@
 						let res = data.data.result.cate;
 						this.fixedList.push({
 							setmeal_id: res[i].id,
-							setmeal_name: res[i].name
+							setmeal_name: res[i].name,
+							is_add: res[i].is_add
 						})
 					}
 				})
@@ -180,7 +185,8 @@
 						let res = data.data.result.cate;
 						this.fixedList.push({
 							setmeal_id: res[i].id,
-							setmeal_name: res[i].name
+							setmeal_name: res[i].name,
+							is_add: res[i].is_add
 						})
 					}
 				})
@@ -192,13 +198,35 @@
 			},
 			toDetail(id,idx){
 				console.log(this.us_id);
-				uni.navigateTo({
-					url: '/pages/index/detail?type=on&cid='+id+'&idx='+idx+'&us_id='+this.us_id
-				})
+				if(this.us_id == ''){
+					uni.navigateTo({
+						url: '/pages/index/detail?type=on&cid='+id+'&idx='+idx+'&us_id='+this.us_id
+					})
+				}else{
+					uni.navigateTo({
+						url: '/pages/index/detail?type=on&cid='+id+'&idx='+idx+'&us_id='+this.us_id
+					})
+				}
 			}
 		},
 		onReachBottom() {
 			this.page++;
+			let params = {
+				token: uni.getStorageSync('token'),
+				page: this.page,
+				limit: 10,
+				setmeal_id: this.onlineList[this.current].setmeal_id,
+				us_cat_id: this.fixedList[this.index].setmeal_id
+			};
+			let sign = this.$sign.getSign(params,this.AppSecret);
+			params.sign = sign;
+			this.$http.setThezone(params).then((data)=>{
+				if(data.data.result.dataList.length == 0){
+					this.loadingType = 'noMore';
+					return;
+				}
+				this.contentList = this.contentList.concat(data.data.result.dataList);
+			})
 			// let params = {
 			// 	token: uni.getStorageSync('token'),
 			// 	article_id: this.id,

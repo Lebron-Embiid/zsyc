@@ -111,9 +111,11 @@
 						let sign = this.$sign.getSign(params,this.AppSecret);
 						params.sign = sign;
 						that.$http.sendValidateCode(params).then((data)=>{
-							console.log(data);
-							that.$api.msg(data.data.msg);
 							if(data.data.status == 1){
+								if(data.data.is_test == 1){
+									that.code = data.data.msg;
+								}
+								that.$api.msg('验证码已发送');
 								that.second = 60;
 								timer = setInterval(function(){
 									that.second--;
@@ -121,6 +123,8 @@
 										clearInterval(timer)
 									}
 								},1000)
+							}else{
+								that.$api.msg(data.data.msg);
 							}
 						})
 				    }

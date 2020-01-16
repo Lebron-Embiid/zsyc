@@ -53,7 +53,7 @@
 				</view>
 				<view class="text" v-if="goodsList.length!=0">全选</view>
 			</view>
-			<view class="delBtn" v-if="goodsList.length!=0,selectedList.length!=0" @tap="deleteList">删除</view>
+			<view class="delBtn" v-if="goodsList.length!=0||selectedList.length!=0" @tap="deleteList">删除</view>
 			<view class="settlement">
 				<view class="sum">合计:<view class="money">￥{{sumPrice}}</view></view>
 				<view class="btn" @tap="toConfirmation">结算<!-- ({{selectedList.length}}) --></view>
