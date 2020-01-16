@@ -27,6 +27,7 @@
 					<button v-if="item.is_type == 8 || item.is_type == 9" type="default" size="mini">已提货</button>
 					<button @tap="toEvaluation(item.id)" v-if="item.is_type == 9 && item.is_eval == 0" type="primary" size="mini" class="orange">评价</button>
 					<button v-if="item.is_type == 9 && item.is_eval == 1" type="primary" size="mini">已评价</button>
+					<button @tap="buyAgain" v-if="item.order_status_code == 'WAITSEND' || item.order_status_code == 'CANCEL' || item.order_status_code == 'FINISH' || item.order_status_code == 'WAITCCOMMENT'" type="default" size="mini" class="pad">再次购买</button>
 				</view>
 			</view>
 			<uni-load-more :status="loadingType" backgroundColor="#efefef"></uni-load-more>

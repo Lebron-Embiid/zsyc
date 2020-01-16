@@ -376,7 +376,7 @@ export default {
 		
 		let params = {};
 		if(this.us_id == ''){
-			params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id,store_id: this.store_id};
+			params = {token: uni.getStorageSync('token'),id: option.cid};
 		}else{
 			params = {token: uni.getStorageSync('token'),id: option.cid,us_id: this.us_id,store_id: this.store_id};
 		}

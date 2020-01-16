@@ -22,7 +22,7 @@
 				<view class="moi_bottom">
 					<!-- <button @tap="toLogistics(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini" class="pad">查看物流</button> -->
 					<button @tap="cancelOrder(item.order_id)" v-if="item.order_status_code == 'WAITPAY' || item.order_status_code == 'WAITSEND'" type="default" size="mini" class="pad">取消订单</button>
-					<button @tap="buyAgain" v-if="item.order_status_code == 'WAITSEND' || item.order_status_code == 'CANCEL' || item.order_status_code == 'WAITCCOMMENT'" type="default" size="mini" class="pad">再次购买</button>
+					<button @tap="buyAgain" v-if="item.order_status_code == 'WAITSEND' || item.order_status_code == 'CANCEL' || item.order_status_code == 'FINISH' || item.order_status_code == 'WAITCCOMMENT'" type="default" size="mini" class="pad">再次购买</button>
 					<button v-if="item.order_status_code == 'WAITRECEIVE'" type="default" size="mini">退换货</button>
 					<button @tap="toConfirm(item.order_id)" v-if="item.order_status_code == 'WAITRECEIVE'" type="primary" size="mini" class="red pad">确认收货</button>
 					<!-- <button @tap="toEvaluation(item.order_id)" v-if="item.order_status_code == 'WAITCCOMMENT'" type="primary" size="mini" class="red pad">去评价</button> -->
