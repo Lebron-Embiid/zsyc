@@ -366,12 +366,15 @@ export default {
 			// console.log(this.goods_id);
 		}
 		if(option.us_id != undefined){
-			this.store_id = option.store_id;
 			this.m_type = option.type;
 			this.idx = option.idx;
 			this.us_id = option.us_id;
 			console.log(option);
 		}
+		if(option.store_id != undefined){
+			this.store_id = option.store_id;
+		}
+			
 		console.log(option.cid+'---------------'+this.goodsData.id);
 		
 		let params = {};

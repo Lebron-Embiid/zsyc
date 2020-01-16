@@ -44,7 +44,7 @@
 				名额消费 <text>v 600</text>
 			</view> -->
 			<view class="order_info_item" v-if="combo.length!=0">
-				套餐使用 <text>无</text>
+				套餐使用 <text>{{setmeal_name}}</text>
 			</view>
 			<view class="order_info_item">
 				运费 <text>+￥{{post_fee}}</text>
@@ -147,6 +147,7 @@
 				has_address: false,
 				shipping_code: {},
 				combo: [],
+				setmeal_name: '',
 				pay_price: '',
 				total_price: '',
 				post_fee: ''
@@ -183,10 +184,13 @@
 				}
 				this.recinfo = data.data.result.addressList!=null?data.data.result.addressList:{};
 				this.goodsList = data.data.result.cartList;
-				this.total_price = data.data.result.totalPrice.total_fee;
-				this.pay_price = data.data.result.totalPrice.total_fee;
+				this.pay_price = data.data.result.totalPrice.combo_fee;
 				this.over_money = data.data.result.user_info.user_money;
 				this.over_points = data.data.result.user_info.pay_points;
+				// this.user_money = data.data.result.totalPrice.combo_fee;
+				this.total_price = data.data.result.combo.setmeal_price;
+				this.post_fee = data.data.result.combo.freight_price;
+				this.setmeal_name = data.data.result.combo.setmeal_name;
 				this.mealList.push({
 					us_id: data.data.result.combo.us_id,
 					setmeal_id:data.data.result.combo.setmeal_id,
@@ -209,19 +213,18 @@
 					this.phone = tel1;
 					
 					// console.log(this.shipping_code);
-					let params1 = {
-						token: uni.getStorageSync('token'),
-						address_id: this.recinfo.address_id,
-						user_money: 0,
-						pay_points: 0
-					};
-					let sign1 = this.$sign.getSign(params1,this.AppSecret);
-					params1.sign = sign1;
+					// let params1 = {
+					// 	token: uni.getStorageSync('token'),
+					// 	address_id: this.recinfo.address_id,
+					// 	user_money: 0,
+					// 	pay_points: 0
+					// };
+					// let sign1 = this.$sign.getSign(params1,this.AppSecret);
+					// params1.sign = sign1;
 					
-					this.$http.submitConfirm(params1).then((data1)=>{
-						this.post_fee = data1.data.result.postFee;
-						this.pay_price = data1.data.result.payables;
-					})
+					// this.$http.submitConfirm(params1).then((data1)=>{
+					// 	this.pay_price = data1.data.result.payables;
+					// })
 				}
 				
 				if(uni.getStorageSync('selectAddress') != ''){

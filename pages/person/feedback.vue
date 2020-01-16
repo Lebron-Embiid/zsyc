@@ -24,7 +24,7 @@
 		data(){
 			return{
 				feed_type: '请选择反馈类型',
-				type: '',
+				type: null,
 				phone: '',
 				feed_content: '',
 				feedback_arr: [],
@@ -46,7 +46,7 @@
 		},
 		methods:{
 			submit(){
-				if(this.type == ''){
+				if(this.type == null){
 					this.$api.msg('请选择反馈类型');
 					return;
 				}

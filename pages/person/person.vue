@@ -94,7 +94,7 @@
 						icon: '/static/icon/order_icon1.png',
 						title: '待付款',
 						url: '/pages/person/order?idx=1',
-						num: 1
+						num: 0
 					},{
 						icon: '/static/icon/order_icon2.png',
 						title: '待发货',
@@ -132,16 +132,16 @@
 						icon: '/static/icon/order_icon3.png',
 						title: '待收货',
 						url: '/pages/person/online_order?idx=3',
-						num: 2
+						num: 0
 					},{
 						icon: '/static/icon/order_icon4.png',
 						title: '已完成',
-						url: '/pages/person/online_order?idx=4',
+						url: '/pages/person/online_order?idx=5',
 						num: 0
 					},{
 						icon: '/static/icon/order_icon5.png',
 						title: '换货',
-						url: '/pages/person/online_order?idx=2',
+						url: '',
 						num: 0
 					}
 				],
@@ -164,7 +164,7 @@
 					},{
 						icon: '/static/icon/order_icon5.png',
 						title: '换货',
-						url: '/pages/person/offline_order?idx=3',
+						url: '',
 						num: 0
 					}
 				],
@@ -225,12 +225,12 @@
 			params2.sign = sign2;
 			this.$http.getOrderCount(params2).then((data)=>{
 				this.orderNavs[0].num = data.data.result.wai_pay_count;
-				this.orderNavs[1].num = data.data.result.online_wai_send_count;
-				this.orderNavs[2].num = data.data.result.online_wai_receive_count;
-				this.orderNavs[3].num = data.data.result.online_wai_comment_count;
-				this.mealNavs[0].num = data.data.result.wai_pay_count;
-				this.mealNavs[1].num = data.data.result.wai_send_count;
-				this.mealNavs[2].num = data.data.result.wai_receive_count;
+				this.orderNavs[1].num = data.data.result.wai_send_count;
+				this.orderNavs[2].num = data.data.result.wai_receive_count;
+				this.orderNavs[3].num = data.data.result.wai_comment_count;
+				this.mealNavs[0].num = data.data.result.online_wai_pay_count;
+				this.mealNavs[1].num = data.data.result.online_wai_send_count;
+				this.mealNavs[2].num = data.data.result.online_wai_receive_count;
 				this.mealNavs2[0].num = data.data.result.underline_wai_pay_count;
 				this.mealNavs2[1].num = data.data.result.underline_wai_send_count;
 				this.mealNavs2[2].num = data.data.result.underline_wai_comment_count;

@@ -1,8 +1,8 @@
 <template>
 	<view class="offline_order">
 		<uni-nav-bar leftIcon="back" title="套餐线下订单" rightText="线上订单" :isBtn="true" @clickRight="clickRightBtn"></uni-nav-bar>
-		<view class="list_nav">
-			<view v-for="(item,index) in navbar" :key="index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
+		<view class="list_nav" scroll-x="true" :scroll-into-view="nav_current">
+			<view v-for="(item,index) in navbar" :key="index" :id="'nav'+index" :class="[currentTab==index ? 'active' : '']" @click="navbarTap(index)">{{item.name}}</view>
 		</view>
 		<scroll-view scroll-y="true" @scrolltolower="loadMore" class="my_order_box">
 			<view class="my_order_item" v-for="(item,index) in orderList" :key="index">
@@ -153,6 +153,8 @@
 				pay_radio: '',
 				payList: [],
 				url: '',
+				page: 1,
+				nav_current: '',
 				loadingType: 'more'
 			}
 		},
@@ -165,6 +167,7 @@
 			this.url = this.$http.url;
 			if(opt.idx != undefined){
 				this.currentTab = opt.idx;
+				this.nav_current = 'nav'+opt.idx;
 			}
 			var type = '';
 			if(opt.idx == 0){
